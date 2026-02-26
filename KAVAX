@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Roblox 白名单远程执行</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        
+        .panel {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .panel h2 {
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #0078D7;
+            font-size: 1.5em;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.9em;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ced4da;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #0078D7;
+            box-shadow: 0 0 0 3px rgba(0,120,215,0.1);
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #0078D7 0%, #005A9E 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,120,215,0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #bd2130 100%);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .user-status {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 5px solid #0078D7;
+        }
+        
+        .status-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .status-online {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-offline {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-whitelist {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .status-info h3 {
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .status-info p {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .log {
+            background: #333;
+            color: #00ff00;
+            font-family: 'Consolas', 'Monaco', monospace;
+            padding: 15px;
+            border-radius: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        
+        .log-entry {
+            margin-bottom: 5px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #444;
+        }
+        
+        .log-time {
+            color: #888;
+            font-size: 0.8em;
+        }
+        
+        .log-success {
+            color: #00ff00;
+        }
+        
+        .log-error {
+            color: #ff4444;
+        }
+        
+        .log-warning {
+            color: #ffaa00;
+        }
+        
+        .quick-commands {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .server-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .server-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .server-card:hover {
+            border-color: #0078D7;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .server-card.active {
+            border-color: #0078D7;
+            background: #f0f8ff;
+        }
+        
+        .server-card h4 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .server-info {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 标题 -->
+        <h1>🔐 Roblox 白名单远程控制系统</h1>
+        <p class="subtitle">仅限授权用户执行远程操作</p>
+        
+        <!-- 用户认证面板 -->
+        <div class="panel">
+            <h2>👤 用户身份验证</h2>
+            
+            <div class="form-group">
+                <label for="username">Roblox 用户名</label>
+                <input type="text" id="username" placeholder="输入你的Roblox用户名" value="">
+            </div>
+            
+            <div id="userStatus" class="user-status" style="display: none;">
+                <div class="status-icon" id="statusIcon">
+                    <span>👤</span>
+                </div>
+                <div class="status-info">
+                    <h3 id="statusTitle">未验证</h3>
+                    <p id="statusText">请登录验证</p>
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn" onclick="verifyUser()">
+                    <span>✅</span> 验证用户
+                </button>
+                <button class="btn btn-secondary" onclick="checkWhitelist()">
+                    <span>📋</span> 检查白名单状态
+                </button>
+                <button class="btn btn-danger" onclick="logoutUser()">
+                    <span>🚪</span> 退出登录
+                </button>
+            </div>
+        </div>
+        
+        <!-- 游戏连接面板 -->
+        <div class="panel">
+            <h2>🎮 游戏连接</h2>
+            
+            <div class="form-group">
+                <label for="placeId">游戏ID</label>
+                <input type="text" id="placeId" placeholder="输入游戏Place ID" value="">
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn" onclick="connectToGame()">
+                    <span>🔗</span> 连接游戏
+                </button>
+                <button class="btn btn-secondary" onclick="findServers()">
+                    <span>🔄</span> 查找服务器
+                </button>
+            </div>
+            
+            <div id="serverList" class="server-list"></div>
+        </div>
+        
+        <!-- 代码执行面板 -->
+        <div class="panel">
+            <h2>💻 代码执行</h2>
+            <p style="color: #666; margin-bottom: 20px; font-size: 0.9em;">
+                只有白名单用户才能执行命令。当前用户: <span id="currentUser" style="font-weight: bold;">未登录</span>
+            </p>
+            
+            <div class="form-group">
+                <label for="codeInput">要执行的代码</label>
+                <textarea id="codeInput" placeholder="例如: print('Hello from website!')">print('Hello from authorized user!')</textarea>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-success" onclick="executeCode()">
+                    <span>🚀</span> 执行代码
+                </button>
+                <button class="btn" onclick="testConnection()">
+                    <span>🔍</span> 测试连接
+                </button>
+            </div>
+            
+            <!-- 快捷命令 -->
+            <h3 style="margin-top: 30px; margin-bottom: 15px;">⚡ 快捷命令</h3>
+            <div class="quick-commands">
+                <button class="btn" onclick="runCommand('print(\"网站远程执行成功！\")')">
+                    <span>📢</span> 测试打印
+                </button>
+                <button class="btn" onclick="runCommand('print players')">
+                    <span>👥</span> 打印在线玩家
+                </button>
+                <button class="btn" onclick="runCommand('print(game.JobId)')">
+                    <span>🆔</span> 服务器ID
+                </button>
+                <button class="btn" onclick="runCommand('print(os.date())')">
+                    <span>🕒</span> 服务器时间
+                </button>
+            </div>
+        </div>
+        
+        <!-- 执行日志 -->
+        <div class="panel">
+            <h2>📜 执行日志</h2>
+            <div class="btn-group">
+                <button class="btn" onclick="clearLog()">
+                    <span>🧹</span> 清空日志
+                </button>
+                <button class="btn btn-secondary" onclick="exportLog()">
+                    <span>📥</span> 导出日志
+                </button>
+            </div>
+            
+            <div id="log" class="log">
+                <div class="log-entry log-warning">
+                    <span class="log-time">[系统]</span> 等待用户登录...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局状态
+        let currentUser = null;
+        let userVerified = false;
+        let currentPlaceId = '';
+        let currentServer = null;
+        let connectionType = null;
+        let logEntries = [];
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查本地存储的用户
+            const savedUser = localStorage.getItem('roblox_username');
+            if (savedUser) {
+                document.getElementById('username').value = savedUser;
+                verifyUser();
+            }
+            
+            // 检查游戏ID
+            const savedPlaceId = localStorage.getItem('roblox_placeid');
+            if (savedPlaceId) {
+                document.getElementById('placeId').value = savedPlaceId;
+            }
+        });
+        
+        // 用户验证
+        async function verifyUser() {
+            const username = document.getElementById('username').value.trim();
+            if (!username) {
+                showLog('请输入用户名', 'error');
+                return;
+            }
+            
+            showLog('验证用户 ' + username + '...', 'info');
+            
+            try {
+                // 1. 验证用户名是否存在（通过Roblox API）
+                const userResponse = await fetch(`https://users.roblox.com/v1/usernames/users`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usernames: [username] })
+                });
+                
+                const userData = await userResponse.json();
+                
+                if (userData.data && userData.data.length > 0) {
+                    const user = userData.data[0];
+                    currentUser = user.name;
+                    localStorage.setItem('roblox_username', currentUser);
+                    
+                    // 更新UI
+                    document.getElementById('currentUser').textContent = currentUser;
+                    
+                    // 显示用户状态
+                    showUserStatus(true, user.id);
+                    
+                    showLog('用户验证成功: ' + currentUser, 'success');
+                    
+                    // 自动检查白名单状态
+                    await checkWhitelist();
+                } else {
+                    showLog('用户不存在: ' + username, 'error');
+                    showUserStatus(false);
+                }
+            } catch (error) {
+                showLog('验证失败: ' + error.message, 'error');
+                showUserStatus(false);
+            }
+        }
+        
+        // 检查白名单状态
+        async function checkWhitelist() {
+            if (!currentUser) {
+                showLog('请先验证用户', 'error');
+                return;
+            }
+            
+            showLog('检查白名单状态...', 'info');
+            
+            // 这里需要连接到你的Roblox游戏服务器
+            // 实际情况中，你可能需要通过WebSocket或HTTP请求到你的后端
+            
+            // 模拟检查（实际实现需要连接到游戏服务器）
+            setTimeout(() => {
+                // 模拟响应
+                const isWhitelisted = Math.random() > 0.5; // 模拟50%的概率在白名单
+                
+                if (isWhitelisted) {
+                    userVerified = true;
+                    showLog('✅ 用户在白名单中，可以执行命令', 'success');
+                    updateUserStatus('在白名单中', 'status-whitelist');
+                } else {
+                    userVerified = false;
+                    showLog('❌ 用户不在白名单中，无法执行命令', 'error');
+                    updateUserStatus('不在白名单中', 'status-offline');
+                }
+            }, 1000);
+        }
+        
+        // 显示用户状态
+        function showUserStatus(verified, userId) {
+            const statusDiv = document.getElementById('userStatus');
+            const statusIcon = document.getElementById('statusIcon');
+            const statusTitle = document.getElementById('statusTitle');
+            const statusText = document.getElementById('statusText');
+            
+            statusDiv.style.display = 'flex';
+            
+            if (verified) {
+                statusIcon.innerHTML = '<span>✅</span>';
+                statusIcon.className = 'status-icon status-online';
+                statusTitle.textContent = currentUser;
+                statusText.textContent = '用户已验证';
+            } else {
+                statusIcon.innerHTML = '<span>❌</span>';
+                statusIcon.className = 'status-icon status-offline';
+                statusTitle.textContent = '未验证';
+                statusText.textContent = '用户验证失败';
+            }
+        }
+        
+        function updateUserStatus(status, statusClass) {
+            const statusIcon = document.getElementById('statusIcon');
+            const statusText = document.getElementById('statusText');
+            
+            statusIcon.className = 'status-icon ' + statusClass;
+            statusText.textContent = status;
+        }
+        
+        // 连接游戏
+        async function connectToGame() {
+            const placeId = document.getElementById('placeId').value.trim();
+            if (!placeId) {
+                showLog('请输入游戏ID', 'error');
+                return;
+            }
+            
+            currentPlaceId = placeId;
+            localStorage.setItem('roblox_placeid', placeId);
+            
+            showLog('连接游戏 ' + placeId + '...', 'info');
+            
+            // 自动查找服务器
+            await findServers();
+        }
+        
+        // 查找服务器
+        async function findServers() {
+            if (!currentPlaceId) {
+                showLog('请先输入游戏ID', 'error');
+                return;
+            }
+            
+            showLog('查找可用服务器...', 'info');
+            
+            try {
+                // 使用Roblox API获取服务器列表
+                const response = await fetch(`https://games.roblox.com/v1/games/${currentPlaceId}/servers/Public?limit=5`);
+                const data = await response.json();
+                
+                const serverListDiv = document.getElementById('serverList');
+                serverListDiv.innerHTML = '';
+                
+                if (data.data && data.data.length > 0) {
+                    data.data.forEach(server => {
+                        const serverCard = document.createElement('div');
+                        serverCard.className = 'server-card';
+                        serverCard.onclick = () => selectServer(server);
+                        
+                        serverCard.innerHTML = `
+                            <h4>服务器 ${server.id.slice(0, 8)}...
+                                <span class="badge badge-success">在线</span>
+                            </h4>
+                            <div class="server-info">
+                                <p>玩家: ${server.playing}/${server.maxPlayers}</p>
+                                <p>Ping: ${server.ping || 'N/A'}ms</p>
+                                <p>地区: ${server.fps || 'N/A'}</p>
+                            </div>
+                        `;
+                        
+                        serverListDiv.appendChild(serverCard);
+                    });
+                    
+                    // 自动选择第一个服务器
+                    selectServer(data.data[0]);
+                } else {
+                    showLog('未找到可用服务器', 'warning');
+                }
+            } catch (error) {
+                showLog('获取服务器失败: ' + error.message, 'error');
+            }
+        }
+        
+        // 选择服务器
+        function selectServer(server) {
+            currentServer = server;
+            showLog('选择服务器: ' + server.id.slice(0, 8) + '...', 'success');
+            
+            // 高亮选中的服务器
+            document.querySelectorAll('.server-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+        
+        // 执行代码
+        async function executeCode() {
+            if (!userVerified) {
+                showLog('请先验证白名单用户', 'error');
+                return;
+            }
+            
+            if (!currentServer) {
+                showLog('请先选择服务器', 'error');
+                return;
+            }
+            
+            const code = document.getElementById('codeInput').value.trim();
+            if (!code) {
+                showLog('请输入要执行的代码', 'error');
+                return;
+            }
+            
+            showLog('执行代码: ' + code, 'info');
+            
+            // 构建执行数据
+            const executionData = {
+                username: currentUser,
+                code: code,
+                serverId: currentServer.id,
+                timestamp: new Date().toISOString()
+            };
+            
+            // 实际执行需要连接到游戏服务器
+            // 这里是一个模拟实现
+            simulateExecution(executionData);
+        }
+        
+        // 模拟代码执行
+        function simulateExecution(data) {
+            showLog('正在执行...', 'info');
+            
+            // 模拟延迟
+            setTimeout(() => {
+                const success = Math.random() > 0.2; // 模拟80%成功率
+                
+                if (success) {
+                    showLog(`✅ 执行成功！用户: ${data.username}`, 'success');
+                    showLog(`   代码: ${data.code}`, 'success');
+                    showLog(`   服务器: ${data.serverId.slice(0, 8)}...`, 'success');
+                } else {
+                    showLog(`❌ 执行失败！用户: ${data.username}`, 'error');
+                    showLog(`   代码: ${data.code}`, 'error');
+                    showLog(`   服务器: ${data.serverId.slice(0, 8)}...`, 'error');
+                }
+            }, 1500);
+        }
+        
+        // 快捷命令
+        function runCommand(command) {
+            document.getElementById('codeInput').value = command;
+            executeCode();
+        }
+        
+        // 测试连接
+        function testConnection() {
+            if (!currentUser) {
+                showLog('请先验证用户', 'error');
+                return;
+            }
+            
+            showLog('测试连接...', 'info');
+            
+            setTimeout(() => {
+                if (Math.random() > 0.3) {
+                    showLog('✅ 连接测试成功', 'success');
+                    showLog('服务器响应正常', 'success');
+                } else {
+                    showLog('❌ 连接测试失败', 'error');
+                    showLog('请检查网络连接和服务器状态', 'error');
+                }
+            }, 1000);
+        }
+        
+        // 退出登录
+        function logoutUser() {
+            currentUser = null;
+            userVerified = false;
+            
+            localStorage.removeItem('roblox_username');
+            
+            document.getElementById('currentUser').textContent = '未登录';
+            document.getElementById('userStatus').style.display = 'none';
+            document.getElementById('username').value = '';
+            
+            showLog('用户已退出登录', 'info');
+        }
+        
+        // 显示日志
+        function showLog(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const time = new Date().toLocaleTimeString();
+            
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry log-${type}`;
+            logEntry.innerHTML = `<span class="log-time">[${time}]</span> ${message}`;
+            
+            logDiv.appendChild(logEntry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+            
+            // 保存到历史
+            logEntries.push({ time, message, type });
+        }
+        
+        // 清空日志
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+            logEntries = [];
+            showLog('日志已清空', 'info');
+        }
+        
+        // 导出日志
+        function exportLog() {
+            const logText = logEntries.map(entry => 
+                `[${entry.time}] ${entry.message}`
+            ).join('\n');
+            
+            const blob = new Blob([logText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'roblox-execution-log.txt';
+            a.click();
+            
+            showLog('日志已导出', 'success');
+        }
+        
+        // WebSocket连接实现（实际部署时需要）
+        function setupWebSocketConnection() {
+            const ws = new WebSocket('ws://localhost:8080/roblox-control');
+            
+            ws.onopen = function() {
+                connectionType = 'websocket';
+                showLog('WebSocket连接成功', 'success');
+                
+                // 发送认证信息
+                ws.send(JSON.stringify({
+                    type: 'authenticate',
+                    username: currentUser,
+                    placeId: currentPlaceId
+                }));
+            };
+            
+            ws.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                
+                switch (data.type) {
+                    case 'auth_response':
+                        if (data.success) {
+                            userVerified = true;
+                            showLog('WebSocket认证成功', 'success');
+                        } else {
+                            showLog('WebSocket认证失败: ' + data.message, 'error');
+                        }
+                        break;
+                        
+                    case 'execution_result':
+                        showLog('执行结果: ' + data.result, 'success');
+                        break;
+                        
+                    case 'error':
+                        showLog('错误: ' + data.message, 'error');
+                        break;
+                }
+            };
+            
+            ws.onerror = function(error) {
+                showLog('WebSocket连接错误: ' + error.message, 'error');
+            };
+            
+            ws.onclose = function() {
+                showLog('WebSocket连接已关闭', 'warning');
+                connectionType = null;
+            };
+        }
+        
+        // HTTP API调用（实际部署时需要）
+        async function callRobloxAPI(endpoint, data) {
+            try {
+                const response = await fetch(`https://your-api-server.com/${endpoint}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                return await response.json();
+            } catch (error) {
+                showLog('API调用失败: ' + error.message, 'error');
+                return null;
+            }
+        }
+    </script>
+</body>
+</html>
