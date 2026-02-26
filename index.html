@@ -24,6 +24,9 @@
             padding: 15px 25px;
             border-radius: 40px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 10px;
+            z-index: 100;
         }
         
         .logo {
@@ -41,6 +44,110 @@
             font-size: 1.4rem;
             font-weight: 600;
             color: #1a1a1a;
+        }
+        
+        .right-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .notification-icon {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #d32f2f;
+            color: white;
+            font-size: 0.7rem;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+        }
+        
+        .notification-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            width: 320px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: none;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        
+        .notification-dropdown.show {
+            display: block;
+        }
+        
+        .notification-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+        
+        .notification-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            gap: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .notification-item:hover {
+            background: #f5f5f5;
+        }
+        
+        .notification-item.unread {
+            background: #e8f0fe;
+        }
+        
+        .notification-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            background: #EADDFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #21005E;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .notification-text {
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+        
+        .notification-time {
+            font-size: 0.75rem;
+            color: #999;
+        }
+        
+        .notification-empty {
+            padding: 30px;
+            text-align: center;
+            color: #999;
         }
         
         .btn {
@@ -273,11 +380,6 @@
             background: #f5f5f5;
         }
         
-        .action-btn.liked .material-symbols-outlined {
-            color: #d32f2f;
-            font-variation-settings: 'FILL' 1;
-        }
-        
         .comments-section {
             margin-left: 60px;
             margin-top: 15px;
@@ -316,6 +418,10 @@
         .comment-time {
             font-size: 0.75rem;
             color: #999;
+        }
+        
+        .comment-text {
+            margin-top: 4px;
         }
         
         .add-comment {
@@ -367,23 +473,43 @@
             <span>DevCommunity</span>
         </div>
         
-        <div id="auth-section">
-            <button class="btn" onclick="showLogin()">
-                <span class="material-symbols-outlined">login</span> 登录
-            </button>
-            <button class="btn secondary" onclick="showRegister()">
-                <span class="material-symbols-outlined">person_add</span> 注册
-            </button>
-        </div>
-        
-        <div id="user-section" class="hidden">
-            <span id="userEmail" style="margin-right: 10px;"></span>
-            <span class="badge">
-                <span class="material-symbols-outlined" style="font-size: 16px;">verified</span> 已验证
-            </span>
-            <button class="btn secondary" onclick="logout()">
-                <span class="material-symbols-outlined">logout</span> 退出
-            </button>
+        <div class="right-section">
+            <div id="notificationSection" class="hidden">
+                <div class="notification-icon" onclick="toggleNotifications()">
+                    <span class="material-symbols-outlined">notifications</span>
+                    <span id="notificationBadge" class="notification-badge hidden">0</span>
+                </div>
+                <div id="notificationDropdown" class="notification-dropdown">
+                    <div class="notification-header">
+                        <span>通知</span>
+                        <button class="btn-icon" onclick="markAllAsRead()">
+                            <span class="material-symbols-outlined" style="font-size: 20px;">done_all</span>
+                        </button>
+                    </div>
+                    <div id="notificationList" class="notification-list">
+                        <div class="notification-empty">暂无通知</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="auth-section">
+                <button class="btn" onclick="showLogin()">
+                    <span class="material-symbols-outlined">login</span> 登录
+                </button>
+                <button class="btn secondary" onclick="showRegister()">
+                    <span class="material-symbols-outlined">person_add</span> 注册
+                </button>
+            </div>
+            
+            <div id="user-section" class="hidden">
+                <span id="userEmail" style="margin-right: 10px;"></span>
+                <span class="badge">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">verified</span> 已验证
+                </span>
+                <button class="btn secondary" onclick="logout()">
+                    <span class="material-symbols-outlined">logout</span> 退出
+                </button>
+            </div>
         </div>
     </div>
 
@@ -511,6 +637,8 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZubGFyeWphbm1mcXZub25xZnlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwNzQzNzgsImV4cCI6MjA4NzY1MDM3OH0.4uGXyVd_6XQnK3o1vu_sDhpdRyrM67JFaBm2SnuJf1M';
         
         let currentUser = null;
+        let notifications = [];
+        let unreadCount = 0;
         
         function loadUserFromStorage() {
             const savedUser = localStorage.getItem('currentUser');
@@ -518,6 +646,8 @@
                 try {
                     currentUser = JSON.parse(savedUser);
                     updateUIForUser();
+                    loadNotifications();
+                    startNotificationPolling();
                 } catch (e) {
                     localStorage.removeItem('currentUser');
                 }
@@ -529,12 +659,136 @@
                 document.getElementById('auth-section').classList.add('hidden');
                 document.getElementById('user-section').classList.remove('hidden');
                 document.getElementById('compose-section').classList.remove('hidden');
+                document.getElementById('notificationSection').classList.remove('hidden');
                 document.getElementById('userEmail').textContent = currentUser.email;
             } else {
                 document.getElementById('auth-section').classList.remove('hidden');
                 document.getElementById('user-section').classList.add('hidden');
                 document.getElementById('compose-section').classList.add('hidden');
+                document.getElementById('notificationSection').classList.add('hidden');
             }
+        }
+        
+        function loadNotifications() {
+            const saved = localStorage.getItem(`notifications_${currentUser?.id}`);
+            if (saved) {
+                notifications = JSON.parse(saved);
+                unreadCount = notifications.filter(n => !n.read).length;
+                updateNotificationBadge();
+                renderNotifications();
+            }
+        }
+        
+        function saveNotifications() {
+            if (currentUser) {
+                localStorage.setItem(`notifications_${currentUser.id}`, JSON.stringify(notifications));
+            }
+        }
+        
+        function addNotification(type, data) {
+            if (!currentUser) return;
+            
+            const notification = {
+                id: Date.now() + Math.random(),
+                type: type,
+                data: data,
+                read: false,
+                time: new Date().toISOString()
+            };
+            
+            notifications.unshift(notification);
+            unreadCount++;
+            
+            saveNotifications();
+            updateNotificationBadge();
+            renderNotifications();
+        }
+        
+        function updateNotificationBadge() {
+            const badge = document.getElementById('notificationBadge');
+            unreadCount = notifications.filter(n => !n.read).length;
+            
+            if (unreadCount > 0) {
+                badge.textContent = unreadCount > 99 ? '99+' : unreadCount;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+        
+        function renderNotifications() {
+            const list = document.getElementById('notificationList');
+            
+            if (notifications.length === 0) {
+                list.innerHTML = '<div class="notification-empty">暂无通知</div>';
+                return;
+            }
+            
+            let html = '';
+            notifications.slice(0, 20).forEach(n => {
+                const time = new Date(n.time).toLocaleString('zh-CN', {
+                    month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
+                });
+                
+                if (n.type === 'like') {
+                    html += `
+                        <div class="notification-item ${n.read ? '' : 'unread'}" onclick="markAsRead('${n.id}')">
+                            <div class="notification-avatar">❤️</div>
+                            <div class="notification-content">
+                                <div class="notification-text">
+                                    <strong>${n.data.author}</strong> 点赞了你的帖子
+                                </div>
+                                <div class="notification-time">${time}</div>
+                            </div>
+                        </div>
+                    `;
+                } else if (n.type === 'comment') {
+                    html += `
+                        <div class="notification-item ${n.read ? '' : 'unread'}" onclick="markAsRead('${n.id}')">
+                            <div class="notification-avatar">💬</div>
+                            <div class="notification-content">
+                                <div class="notification-text">
+                                    <strong>${n.data.author}</strong> 评论了你的帖子:<br>
+                                    ${n.data.content.substring(0, 30)}${n.data.content.length > 30 ? '...' : ''}
+                                </div>
+                                <div class="notification-time">${time}</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            list.innerHTML = html;
+        }
+        
+        function markAsRead(notificationId) {
+            const n = notifications.find(n => n.id == notificationId);
+            if (n && !n.read) {
+                n.read = true;
+                saveNotifications();
+                updateNotificationBadge();
+                renderNotifications();
+            }
+        }
+        
+        function markAllAsRead() {
+            notifications.forEach(n => n.read = true);
+            saveNotifications();
+            updateNotificationBadge();
+            renderNotifications();
+        }
+        
+        function toggleNotifications() {
+            const dropdown = document.getElementById('notificationDropdown');
+            dropdown.classList.toggle('show');
+        }
+        
+        function startNotificationPolling() {
+            setInterval(() => {
+                if (currentUser) {
+                    console.log('检查新通知...');
+                }
+            }, 30000);
         }
         
         function generateCaptcha() {
@@ -641,6 +895,8 @@
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
                     
                     updateUIForUser();
+                    loadNotifications();
+                    startNotificationPolling();
                     hideLogin();
                     loadPosts();
                 }
@@ -745,7 +1001,7 @@
                 let html = '';
                 posts.forEach(post => {
                     const date = new Date(post.created_at).toLocaleString();
-                    html += `<div class="post" data-id="${post.id}">
+                    html += `<div class="post" data-id="${post.id}" data-author="${post.author}">
                         <div class="post-header">
                             <div class="avatar">${(post.author?.[0] || 'U').toUpperCase()}</div>
                             <div>
@@ -758,7 +1014,7 @@
                         </div>
                         <div class="post-content">${post.content}</div>
                         <div class="post-actions">
-                            <button class="action-btn" onclick="handleLike(${post.id})">
+                            <button class="action-btn" onclick="handleLike(${post.id}, '${post.author}')">
                                 <span class="material-symbols-outlined">favorite</span> ${post.likes || 0}
                             </button>
                             <button class="action-btn" onclick="toggleComments(${post.id})">
@@ -769,7 +1025,7 @@
                             ${renderComments(post.comments || [])}
                             <div class="add-comment">
                                 <input type="text" id="comment-${post.id}" placeholder="写评论...">
-                                <button class="btn-icon" onclick="addComment(${post.id})">
+                                <button class="btn-icon" onclick="addComment(${post.id}, '${post.author}')">
                                     <span class="material-symbols-outlined">send</span>
                                 </button>
                             </div>
@@ -791,7 +1047,7 @@
                     <div class="comment-content">
                         <span class="comment-author">${c.author}</span>
                         <span class="comment-time">${new Date(c.created_at).toLocaleString()}</span>
-                        <div>${c.content}</div>
+                        <div class="comment-text">${c.content}</div>
                     </div>
                 </div>
             `).join('');
@@ -802,7 +1058,7 @@
             if (el) el.classList.toggle('hidden');
         }
 
-        async function handleLike(postId) {
+        async function handleLike(postId, postAuthor) {
             if (!currentUser) {
                 alert('请先登录');
                 return;
@@ -817,7 +1073,7 @@
                 
                 const newLikes = (post.likes || 0) + 1;
                 
-                await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
+                const updateRes = await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
                     method: 'PATCH',
                     headers: {
                         'apikey': SUPABASE_KEY,
@@ -827,13 +1083,24 @@
                     body: JSON.stringify({ likes: newLikes })
                 });
                 
+                if (!updateRes.ok) {
+                    throw new Error('更新失败');
+                }
+                
+                if (postAuthor !== currentUser.email.split('@')[0]) {
+                    addNotification('like', {
+                        author: currentUser.email.split('@')[0],
+                        postId: postId
+                    });
+                }
+                
                 loadPosts();
             } catch (err) {
-                alert('点赞失败');
+                alert('点赞失败: ' + err.message);
             }
         }
 
-        async function addComment(postId) {
+        async function addComment(postId, postAuthor) {
             if (!currentUser) {
                 alert('请先登录');
                 return;
@@ -841,36 +1108,64 @@
             
             const input = document.getElementById(`comment-${postId}`);
             const content = input.value.trim();
-            if (!content) return;
+            if (!content) {
+                alert('请输入评论内容');
+                return;
+            }
             
             try {
                 const res = await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
                     headers: { 'apikey': SUPABASE_KEY }
                 });
+                
+                if (!res.ok) {
+                    throw new Error(`获取帖子失败: ${res.status}`);
+                }
+                
                 const posts = await res.json();
                 const post = posts[0];
                 
+                if (!post) {
+                    throw new Error('帖子不存在');
+                }
+                
                 const comments = post.comments || [];
-                comments.push({
+                const newComment = {
                     author: currentUser.email.split('@')[0],
                     content: content,
                     created_at: new Date().toISOString()
-                });
+                };
+                comments.push(newComment);
                 
-                await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
+                const updateRes = await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
                     method: 'PATCH',
                     headers: {
                         'apikey': SUPABASE_KEY,
                         'Authorization': `Bearer ${SUPABASE_KEY}`,
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ comments })
+                    body: JSON.stringify({ comments: comments })
                 });
+                
+                if (!updateRes.ok) {
+                    const errorText = await updateRes.text();
+                    throw new Error(`更新失败: ${errorText}`);
+                }
+                
+                if (postAuthor !== currentUser.email.split('@')[0]) {
+                    addNotification('comment', {
+                        author: currentUser.email.split('@')[0],
+                        content: content,
+                        postId: postId
+                    });
+                }
                 
                 input.value = '';
                 loadPosts();
+                
             } catch (err) {
-                alert('评论失败');
+                console.error('评论错误:', err);
+                alert('评论失败: ' + err.message);
             }
         }
 
@@ -881,10 +1176,13 @@
             }
             
             const content = document.getElementById('postContent').value.trim();
-            if (!content) return;
+            if (!content) {
+                alert('请输入内容');
+                return;
+            }
             
             try {
-                await fetch(`${SUPABASE_URL}/rest/v1/posts`, {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/posts`, {
                     method: 'POST',
                     headers: {
                         'apikey': SUPABASE_KEY,
@@ -899,17 +1197,24 @@
                     }])
                 });
                 
+                if (!res.ok) {
+                    throw new Error('发布失败');
+                }
+                
                 document.getElementById('postContent').value = '';
                 loadPosts();
             } catch (err) {
-                alert('发布失败');
+                alert('发布失败: ' + err.message);
             }
         }
 
         function logout() {
             currentUser = null;
+            notifications = [];
+            unreadCount = 0;
             localStorage.removeItem('currentUser');
             updateUIForUser();
+            document.getElementById('notificationBadge').classList.add('hidden');
         }
 
         function showLogin() { 
@@ -932,6 +1237,9 @@
         function switchToLogin() { hideRegister(); showLogin(); }
 
         window.addEventListener('click', (e) => {
+            if (!e.target.closest('.notification-icon') && !e.target.closest('.notification-dropdown')) {
+                document.getElementById('notificationDropdown').classList.remove('show');
+            }
             if (e.target.classList.contains('modal')) {
                 e.target.classList.add('hidden');
             }
