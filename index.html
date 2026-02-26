@@ -215,6 +215,7 @@
             border-radius: 7.5px;
             background: var(--success);
             border: 2px solid white;
+            display: none;
         }
         
         .profile-name {
@@ -739,7 +740,6 @@
             </div>
         </header>
 
-        <!-- 主页视图 -->
         <div id="homeView">
             <div class="profile-grid">
                 <div class="profile-card">
@@ -806,7 +806,6 @@
             </div>
         </div>
 
-        <!-- 他人主页视图 -->
         <div id="profileView" class="hidden">
             <div class="back-btn" onclick="showHome()">
                 <span class="material-symbols-outlined">arrow_back</span> 返回首页
@@ -853,7 +852,6 @@
             </div>
         </div>
 
-        <!-- 编辑资料弹窗 -->
         <div id="editProfileModal" class="modal hidden">
             <div class="modal-content">
                 <h3>编辑资料</h3>
@@ -876,7 +874,6 @@
             </div>
         </div>
 
-        <!-- 举报弹窗 -->
         <div id="reportModal" class="modal hidden">
             <div class="modal-content">
                 <h3>举报</h3>
@@ -907,7 +904,6 @@
             </div>
         </div>
 
-        <!-- 举报管理面板 -->
         <div id="reportsModal" class="modal hidden">
             <div class="modal-content">
                 <h3>举报管理</h3>
@@ -916,7 +912,6 @@
             </div>
         </div>
 
-        <!-- 登录弹窗 -->
         <div id="loginModal" class="modal hidden">
             <div class="modal-content">
                 <h3>登录</h3>
@@ -929,7 +924,6 @@
             </div>
         </div>
 
-        <!-- 注册弹窗 -->
         <div id="registerModal" class="modal hidden">
             <div class="modal-content">
                 <h3>注册</h3>
@@ -964,15 +958,6 @@
         let currentViewUser = null;
         
         let userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
-        if (!userProfile.name) {
-            userProfile = {
-                name: '511651251',
-                bio: '热爱编程的开发者',
-                avatar: 'U',
-                joinDate: new Date().toLocaleDateString()
-            };
-            localStorage.setItem('userProfile', JSON.stringify(userProfile));
-        }
 
         function showToast(message, isError = false) {
             const toast = document.createElement('div');
@@ -989,71 +974,68 @@
             }
         }
 
-        async function init() {
-            await loadUserFromStorage();
-            await loadPosts();
-            updateHomeProfile();
-            updateOnlineStatus();
-            updateNotificationBadge();
-            startOnlineStatusPing();
-        }
-
-        function startOnlineStatusPing() {
-            setInterval(() => {
-                if (currentUser) {
-                    const username = currentUser.email.split('@')[0];
-                    if (!onlineUsers.includes(username)) {
-                        onlineUsers.push(username);
-                        localStorage.setItem('onlineUsers', JSON.stringify(onlineUsers));
-                    }
-                }
-                document.getElementById('onlineCount').textContent = onlineUsers.length;
-            }, 30000);
-        }
-
-        function updateOnlineStatus() {
-            onlineUsers = JSON.parse(localStorage.getItem('onlineUsers') || '[]');
-            if (currentUser) {
-                const username = currentUser.email.split('@')[0];
-                if (!onlineUsers.includes(username)) {
-                    onlineUsers.push(username);
-                    localStorage.setItem('onlineUsers', JSON.stringify(onlineUsers));
-                }
-                document.getElementById('homeOnlineBadge').style.display = 'block';
-            }
-            document.getElementById('onlineCount').textContent = onlineUsers.length;
-        }
-
-        async function loadUserFromStorage() {
+        async function validateSession() {
             const savedUser = localStorage.getItem('currentUser');
-            if (savedUser) {
-                try {
-                    currentUser = JSON.parse(savedUser);
-                    document.getElementById('auth-section').classList.add('hidden');
-                    document.getElementById('user-section').classList.remove('hidden');
-                    document.getElementById('compose-section').classList.remove('hidden');
-                    document.getElementById('notificationSection').classList.remove('hidden');
-                    
-                    if (currentUser.email === '511651251@qq.com') {
-                        document.getElementById('adminBadge').classList.remove('hidden');
-                        document.getElementById('adminPanelBtn').classList.remove('hidden');
-                    } else {
-                        document.getElementById('adminBadge').classList.add('hidden');
-                        document.getElementById('adminPanelBtn').classList.add('hidden');
-                    }
-                } catch (e) {
+            if (!savedUser) return false;
+            
+            try {
+                const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_KEY);
+                const { data: { user }, error } = await supabase.auth.getUser();
+                
+                if (error || !user) {
                     localStorage.removeItem('currentUser');
+                    localStorage.removeItem('userProfile');
+                    return false;
                 }
+                
+                currentUser = user;
+                return true;
+            } catch (e) {
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('userProfile');
+                return false;
+            }
+        }
+
+        function updateUIForUser(isLoggedIn) {
+            if (isLoggedIn && currentUser) {
+                document.getElementById('auth-section').classList.add('hidden');
+                document.getElementById('user-section').classList.remove('hidden');
+                document.getElementById('compose-section').classList.remove('hidden');
+                document.getElementById('notificationSection').classList.remove('hidden');
+                
+                if (currentUser.email === '511651251@qq.com') {
+                    document.getElementById('adminBadge').classList.remove('hidden');
+                    document.getElementById('adminPanelBtn').classList.remove('hidden');
+                } else {
+                    document.getElementById('adminBadge').classList.add('hidden');
+                    document.getElementById('adminPanelBtn').classList.add('hidden');
+                }
+                
+                document.getElementById('homeOnlineBadge').style.display = 'block';
+                updateOnlineStatus();
+            } else {
+                document.getElementById('auth-section').classList.remove('hidden');
+                document.getElementById('user-section').classList.add('hidden');
+                document.getElementById('compose-section').classList.add('hidden');
+                document.getElementById('notificationSection').classList.add('hidden');
+                document.getElementById('adminBadge').classList.add('hidden');
+                document.getElementById('adminPanelBtn').classList.add('hidden');
+                document.getElementById('homeOnlineBadge').style.display = 'none';
             }
         }
 
         function updateHomeProfile() {
-            document.getElementById('homeAvatar').textContent = userProfile.avatar;
-            document.getElementById('homeDisplayName').textContent = userProfile.name;
-            document.getElementById('homeBio').textContent = userProfile.bio;
+            document.getElementById('homeAvatar').textContent = userProfile.avatar || 'U';
+            document.getElementById('homeDisplayName').textContent = userProfile.name || '511651251';
+            document.getElementById('homeBio').textContent = userProfile.bio || '热爱编程的开发者';
         }
 
         function showEditProfile() {
+            if (!currentUser) {
+                showToast('请先登录', true);
+                return;
+            }
             document.getElementById('editName').value = userProfile.name;
             document.getElementById('editBio').value = userProfile.bio;
             document.getElementById('editProfileModal').classList.remove('hidden');
@@ -1068,9 +1050,12 @@
             document.getElementById('homeAvatar').textContent = emoji;
         }
 
-        function saveProfile() {
+        async function saveProfile() {
+            if (!currentUser) return;
+            
             userProfile.name = document.getElementById('editName').value || '511651251';
             userProfile.bio = document.getElementById('editBio').value || '热爱编程的开发者';
+            
             localStorage.setItem('userProfile', JSON.stringify(userProfile));
             updateHomeProfile();
             hideEditProfile();
@@ -1140,16 +1125,34 @@
             updateNotificationBadge();
         }
 
+        function updateOnlineStatus() {
+            onlineUsers = JSON.parse(localStorage.getItem('onlineUsers') || '[]');
+            if (currentUser) {
+                const username = currentUser.email.split('@')[0];
+                if (!onlineUsers.includes(username)) {
+                    onlineUsers.push(username);
+                    localStorage.setItem('onlineUsers', JSON.stringify(onlineUsers));
+                }
+            }
+            document.getElementById('onlineCount').textContent = onlineUsers.length;
+        }
+
+        function startOnlineStatusPing() {
+            setInterval(updateOnlineStatus, 30000);
+        }
+
         async function loadPosts() {
             setLoading('postsList', true);
             try {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/posts?select=*&order=created_at.desc`, {
-                    headers: { 'apikey': SUPABASE_KEY }
-                });
+                const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_KEY);
+                const { data, error } = await supabase
+                    .from('posts')
+                    .select('*')
+                    .order('created_at', { ascending: false });
                 
-                if (!res.ok) throw new Error(`HTTP错误: ${res.status}`);
+                if (error) throw error;
                 
-                allPosts = await res.json();
+                allPosts = data || [];
                 renderPosts();
                 renderHotPosts();
                 renderFollowingPosts();
@@ -1188,7 +1191,6 @@
                 html = '<div style="text-align:center; padding:30px;">暂无帖子</div>';
             } else {
                 allPosts.forEach(post => {
-                    const isLiked = false;
                     html += `
                         <div class="post" id="post-${post.id}">
                             <div class="post-menu" onclick="togglePostMenu(${post.id})">
@@ -1223,7 +1225,7 @@
                             </div>
                             <div class="post-content">${post.content}</div>
                             <div class="post-actions">
-                                <button class="action-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
+                                <button class="action-btn" onclick="toggleLike(${post.id})">
                                     <span class="material-symbols-outlined">favorite</span> ${post.likes || 0}
                                 </button>
                                 <button class="action-btn" onclick="toggleComments(${post.id})">
@@ -1340,12 +1342,13 @@
             if (!confirm('确定要删除这个帖子吗？')) return;
             
             try {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
-                    method: 'DELETE',
-                    headers: { 'apikey': SUPABASE_KEY }
-                });
+                const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_KEY);
+                const { error } = await supabase
+                    .from('posts')
+                    .delete()
+                    .eq('id', postId);
                 
-                if (!res.ok) throw new Error('删除失败');
+                if (error) throw error;
                 
                 allPosts = allPosts.filter(p => p.id !== postId);
                 renderPosts();
@@ -1375,16 +1378,13 @@
             const newLikes = (post.likes || 0) + 1;
             
             try {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ likes: newLikes })
-                });
+                const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_KEY);
+                const { error } = await supabase
+                    .from('posts')
+                    .update({ likes: newLikes })
+                    .eq('id', postId);
                 
-                if (!res.ok) throw new Error('点赞失败');
+                if (error) throw error;
                 
                 post.likes = newLikes;
                 renderPosts();
@@ -1424,16 +1424,13 @@
             });
             
             try {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ comments })
-                });
+                const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_KEY);
+                const { error } = await supabase
+                    .from('posts')
+                    .update({ comments })
+                    .eq('id', postId);
                 
-                if (!res.ok) throw new Error('评论失败');
+                if (error) throw error;
                 
                 post.comments = comments;
                 input.value = '';
@@ -1464,26 +1461,19 @@
             }
             
             try {
+                const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_KEY);
                 const username = currentUser.email.split('@')[0];
                 
-                const postData = {
-                    author: username,
-                    content: content,
-                    likes: 0,
-                    comments: []
-                };
+                const { error } = await supabase
+                    .from('posts')
+                    .insert([{
+                        author: username,
+                        content: content,
+                        likes: 0,
+                        comments: []
+                    }]);
                 
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/posts`, {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(postData)
-                });
-                
-                if (!res.ok) throw new Error('发布失败');
+                if (error) throw error;
                 
                 document.getElementById('postContent').value = '';
                 await loadPosts();
@@ -1790,24 +1780,16 @@
             }
             
             try {
-                const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password })
+                const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_KEY);
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email, password
                 });
                 
-                const data = await res.json();
-                
-                if (data.error) {
-                    if (data.error_description === 'Email not confirmed') {
+                if (error) {
+                    if (error.message.includes('Email not confirmed')) {
                         showToast('请先验证邮箱', true);
-                    } else if (data.error_description === 'Invalid login credentials') {
-                        showToast('邮箱或密码错误', true);
                     } else {
-                        showToast(data.error_description || data.msg, true);
+                        showToast(error.message, true);
                     }
                 } else {
                     if (!data.user.email_confirmed_at) {
@@ -1818,16 +1800,17 @@
                     currentUser = data.user;
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
                     
-                    document.getElementById('auth-section').classList.add('hidden');
-                    document.getElementById('user-section').classList.remove('hidden');
-                    document.getElementById('compose-section').classList.remove('hidden');
-                    document.getElementById('notificationSection').classList.remove('hidden');
-                    
-                    if (currentUser.email === '511651251@qq.com') {
-                        document.getElementById('adminBadge').classList.remove('hidden');
-                        document.getElementById('adminPanelBtn').classList.remove('hidden');
+                    if (!userProfile.name) {
+                        userProfile = {
+                            name: currentUser.email.split('@')[0],
+                            bio: '热爱编程的开发者',
+                            avatar: 'U',
+                            joinDate: new Date().toLocaleDateString()
+                        };
+                        localStorage.setItem('userProfile', JSON.stringify(userProfile));
                     }
                     
+                    updateUIForUser(true);
                     hideLogin();
                     await loadPosts();
                     updateOnlineStatus();
@@ -1859,27 +1842,15 @@
             }
             
             try {
-                const res = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ 
-                        email, 
-                        password,
-                        options: { emailRedirectTo: window.location.origin }
-                    })
+                const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_KEY);
+                const { error } = await supabase.auth.signUp({
+                    email, 
+                    password,
+                    options: { emailRedirectTo: window.location.origin }
                 });
                 
-                const data = await res.json();
-                
-                if (data.error) {
-                    if (data.msg === 'User already registered') {
-                        showToast('该邮箱已注册，请直接登录', true);
-                    } else {
-                        showToast(data.error_description || data.msg, true);
-                    }
+                if (error) {
+                    showToast(error.message, true);
                 } else {
                     showToast('注册成功！请查收验证邮件');
                     hideRegister();
@@ -1900,13 +1871,7 @@
             currentUser = null;
             localStorage.removeItem('currentUser');
             
-            document.getElementById('auth-section').classList.remove('hidden');
-            document.getElementById('user-section').classList.add('hidden');
-            document.getElementById('compose-section').classList.add('hidden');
-            document.getElementById('notificationSection').classList.add('hidden');
-            document.getElementById('adminBadge').classList.add('hidden');
-            document.getElementById('adminPanelBtn').classList.add('hidden');
-            
+            updateUIForUser(false);
             updateOnlineStatus();
             showToast('已退出登录');
         }
@@ -1926,6 +1891,32 @@
                 document.getElementById('notificationDropdown').classList.remove('show');
             }
         });
+
+        async function init() {
+            const isValid = await validateSession();
+            
+            if (isValid) {
+                updateUIForUser(true);
+            } else {
+                currentUser = null;
+                updateUIForUser(false);
+            }
+            
+            if (!userProfile.name) {
+                userProfile = {
+                    name: currentUser ? currentUser.email.split('@')[0] : '511651251',
+                    bio: '热爱编程的开发者',
+                    avatar: 'U',
+                    joinDate: new Date().toLocaleDateString()
+                };
+            }
+            
+            updateHomeProfile();
+            await loadPosts();
+            updateOnlineStatus();
+            updateNotificationBadge();
+            startOnlineStatusPing();
+        }
 
         init();
     </script>
