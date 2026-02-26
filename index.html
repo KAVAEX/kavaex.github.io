@@ -2,54 +2,76 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>开发者社区 - 已修复安全隐患</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>开发者社区 - 真实完整版</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0,200" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #6750A4;
+            --primary-light: #7c6ab3;
+            --surface: #ffffff;
+            --background: #f8f9fa;
+            --text: #1a1a1a;
+            --text-secondary: #666666;
+            --border: #e0e0e0;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
+        }
+        
         body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background: #f8f9fa;
-            padding: 20px;
-            max-width: 800px;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 12px;
+        }
+        
+        .container {
+            max-width: 1200px;
             margin: 0 auto;
+            width: 100%;
         }
         
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            background: white;
-            padding: 15px 25px;
-            border-radius: 40px;
+            background: var(--surface);
+            border-radius: 30px;
+            padding: 10px 16px;
+            margin-bottom: 16px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
             position: sticky;
-            top: 10px;
+            top: 8px;
             z-index: 100;
         }
         
         .logo {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            cursor: pointer;
         }
         
         .logo .material-symbols-outlined {
-            font-size: 32px;
-            color: #6750A4;
+            font-size: 24px;
+            color: var(--primary);
         }
         
         .logo span:last-child {
-            font-size: 1.4rem;
+            font-size: 1.1rem;
             font-weight: 600;
-            color: #1a1a1a;
         }
         
         .right-section {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 8px;
+            flex-wrap: wrap;
         }
         
         .notification-icon {
@@ -61,7 +83,7 @@
             position: absolute;
             top: -5px;
             right: -5px;
-            background: #d32f2f;
+            background: var(--danger);
             color: white;
             font-size: 0.7rem;
             min-width: 18px;
@@ -77,7 +99,7 @@
             position: absolute;
             top: 50px;
             right: 0;
-            width: 320px;
+            width: 300px;
             background: white;
             border-radius: 24px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
@@ -91,83 +113,45 @@
             display: block;
         }
         
-        .notification-header {
-            padding: 15px 20px;
-            border-bottom: 1px solid #f0f0f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-        }
-        
-        .notification-item {
-            padding: 15px 20px;
-            border-bottom: 1px solid #f0f0f0;
-            display: flex;
-            gap: 12px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        
-        .notification-item:hover {
-            background: #f5f5f5;
-        }
-        
-        .notification-item.unread {
-            background: #e8f0fe;
-        }
-        
-        .notification-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 20px;
-            background: #EADDFF;
+        .online-count {
+            background: #2d2d2d;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 30px;
+            font-size: 0.8rem;
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: #21005E;
-            font-weight: 600;
-            flex-shrink: 0;
+            gap: 4px;
         }
         
-        .notification-content {
-            flex: 1;
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 4px;
+            background: var(--success);
+            animation: pulse 2s infinite;
         }
         
-        .notification-text {
-            margin-bottom: 4px;
-            line-height: 1.4;
-        }
-        
-        .notification-time {
-            font-size: 0.75rem;
-            color: #999;
-        }
-        
-        .notification-empty {
-            padding: 30px;
-            text-align: center;
-            color: #999;
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
         
         .btn {
-            background: #6750A4;
+            background: var(--primary);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 40px;
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 500;
             cursor: pointer;
-            margin: 5px;
-            font-size: 0.95rem;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 4px;
             transition: all 0.2s;
-        }
-        
-        .btn:hover {
-            background: #7c6ab3;
-            transform: translateY(-1px);
+            min-height: 40px;
         }
         
         .btn.secondary {
@@ -175,30 +159,345 @@
             color: #333;
         }
         
-        .btn.secondary:hover {
-            background: #e0e0e0;
+        .btn.small {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            min-height: 32px;
         }
         
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
+        .btn.danger {
+            background: var(--danger);
         }
         
-        .btn-icon {
-            background: transparent;
-            color: #666;
-            padding: 8px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: none;
-            display: inline-flex;
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        
+        @media (min-width: 768px) {
+            .profile-grid {
+                grid-template-columns: 280px 1fr;
+            }
+        }
+        
+        .profile-card {
+            background: var(--surface);
+            border-radius: 24px;
+            padding: 20px 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 80px;
+        }
+        
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50px;
+            background: #EADDFF;
+            display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 2.8rem;
+            font-weight: 600;
+            color: #21005E;
+            margin: 0 auto 12px;
+            cursor: pointer;
+            position: relative;
         }
         
-        .btn-icon:hover {
-            background: #f0f0f0;
+        .online-badge-small {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 15px;
+            height: 15px;
+            border-radius: 7.5px;
+            background: var(--success);
+            border: 2px solid white;
+        }
+        
+        .profile-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .profile-bio {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            word-break: break-word;
+        }
+        
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            padding: 16px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin: 16px 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .stat-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+        }
+        
+        .edit-profile-btn {
+            width: 100%;
+            padding: 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+        
+        .main-content {
+            background: var(--surface);
+            border-radius: 24px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 12px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 16px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .tab {
+            padding: 8px 0;
+            cursor: pointer;
+            color: var(--text-secondary);
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            font-weight: 500;
+        }
+        
+        .compose-box {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .compose-box textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            font-size: 0.95rem;
+            resize: vertical;
+            min-height: 70px;
+            font-family: inherit;
+            margin-bottom: 8px;
+        }
+        
+        .post {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 14px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        
+        .post-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            background: #EADDFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            position: relative;
+        }
+        
+        .post-author {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .post-time {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+        
+        .post-menu {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            cursor: pointer;
+        }
+        
+        .post-menu-dropdown {
+            position: absolute;
+            top: 30px;
+            right: 0;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 10;
+            min-width: 150px;
+        }
+        
+        .post-menu-dropdown.show {
+            display: block;
+        }
+        
+        .menu-item {
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        
+        .menu-item:hover {
+            background: #f5f5f5;
+        }
+        
+        .menu-item.danger {
+            color: var(--danger);
+        }
+        
+        .post-content {
+            margin-left: 50px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            word-break: break-word;
+        }
+        
+        .post-actions {
+            display: flex;
+            gap: 12px;
+            margin-left: 50px;
+            padding-top: 8px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        
+        .action-btn.liked {
+            color: var(--danger);
+        }
+        
+        .action-btn.liked .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        .comments-section {
+            margin-left: 50px;
+            margin-top: 12px;
+        }
+        
+        .comment {
+            background: white;
+            border-radius: 16px;
+            padding: 10px;
+            margin-bottom: 8px;
+            position: relative;
+        }
+        
+        .comment-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 4px;
+            flex-wrap: wrap;
+        }
+        
+        .comment-author {
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        .comment-time {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+        }
+        
+        .comment-content {
+            word-break: break-word;
+        }
+        
+        .add-comment {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        
+        .add-comment input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            font-size: 0.9rem;
         }
         
         .modal {
@@ -209,427 +508,444 @@
             align-items: center;
             justify-content: center;
             z-index: 1000;
-            backdrop-filter: blur(4px);
+            padding: 16px;
         }
         
         .modal-content {
             background: white;
-            width: 90%;
+            width: 100%;
             max-width: 400px;
-            padding: 30px;
-            border-radius: 32px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 28px;
+            max-height: 80vh;
+            overflow-y: auto;
         }
         
         .modal-content h3 {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            color: #1a1a1a;
-        }
-        
-        input, textarea {
-            width: 100%;
-            padding: 14px 18px;
-            border: 1px solid #e0e0e0;
-            border-radius: 40px;
-            margin-bottom: 15px;
-            font-size: 1rem;
-            transition: all 0.2s;
-        }
-        
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: #6750A4;
-            box-shadow: 0 0 0 3px rgba(103,80,164,0.1);
-        }
-        
-        .hidden { display: none !important; }
-        
-        .error-message {
-            background: #ffebee;
-            color: #c62828;
-            padding: 12px;
-            border-radius: 24px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .success-message {
-            background: #e8f5e9;
-            color: #2e7d32;
-            padding: 12px;
-            border-radius: 24px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .captcha-box {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .captcha-box input {
-            flex: 1;
-            margin-bottom: 0;
-        }
-        
-        .captcha-image {
-            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
-            padding: 12px 20px;
-            border-radius: 40px;
-            font-family: monospace;
+            margin-bottom: 16px;
             font-size: 1.2rem;
-            letter-spacing: 4px;
-            font-weight: bold;
-            color: #333;
-            user-select: none;
-            min-width: 120px;
+        }
+        
+        .modal-content input, .modal-content textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+        
+        .report-reason {
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+        
+        .report-reason.selected {
+            background: #e8f0fe;
+            border-color: var(--primary);
+        }
+        
+        .report-reason strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .report-reason div {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .reports-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 16px;
+        }
+        
+        .report-item {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .report-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .profile-view {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 16px;
+        }
+        
+        .profile-header {
+            background: var(--surface);
+            border-radius: 24px;
+            padding: 24px;
             text-align: center;
         }
         
-        .rate-limit-warning {
-            background: #fff3e0;
-            color: #e65100;
-            padding: 12px;
-            border-radius: 24px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .post {
-            background: white;
-            border-radius: 28px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        
-        .post-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        
-        .avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 24px;
+        .profile-header .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 60px;
             background: #EADDFF;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 12px;
-            color: #21005E;
-            font-weight: 600;
-            font-size: 1.2rem;
+            font-size: 3rem;
+            margin: 0 auto 16px;
         }
         
-        .post-author {
-            font-weight: 600;
-            color: #1a1a1a;
-            margin-bottom: 4px;
-        }
-        
-        .post-time {
-            font-size: 0.85rem;
-            color: #666;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        .post-content {
-            margin-left: 60px;
-            line-height: 1.6;
-            color: #333;
-        }
-        
-        .post-actions {
-            display: flex;
-            gap: 15px;
-            margin-left: 60px;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #f0f0f0;
-        }
-        
-        .action-btn {
-            background: none;
+        .follow-btn {
+            width: 100%;
+            padding: 10px;
+            background: var(--primary);
+            color: white;
             border: none;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            color: #666;
+            border-radius: 30px;
+            margin-top: 16px;
             cursor: pointer;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.95rem;
-        }
-        
-        .action-btn:hover {
-            background: #f5f5f5;
-        }
-        
-        .comments-section {
-            margin-left: 60px;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #f0f0f0;
-        }
-        
-        .comment {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .comment-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 16px;
-            background: #E8DEF8;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #1E192B;
+            gap: 6px;
+        }
+        
+        .follow-btn.following {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .hidden { display: none !important; }
+        
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 40px;
             font-size: 0.9rem;
-            flex-shrink: 0;
+            z-index: 2000;
+            animation: slideIn 0.3s;
         }
         
-        .comment-content {
-            flex: 1;
+        .error-toast {
+            background: var(--danger);
         }
         
-        .comment-author {
-            font-weight: 500;
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
             margin-right: 8px;
         }
         
-        .comment-time {
-            font-size: 0.75rem;
-            color: #999;
-        }
-        
-        .comment-text {
-            margin-top: 4px;
-        }
-        
-        .add-comment {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        
-        .add-comment input {
-            flex: 1;
-            padding: 10px 15px;
-            margin-bottom: 0;
-        }
-        
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: #e8f5e9;
-            color: #2e7d32;
-            padding: 4px 8px;
-            border-radius: 20px;
-            font-size: 0.8rem;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         .footer {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 24px;
             color: #999;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            font-size: 0.75rem;
         }
         
-        .compose-card {
-            background: white;
-            border-radius: 28px;
-            padding: 20px;
-            margin-bottom: 20px;
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--primary);
+            cursor: pointer;
+            margin-bottom: 12px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            width: fit-content;
+        }
+        
+        .back-btn:hover {
+            background: #f0f0f0;
+        }
+        
+        .admin-badge {
+            background: var(--warning);
+            color: #333;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: 8px;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo">
-            <span class="material-symbols-outlined">code_blocks</span>
-            <span>DevCommunity</span>
-        </div>
-        
-        <div class="right-section">
-            <div id="notificationSection" class="hidden">
-                <div class="notification-icon" onclick="toggleNotifications()">
-                    <span class="material-symbols-outlined">notifications</span>
-                    <span id="notificationBadge" class="notification-badge hidden">0</span>
-                </div>
-                <div id="notificationDropdown" class="notification-dropdown">
-                    <div class="notification-header">
-                        <span>通知</span>
-                        <button class="btn-icon" onclick="markAllAsRead()">
-                            <span class="material-symbols-outlined" style="font-size: 20px;">done_all</span>
-                        </button>
+    <div class="container">
+        <header class="header">
+            <div class="logo" onclick="showHome()">
+                <span class="material-symbols-outlined">code_blocks</span>
+                <span>DevCommunity</span>
+            </div>
+            
+            <div class="right-section">
+                <div id="notificationSection" class="hidden">
+                    <div class="notification-icon" onclick="toggleNotifications()">
+                        <span class="material-symbols-outlined">notifications</span>
+                        <span id="notificationBadge" class="notification-badge hidden">0</span>
                     </div>
-                    <div id="notificationList" class="notification-list">
-                        <div class="notification-empty">暂无通知</div>
+                    <div id="notificationDropdown" class="notification-dropdown">
+                        <div class="notification-header" style="padding:12px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between;">
+                            <span>通知</span>
+                            <button class="btn small secondary" onclick="markAllAsRead()">全部已读</button>
+                        </div>
+                        <div id="notificationList"></div>
                     </div>
                 </div>
-            </div>
-            
-            <div id="auth-section">
-                <button class="btn" onclick="showLogin()">
-                    <span class="material-symbols-outlined">login</span> 登录
-                </button>
-                <button class="btn secondary" onclick="showRegister()">
-                    <span class="material-symbols-outlined">person_add</span> 注册
-                </button>
-            </div>
-            
-            <div id="user-section" class="hidden">
-                <span id="userEmail" style="margin-right: 10px;"></span>
-                <span class="badge">
-                    <span class="material-symbols-outlined" style="font-size: 16px;">verified</span> 已验证
-                </span>
-                <button class="btn secondary" onclick="logout()">
-                    <span class="material-symbols-outlined">logout</span> 退出
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div id="compose-section" class="compose-card hidden">
-        <textarea id="postContent" placeholder="分享你的开发心得..." rows="3"></textarea>
-        <button class="btn" onclick="publishPost()" style="width: 100%;">
-            <span class="material-symbols-outlined">send</span> 发布帖子
-        </button>
-    </div>
-
-    <div id="posts-list"></div>
-
-    <div id="loginModal" class="modal hidden">
-        <div class="modal-content">
-            <h3>
-                <span class="material-symbols-outlined">login</span> 登录
-            </h3>
-            <div id="loginError" class="error-message hidden">
-                <span class="material-symbols-outlined">error</span>
-                <span id="loginErrorText"></span>
-            </div>
-            <div id="loginRateLimit" class="rate-limit-warning hidden">
-                <span class="material-symbols-outlined">timer</span>
-                <span>尝试次数过多，请 5 分钟后再试</span>
-            </div>
-            
-            <div style="position: relative;">
-                <span class="material-symbols-outlined" style="position: absolute; left: 15px; top: 14px; color: #999; z-index: 1;">mail</span>
-                <input type="email" id="loginEmail" placeholder="邮箱" value="" style="padding-left: 45px;">
-            </div>
-            
-            <div style="position: relative;">
-                <span class="material-symbols-outlined" style="position: absolute; left: 15px; top: 14px; color: #999; z-index: 1;">lock</span>
-                <input type="password" id="loginPassword" placeholder="密码" value="" style="padding-left: 45px;">
-            </div>
-            
-            <div class="captcha-box">
-                <div style="position: relative; flex: 1;">
-                    <span class="material-symbols-outlined" style="position: absolute; left: 15px; top: 12px; color: #999; z-index: 1;">pin</span>
-                    <input type="text" id="loginCaptcha" placeholder="验证码" value="" style="padding-left: 45px;">
+                
+                <div class="online-count">
+                    <span class="online-dot"></span>
+                    <span id="onlineCount">0</span>
                 </div>
-                <span class="captcha-image" id="loginCaptchaImage">ABC123</span>
-                <button class="btn-icon" onclick="refreshLoginCaptcha()">
-                    <span class="material-symbols-outlined">refresh</span>
-                </button>
-            </div>
-            
-            <button class="btn" onclick="doLogin()" id="loginBtn" style="width: 100%;">
-                <span class="material-symbols-outlined">login</span> 登录
-            </button>
-            
-            <div style="display: flex; gap: 10px; margin-top: 10px;">
-                <button class="btn secondary" onclick="hideLogin()" style="flex: 1;">
-                    <span class="material-symbols-outlined">close</span> 取消
-                </button>
-                <button class="btn secondary" onclick="switchToRegister()" style="flex: 1;">
-                    <span class="material-symbols-outlined">person_add</span> 注册
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div id="registerModal" class="modal hidden">
-        <div class="modal-content">
-            <h3>
-                <span class="material-symbols-outlined">person_add</span> 注册
-            </h3>
-            <div id="registerError" class="error-message hidden">
-                <span class="material-symbols-outlined">error</span>
-                <span id="registerErrorText"></span>
-            </div>
-            <div id="registerSuccess" class="success-message hidden">
-                <span class="material-symbols-outlined">mark_email_read</span>
-                <span>注册成功！请查收验证邮件</span>
-            </div>
-            
-            <div style="position: relative;">
-                <span class="material-symbols-outlined" style="position: absolute; left: 15px; top: 14px; color: #999; z-index: 1;">mail</span>
-                <input type="email" id="registerEmail" placeholder="邮箱" value="" style="padding-left: 45px;">
-            </div>
-            
-            <div style="position: relative;">
-                <span class="material-symbols-outlined" style="position: absolute; left: 15px; top: 14px; color: #999; z-index: 1;">lock</span>
-                <input type="password" id="registerPassword" placeholder="密码" value="" style="padding-left: 45px;">
-            </div>
-            
-            <div style="position: relative;">
-                <span class="material-symbols-outlined" style="position: absolute; left: 15px; top: 14px; color: #999; z-index: 1;">lock_reset</span>
-                <input type="password" id="registerConfirmPassword" placeholder="确认密码" value="" style="padding-left: 45px;">
-            </div>
-            
-            <div class="captcha-box">
-                <div style="position: relative; flex: 1;">
-                    <span class="material-symbols-outlined" style="position: absolute; left: 15px; top: 12px; color: #999; z-index: 1;">pin</span>
-                    <input type="text" id="registerCaptcha" placeholder="验证码" value="" style="padding-left: 45px;">
+                
+                <div id="auth-section">
+                    <button class="btn" onclick="showLogin()">登录</button>
+                    <button class="btn secondary" onclick="showRegister()">注册</button>
                 </div>
-                <span class="captcha-image" id="registerCaptchaImage">XYZ789</span>
-                <button class="btn-icon" onclick="refreshRegisterCaptcha()">
-                    <span class="material-symbols-outlined">refresh</span>
-                </button>
+                
+                <div id="user-section" class="hidden">
+                    <span class="admin-badge" id="adminBadge">管理员</span>
+                    <button class="btn small" onclick="logout()">退出</button>
+                </div>
             </div>
-            
-            <button class="btn" onclick="doRegister()" id="registerBtn" style="width: 100%;">
-                <span class="material-symbols-outlined">person_add</span> 注册
-            </button>
-            
-            <div style="display: flex; gap: 10px; margin-top: 10px;">
-                <button class="btn secondary" onclick="hideRegister()" style="flex: 1;">
-                    <span class="material-symbols-outlined">close</span> 取消
-                </button>
-                <button class="btn secondary" onclick="switchToLogin()" style="flex: 1;">
-                    <span class="material-symbols-outlined">login</span> 返回登录
-                </button>
+        </header>
+
+        <!-- 主页视图 -->
+        <div id="homeView">
+            <div class="profile-grid">
+                <div class="profile-card">
+                    <div class="profile-avatar" id="homeAvatar" onclick="showEditProfile()">
+                        U
+                        <span class="online-badge-small" id="homeOnlineBadge"></span>
+                    </div>
+                    <div class="profile-name" id="homeDisplayName">
+                        加载中...
+                        <span class="material-symbols-outlined" style="font-size: 1.2rem; cursor:pointer;" onclick="showEditProfile()">edit</span>
+                    </div>
+                    <div class="profile-bio" id="homeBio"></div>
+                    
+                    <div class="profile-stats">
+                        <div class="stat-item" onclick="showMyPosts()">
+                            <div class="stat-value" id="homePostCount">0</div>
+                            <div class="stat-label">帖子</div>
+                        </div>
+                        <div class="stat-item" onclick="showMyComments()">
+                            <div class="stat-value" id="homeCommentCount">0</div>
+                            <div class="stat-label">评论</div>
+                        </div>
+                        <div class="stat-item" onclick="showMyLikes()">
+                            <div class="stat-value" id="homeLikeCount">0</div>
+                            <div class="stat-label">获赞</div>
+                        </div>
+                        <div class="stat-item" onclick="showMyFollowers()">
+                            <div class="stat-value" id="homeFollowerCount">0</div>
+                            <div class="stat-label">粉丝</div>
+                        </div>
+                    </div>
+                    
+                    <button class="edit-profile-btn" onclick="showEditProfile()">
+                        <span class="material-symbols-outlined">edit</span> 编辑资料
+                    </button>
+                    
+                    <button class="edit-profile-btn" style="background: var(--warning);" id="adminPanelBtn" onclick="showReportsPanel()">
+                        <span class="material-symbols-outlined">admin_panel_settings</span> 举报管理
+                    </button>
+                </div>
+                
+                <div class="main-content">
+                    <div id="compose-section" class="compose-box hidden">
+                        <textarea id="postContent" placeholder="分享你的开发心得..."></textarea>
+                        <button class="btn" onclick="publishPost()" style="width:100%;">发布帖子</button>
+                    </div>
+                    
+                    <div class="tabs">
+                        <div class="tab active" onclick="switchTab('posts')">
+                            <span class="material-symbols-outlined">post</span> 最新
+                        </div>
+                        <div class="tab" onclick="switchTab('hot')">
+                            <span class="material-symbols-outlined">whatshot</span> 热门
+                        </div>
+                        <div class="tab" onclick="switchTab('following')">
+                            <span class="material-symbols-outlined">group</span> 关注
+                        </div>
+                    </div>
+                    
+                    <div id="postsList"></div>
+                    <div id="hotPostsList" class="hidden"></div>
+                    <div id="followingPostsList" class="hidden"></div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="footer">
-        <span class="material-symbols-outlined" style="font-size: 16px;">security</span> 
-        安全保护已开启 · 验证码 + 限流 + 登录状态持久化
+        <!-- 他人主页视图 -->
+        <div id="profileView" class="hidden">
+            <div class="back-btn" onclick="showHome()">
+                <span class="material-symbols-outlined">arrow_back</span> 返回首页
+            </div>
+            
+            <div class="profile-view">
+                <div class="profile-header">
+                    <div class="avatar" id="viewAvatar">U</div>
+                    <h2 id="viewName">用户名</h2>
+                    <p id="viewBio">个人简介</p>
+                    
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="viewPostCount">0</div>
+                            <div class="stat-label">帖子</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="viewCommentCount">0</div>
+                            <div class="stat-label">评论</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="viewLikeCount">0</div>
+                            <div class="stat-label">获赞</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="viewFollowerCount">0</div>
+                            <div class="stat-label">粉丝</div>
+                        </div>
+                    </div>
+                    
+                    <button class="follow-btn" id="followBtn" onclick="toggleFollow()">
+                        <span class="material-symbols-outlined">person_add</span> 关注
+                    </button>
+                </div>
+                
+                <div class="main-content">
+                    <div class="tabs">
+                        <div class="tab active" onclick="switchProfileTab('posts')">他的帖子</div>
+                        <div class="tab" onclick="switchProfileTab('comments')">他的评论</div>
+                    </div>
+                    <div id="profilePostsList"></div>
+                    <div id="profileCommentsList" class="hidden"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 编辑资料弹窗 -->
+        <div id="editProfileModal" class="modal hidden">
+            <div class="modal-content">
+                <h3>编辑资料</h3>
+                <input type="text" id="editName" placeholder="昵称">
+                <textarea id="editBio" placeholder="个人简介" rows="3"></textarea>
+                <div style="margin-bottom: 12px;">
+                    <label>选择头像</label>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
+                        <span class="profile-avatar" style="width:50px; height:50px; font-size:1.5rem; margin:0; cursor:pointer;" onclick="selectAvatar('😊')">😊</span>
+                        <span class="profile-avatar" style="width:50px; height:50px; font-size:1.5rem; margin:0; cursor:pointer;" onclick="selectAvatar('🚀')">🚀</span>
+                        <span class="profile-avatar" style="width:50px; height:50px; font-size:1.5rem; margin:0; cursor:pointer;" onclick="selectAvatar('💻')">💻</span>
+                        <span class="profile-avatar" style="width:50px; height:50px; font-size:1.5rem; margin:0; cursor:pointer;" onclick="selectAvatar('👨‍💻')">👨‍💻</span>
+                        <span class="profile-avatar" style="width:50px; height:50px; font-size:1.5rem; margin:0; cursor:pointer;" onclick="selectAvatar('🐍')">🐍</span>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn" style="flex:1;" onclick="saveProfile()">保存</button>
+                    <button class="btn secondary" style="flex:1;" onclick="hideEditProfile()">取消</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 举报弹窗 -->
+        <div id="reportModal" class="modal hidden">
+            <div class="modal-content">
+                <h3>举报</h3>
+                <div class="report-reason" onclick="selectReason(this, 'spam')">
+                    <strong>垃圾广告</strong>
+                    <div>包含垃圾广告、引流内容</div>
+                </div>
+                <div class="report-reason" onclick="selectReason(this, 'harassment')">
+                    <strong>人身攻击</strong>
+                    <div>辱骂、骚扰、歧视等不当言论</div>
+                </div>
+                <div class="report-reason" onclick="selectReason(this, 'porn')">
+                    <strong>色情低俗</strong>
+                    <div>包含色情、低俗内容</div>
+                </div>
+                <div class="report-reason" onclick="selectReason(this, 'illegal')">
+                    <strong>违法违规</strong>
+                    <div>违反法律法规的内容</div>
+                </div>
+                <div class="report-reason" onclick="selectReason(this, 'other')">
+                    <strong>其他原因</strong>
+                </div>
+                <textarea id="customReason" class="hidden" placeholder="请详细说明原因..." rows="3"></textarea>
+                <div style="display: flex; gap: 10px; margin-top: 16px;">
+                    <button class="btn" onclick="submitReport()">提交举报</button>
+                    <button class="btn secondary" onclick="hideReportModal()">取消</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 举报管理面板 -->
+        <div id="reportsModal" class="modal hidden">
+            <div class="modal-content">
+                <h3>举报管理</h3>
+                <div class="reports-list" id="reportsList"></div>
+                <button class="btn secondary" onclick="hideReportsModal()">关闭</button>
+            </div>
+        </div>
+
+        <!-- 登录弹窗 -->
+        <div id="loginModal" class="modal hidden">
+            <div class="modal-content">
+                <h3>登录</h3>
+                <input type="email" id="loginEmail" placeholder="邮箱">
+                <input type="password" id="loginPassword" placeholder="密码">
+                <button class="btn" onclick="doLogin()" style="width:100%;">登录</button>
+                <p style="text-align:center; margin-top:12px;">
+                    <button class="btn secondary small" onclick="switchToRegister()">没有账号？注册</button>
+                </p>
+            </div>
+        </div>
+
+        <!-- 注册弹窗 -->
+        <div id="registerModal" class="modal hidden">
+            <div class="modal-content">
+                <h3>注册</h3>
+                <input type="email" id="registerEmail" placeholder="邮箱">
+                <input type="password" id="registerPassword" placeholder="密码">
+                <input type="password" id="registerConfirmPassword" placeholder="确认密码">
+                <button class="btn" onclick="doRegister()" style="width:100%;">注册</button>
+                <p style="text-align:center; margin-top:12px;">
+                    <button class="btn secondary small" onclick="switchToLogin()">返回登录</button>
+                </p>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <span class="material-symbols-outlined" style="font-size: 14px;">security</span> 开发者社区 · 真实完整版
+        </footer>
     </div>
 
     <script>
@@ -637,228 +953,839 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZubGFyeWphbm1mcXZub25xZnlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwNzQzNzgsImV4cCI6MjA4NzY1MDM3OH0.4uGXyVd_6XQnK3o1vu_sDhpdRyrM67JFaBm2SnuJf1M';
         
         let currentUser = null;
-        let notifications = [];
-        let unreadCount = 0;
+        let allPosts = [];
+        let notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+        let reports = JSON.parse(localStorage.getItem('reports') || '[]');
+        let followers = JSON.parse(localStorage.getItem('followers') || '{}');
+        let following = JSON.parse(localStorage.getItem('following') || '{}');
+        let onlineUsers = JSON.parse(localStorage.getItem('onlineUsers') || '[]');
+        let currentReportTarget = null;
+        let selectedReason = '';
+        let currentViewUser = null;
         
-        function loadUserFromStorage() {
+        let userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+        if (!userProfile.name) {
+            userProfile = {
+                name: '511651251',
+                bio: '热爱编程的开发者',
+                avatar: 'U',
+                joinDate: new Date().toLocaleDateString()
+            };
+            localStorage.setItem('userProfile', JSON.stringify(userProfile));
+        }
+
+        function showToast(message, isError = false) {
+            const toast = document.createElement('div');
+            toast.className = `toast ${isError ? 'error-toast' : ''}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
+        }
+
+        function setLoading(elementId, isLoading) {
+            const element = document.getElementById(elementId);
+            if (element && isLoading) {
+                element.innerHTML = '<div style="text-align:center; padding:30px;"><div class="loading-spinner"></div> 加载中...</div>';
+            }
+        }
+
+        async function init() {
+            await loadUserFromStorage();
+            await loadPosts();
+            updateHomeProfile();
+            updateOnlineStatus();
+            updateNotificationBadge();
+            startOnlineStatusPing();
+        }
+
+        function startOnlineStatusPing() {
+            setInterval(() => {
+                if (currentUser) {
+                    const username = currentUser.email.split('@')[0];
+                    if (!onlineUsers.includes(username)) {
+                        onlineUsers.push(username);
+                        localStorage.setItem('onlineUsers', JSON.stringify(onlineUsers));
+                    }
+                }
+                document.getElementById('onlineCount').textContent = onlineUsers.length;
+            }, 30000);
+        }
+
+        function updateOnlineStatus() {
+            onlineUsers = JSON.parse(localStorage.getItem('onlineUsers') || '[]');
+            if (currentUser) {
+                const username = currentUser.email.split('@')[0];
+                if (!onlineUsers.includes(username)) {
+                    onlineUsers.push(username);
+                    localStorage.setItem('onlineUsers', JSON.stringify(onlineUsers));
+                }
+                document.getElementById('homeOnlineBadge').style.display = 'block';
+            }
+            document.getElementById('onlineCount').textContent = onlineUsers.length;
+        }
+
+        async function loadUserFromStorage() {
             const savedUser = localStorage.getItem('currentUser');
             if (savedUser) {
                 try {
                     currentUser = JSON.parse(savedUser);
-                    updateUIForUser();
-                    loadNotifications();
-                    startNotificationPolling();
+                    document.getElementById('auth-section').classList.add('hidden');
+                    document.getElementById('user-section').classList.remove('hidden');
+                    document.getElementById('compose-section').classList.remove('hidden');
+                    document.getElementById('notificationSection').classList.remove('hidden');
+                    
+                    if (currentUser.email === '511651251@qq.com') {
+                        document.getElementById('adminBadge').classList.remove('hidden');
+                        document.getElementById('adminPanelBtn').classList.remove('hidden');
+                    } else {
+                        document.getElementById('adminBadge').classList.add('hidden');
+                        document.getElementById('adminPanelBtn').classList.add('hidden');
+                    }
                 } catch (e) {
                     localStorage.removeItem('currentUser');
                 }
             }
         }
-        
-        function updateUIForUser() {
-            if (currentUser) {
-                document.getElementById('auth-section').classList.add('hidden');
-                document.getElementById('user-section').classList.remove('hidden');
-                document.getElementById('compose-section').classList.remove('hidden');
-                document.getElementById('notificationSection').classList.remove('hidden');
-                document.getElementById('userEmail').textContent = currentUser.email;
-            } else {
-                document.getElementById('auth-section').classList.remove('hidden');
-                document.getElementById('user-section').classList.add('hidden');
-                document.getElementById('compose-section').classList.add('hidden');
-                document.getElementById('notificationSection').classList.add('hidden');
-            }
+
+        function updateHomeProfile() {
+            document.getElementById('homeAvatar').textContent = userProfile.avatar;
+            document.getElementById('homeDisplayName').textContent = userProfile.name;
+            document.getElementById('homeBio').textContent = userProfile.bio;
         }
-        
-        function loadNotifications() {
-            const saved = localStorage.getItem(`notifications_${currentUser?.id}`);
-            if (saved) {
-                notifications = JSON.parse(saved);
-                unreadCount = notifications.filter(n => !n.read).length;
-                updateNotificationBadge();
-                renderNotifications();
-            }
+
+        function showEditProfile() {
+            document.getElementById('editName').value = userProfile.name;
+            document.getElementById('editBio').value = userProfile.bio;
+            document.getElementById('editProfileModal').classList.remove('hidden');
         }
-        
-        function saveNotifications() {
-            if (currentUser) {
-                localStorage.setItem(`notifications_${currentUser.id}`, JSON.stringify(notifications));
-            }
+
+        function hideEditProfile() {
+            document.getElementById('editProfileModal').classList.add('hidden');
         }
-        
-        function addNotification(type, data) {
-            if (!currentUser) return;
-            
-            const notification = {
-                id: Date.now() + Math.random(),
-                type: type,
-                data: data,
-                read: false,
-                time: new Date().toISOString()
-            };
-            
-            notifications.unshift(notification);
-            unreadCount++;
-            
-            saveNotifications();
-            updateNotificationBadge();
-            renderNotifications();
+
+        function selectAvatar(emoji) {
+            userProfile.avatar = emoji;
+            document.getElementById('homeAvatar').textContent = emoji;
         }
-        
+
+        function saveProfile() {
+            userProfile.name = document.getElementById('editName').value || '511651251';
+            userProfile.bio = document.getElementById('editBio').value || '热爱编程的开发者';
+            localStorage.setItem('userProfile', JSON.stringify(userProfile));
+            updateHomeProfile();
+            hideEditProfile();
+            showToast('资料已更新');
+        }
+
         function updateNotificationBadge() {
+            const unread = notifications.filter(n => !n.read).length;
             const badge = document.getElementById('notificationBadge');
-            unreadCount = notifications.filter(n => !n.read).length;
-            
-            if (unreadCount > 0) {
-                badge.textContent = unreadCount > 99 ? '99+' : unreadCount;
+            if (unread > 0) {
+                badge.textContent = unread;
                 badge.classList.remove('hidden');
             } else {
                 badge.classList.add('hidden');
             }
         }
-        
+
+        function toggleNotifications() {
+            const dropdown = document.getElementById('notificationDropdown');
+            dropdown.classList.toggle('show');
+            renderNotifications();
+        }
+
         function renderNotifications() {
             const list = document.getElementById('notificationList');
-            
             if (notifications.length === 0) {
-                list.innerHTML = '<div class="notification-empty">暂无通知</div>';
+                list.innerHTML = '<div style="padding:20px; text-align:center;">暂无通知</div>';
                 return;
             }
-            
-            let html = '';
-            notifications.slice(0, 20).forEach(n => {
-                const time = new Date(n.time).toLocaleString('zh-CN', {
-                    month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
-                });
-                
-                if (n.type === 'like') {
-                    html += `
-                        <div class="notification-item ${n.read ? '' : 'unread'}" onclick="markAsRead('${n.id}')">
-                            <div class="notification-avatar">❤️</div>
-                            <div class="notification-content">
-                                <div class="notification-text">
-                                    <strong>${n.data.author}</strong> 点赞了你的帖子
-                                </div>
-                                <div class="notification-time">${time}</div>
-                            </div>
-                        </div>
-                    `;
-                } else if (n.type === 'comment') {
-                    html += `
-                        <div class="notification-item ${n.read ? '' : 'unread'}" onclick="markAsRead('${n.id}')">
-                            <div class="notification-avatar">💬</div>
-                            <div class="notification-content">
-                                <div class="notification-text">
-                                    <strong>${n.data.author}</strong> 评论了你的帖子:<br>
-                                    ${n.data.content.substring(0, 30)}${n.data.content.length > 30 ? '...' : ''}
-                                </div>
-                                <div class="notification-time">${time}</div>
-                            </div>
-                        </div>
-                    `;
-                }
-            });
-            
-            list.innerHTML = html;
+            list.innerHTML = notifications.slice(0, 10).map(n => `
+                <div class="notification-item ${n.read ? '' : 'unread'}" style="padding:12px; border-bottom:1px solid var(--border); cursor:pointer;" onclick="markAsRead('${n.id}')">
+                    <div>${n.type === 'like' ? '❤️' : '💬'} ${n.data.content}</div>
+                    <div style="font-size:0.7rem; color:#666; margin-top:4px;">${new Date(n.time).toLocaleString()}</div>
+                </div>
+            `).join('');
         }
-        
-        function markAsRead(notificationId) {
-            const n = notifications.find(n => n.id == notificationId);
-            if (n && !n.read) {
-                n.read = true;
-                saveNotifications();
+
+        function markAsRead(id) {
+            const notification = notifications.find(n => n.id == id);
+            if (notification) {
+                notification.read = true;
+                localStorage.setItem('notifications', JSON.stringify(notifications));
                 updateNotificationBadge();
                 renderNotifications();
             }
         }
-        
+
         function markAllAsRead() {
             notifications.forEach(n => n.read = true);
-            saveNotifications();
+            localStorage.setItem('notifications', JSON.stringify(notifications));
             updateNotificationBadge();
             renderNotifications();
-        }
-        
-        function toggleNotifications() {
-            const dropdown = document.getElementById('notificationDropdown');
-            dropdown.classList.toggle('show');
-        }
-        
-        function startNotificationPolling() {
-            setInterval(() => {
-                if (currentUser) {
-                    console.log('检查新通知...');
-                }
-            }, 30000);
-        }
-        
-        function generateCaptcha() {
-            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-            let captcha = '';
-            for (let i = 0; i < 6; i++) {
-                captcha += chars[Math.floor(Math.random() * chars.length)];
-            }
-            return captcha;
-        }
-        
-        let loginCaptcha = generateCaptcha();
-        document.getElementById('loginCaptchaImage').textContent = loginCaptcha;
-        
-        let registerCaptcha = generateCaptcha();
-        document.getElementById('registerCaptchaImage').textContent = registerCaptcha;
-        
-        function refreshLoginCaptcha() {
-            loginCaptcha = generateCaptcha();
-            document.getElementById('loginCaptchaImage').textContent = loginCaptcha;
-        }
-        
-        function refreshRegisterCaptcha() {
-            registerCaptcha = generateCaptcha();
-            document.getElementById('registerCaptchaImage').textContent = registerCaptcha;
-        }
-        
-        let loginAttempts = 0;
-        let lastLoginAttempt = 0;
-        
-        function checkRateLimit() {
-            const now = Date.now();
-            if (now - lastLoginAttempt < 60000) {
-                loginAttempts++;
-            } else {
-                loginAttempts = 1;
-                lastLoginAttempt = now;
-            }
-            
-            if (loginAttempts > 5) {
-                document.getElementById('loginRateLimit').style.display = 'flex';
-                document.getElementById('loginBtn').disabled = true;
-                setTimeout(() => {
-                    document.getElementById('loginRateLimit').style.display = 'none';
-                    document.getElementById('loginBtn').disabled = false;
-                    loginAttempts = 0;
-                }, 300000);
-                return false;
-            }
-            lastLoginAttempt = now;
-            return true;
+            showToast('全部已读');
         }
 
-        async function doLogin() {
-            const inputCaptcha = document.getElementById('loginCaptcha').value.toUpperCase();
-            if (inputCaptcha !== loginCaptcha) {
-                document.getElementById('loginErrorText').textContent = '验证码错误';
-                document.getElementById('loginError').classList.remove('hidden');
-                refreshLoginCaptcha();
+        function addNotification(type, data) {
+            if (!currentUser) return;
+            const notification = {
+                id: Date.now(),
+                type: type,
+                data: data,
+                read: false,
+                time: new Date().toISOString()
+            };
+            notifications.unshift(notification);
+            localStorage.setItem('notifications', JSON.stringify(notifications));
+            updateNotificationBadge();
+        }
+
+        async function loadPosts() {
+            setLoading('postsList', true);
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/posts?select=*&order=created_at.desc`, {
+                    headers: { 'apikey': SUPABASE_KEY }
+                });
+                
+                if (!res.ok) throw new Error(`HTTP错误: ${res.status}`);
+                
+                allPosts = await res.json();
+                renderPosts();
+                renderHotPosts();
+                renderFollowingPosts();
+                updateStats();
+            } catch (err) {
+                console.error('加载失败:', err);
+                document.getElementById('postsList').innerHTML = '<div style="text-align:center; padding:30px; color:var(--danger);">❌ 加载失败，请刷新页面</div>';
+            }
+        }
+
+        function updateStats() {
+            if (currentUser) {
+                const username = currentUser.email.split('@')[0];
+                const userPosts = allPosts.filter(p => p.author === username);
+                const userComments = [];
+                allPosts.forEach(p => {
+                    if (p.comments) {
+                        p.comments.forEach(c => {
+                            if (c.author === username) userComments.push(c);
+                        });
+                    }
+                });
+                const totalLikes = userPosts.reduce((sum, p) => sum + (p.likes || 0), 0);
+                const followerCount = followers[username]?.length || 0;
+                
+                document.getElementById('homePostCount').textContent = userPosts.length;
+                document.getElementById('homeCommentCount').textContent = userComments.length;
+                document.getElementById('homeLikeCount').textContent = totalLikes;
+                document.getElementById('homeFollowerCount').textContent = followerCount;
+            }
+        }
+
+        function renderPosts() {
+            let html = '';
+            if (allPosts.length === 0) {
+                html = '<div style="text-align:center; padding:30px;">暂无帖子</div>';
+            } else {
+                allPosts.forEach(post => {
+                    const isLiked = false;
+                    html += `
+                        <div class="post" id="post-${post.id}">
+                            <div class="post-menu" onclick="togglePostMenu(${post.id})">
+                                <span class="material-symbols-outlined">more_vert</span>
+                            </div>
+                            <div class="post-menu-dropdown" id="menu-${post.id}">
+                                <div class="menu-item" onclick="copyPostLink(${post.id})">
+                                    <span class="material-symbols-outlined">link</span> 复制链接
+                                </div>
+                                <div class="menu-item" onclick="sharePost(${post.id})">
+                                    <span class="material-symbols-outlined">share</span> 分享
+                                </div>
+                                <div class="menu-item danger" onclick="showReportModal('post', ${post.id})">
+                                    <span class="material-symbols-outlined">flag</span> 举报
+                                </div>
+                                ${currentUser && post.author === currentUser.email.split('@')[0] ? `
+                                    <div class="menu-item danger" onclick="deletePost(${post.id})">
+                                        <span class="material-symbols-outlined">delete</span> 删除
+                                    </div>
+                                ` : ''}
+                            </div>
+                            
+                            <div class="post-header" onclick="viewProfile('${post.author}')">
+                                <div class="post-avatar">
+                                    ${post.author[0].toUpperCase()}
+                                    ${onlineUsers.includes(post.author) ? '<span class="online-badge-small"></span>' : ''}
+                                </div>
+                                <div>
+                                    <div class="post-author">${post.author}</div>
+                                    <div class="post-time">${new Date(post.created_at).toLocaleString()}</div>
+                                </div>
+                            </div>
+                            <div class="post-content">${post.content}</div>
+                            <div class="post-actions">
+                                <button class="action-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
+                                    <span class="material-symbols-outlined">favorite</span> ${post.likes || 0}
+                                </button>
+                                <button class="action-btn" onclick="toggleComments(${post.id})">
+                                    <span class="material-symbols-outlined">comment</span> ${post.comments?.length || 0}
+                                </button>
+                            </div>
+                            <div id="comments-${post.id}" class="comments-section hidden">
+                                ${renderComments(post.comments || [])}
+                                <div class="add-comment">
+                                    <input type="text" id="comment-${post.id}" placeholder="写评论...">
+                                    <button class="btn secondary small" onclick="addComment(${post.id})">发送</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            document.getElementById('postsList').innerHTML = html;
+        }
+
+        function renderComments(comments) {
+            if (!comments || comments.length === 0) return '';
+            return comments.map(c => `
+                <div class="comment">
+                    <div class="comment-header">
+                        <span class="comment-author" onclick="viewProfile('${c.author}')">${c.author}</span>
+                        <span class="comment-time">${new Date(c.created_at).toLocaleString()}</span>
+                    </div>
+                    <div class="comment-content">${c.content}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderHotPosts() {
+            const hotPosts = [...allPosts].sort((a, b) => (b.likes || 0) - (a.likes || 0)).slice(0, 10);
+            let html = '';
+            if (hotPosts.length === 0) {
+                html = '<div style="text-align:center; padding:30px;">暂无热门帖子</div>';
+            } else {
+                hotPosts.forEach(post => {
+                    html += `
+                        <div class="post">
+                            <div class="post-header" onclick="viewProfile('${post.author}')">
+                                <div class="post-avatar">${post.author[0].toUpperCase()}</div>
+                                <div>
+                                    <div class="post-author">${post.author}</div>
+                                    <div class="post-time">🔥 ${post.likes || 0} 点赞</div>
+                                </div>
+                            </div>
+                            <div class="post-content">${post.content}</div>
+                        </div>
+                    `;
+                });
+            }
+            document.getElementById('hotPostsList').innerHTML = html;
+        }
+
+        function renderFollowingPosts() {
+            if (!currentUser) {
+                document.getElementById('followingPostsList').innerHTML = '<div style="text-align:center; padding:30px;">请先登录查看关注的人</div>';
                 return;
             }
             
-            if (!checkRateLimit()) return;
+            const username = currentUser.email.split('@')[0];
+            const followingList = following[username] || [];
+            const followingPosts = allPosts.filter(p => followingList.includes(p.author));
             
+            let html = '';
+            if (followingPosts.length === 0) {
+                html = '<div style="text-align:center; padding:30px;">暂无关注的人的帖子</div>';
+            } else {
+                followingPosts.forEach(post => {
+                    html += `
+                        <div class="post">
+                            <div class="post-header" onclick="viewProfile('${post.author}')">
+                                <div class="post-avatar">${post.author[0].toUpperCase()}</div>
+                                <div>
+                                    <div class="post-author">${post.author}</div>
+                                    <div class="post-time">${new Date(post.created_at).toLocaleString()}</div>
+                                </div>
+                            </div>
+                            <div class="post-content">${post.content}</div>
+                        </div>
+                    `;
+                });
+            }
+            document.getElementById('followingPostsList').innerHTML = html;
+        }
+
+        function togglePostMenu(postId) {
+            document.querySelectorAll('.post-menu-dropdown').forEach(m => m.classList.remove('show'));
+            document.getElementById(`menu-${postId}`).classList.toggle('show');
+        }
+
+        function copyPostLink(postId) {
+            const url = `${window.location.origin}?post=${postId}`;
+            navigator.clipboard.writeText(url);
+            showToast('链接已复制');
+        }
+
+        function sharePost(postId) {
+            if (navigator.share) {
+                navigator.share({
+                    title: '开发者社区',
+                    text: '看看这个帖子',
+                    url: `${window.location.origin}?post=${postId}`
+                }).catch(() => copyPostLink(postId));
+            } else {
+                copyPostLink(postId);
+            }
+        }
+
+        async function deletePost(postId) {
+            if (!confirm('确定要删除这个帖子吗？')) return;
+            
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
+                    method: 'DELETE',
+                    headers: { 'apikey': SUPABASE_KEY }
+                });
+                
+                if (!res.ok) throw new Error('删除失败');
+                
+                allPosts = allPosts.filter(p => p.id !== postId);
+                renderPosts();
+                renderHotPosts();
+                renderFollowingPosts();
+                updateStats();
+                showToast('帖子已删除');
+            } catch (err) {
+                showToast('删除失败', true);
+            }
+        }
+
+        function toggleComments(postId) {
+            const el = document.getElementById(`comments-${postId}`);
+            if (el) el.classList.toggle('hidden');
+        }
+
+        async function toggleLike(postId) {
+            if (!currentUser) {
+                showToast('请先登录', true);
+                return;
+            }
+            
+            const post = allPosts.find(p => p.id === postId);
+            if (!post) return;
+            
+            const newLikes = (post.likes || 0) + 1;
+            
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ likes: newLikes })
+                });
+                
+                if (!res.ok) throw new Error('点赞失败');
+                
+                post.likes = newLikes;
+                renderPosts();
+                renderHotPosts();
+                updateStats();
+                
+                if (post.author !== currentUser.email.split('@')[0]) {
+                    addNotification('like', {
+                        content: `${currentUser.email.split('@')[0]} 点赞了你的帖子`
+                    });
+                }
+                
+                showToast('点赞成功');
+            } catch (err) {
+                showToast('点赞失败', true);
+            }
+        }
+
+        async function addComment(postId) {
+            if (!currentUser) {
+                showToast('请先登录', true);
+                return;
+            }
+            
+            const input = document.getElementById(`comment-${postId}`);
+            const content = input.value.trim();
+            if (!content) return;
+            
+            const post = allPosts.find(p => p.id === postId);
+            if (!post) return;
+            
+            const comments = post.comments || [];
+            comments.push({
+                author: currentUser.email.split('@')[0],
+                content: content,
+                created_at: new Date().toISOString()
+            });
+            
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ comments })
+                });
+                
+                if (!res.ok) throw new Error('评论失败');
+                
+                post.comments = comments;
+                input.value = '';
+                renderPosts();
+                
+                if (post.author !== currentUser.email.split('@')[0]) {
+                    addNotification('comment', {
+                        content: `${currentUser.email.split('@')[0]} 评论了你的帖子: ${content.substring(0, 20)}${content.length > 20 ? '...' : ''}`
+                    });
+                }
+                
+                showToast('评论成功');
+            } catch (err) {
+                showToast('评论失败', true);
+            }
+        }
+
+        async function publishPost() {
+            if (!currentUser) {
+                showToast('请先登录', true);
+                return;
+            }
+            
+            const content = document.getElementById('postContent').value.trim();
+            if (!content) {
+                showToast('请输入内容', true);
+                return;
+            }
+            
+            try {
+                const username = currentUser.email.split('@')[0];
+                
+                const postData = {
+                    author: username,
+                    content: content,
+                    likes: 0,
+                    comments: []
+                };
+                
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/posts`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(postData)
+                });
+                
+                if (!res.ok) throw new Error('发布失败');
+                
+                document.getElementById('postContent').value = '';
+                await loadPosts();
+                showToast('发布成功！');
+                
+            } catch (err) {
+                showToast('发布失败: ' + err.message, true);
+            }
+        }
+
+        async function viewProfile(username) {
+            currentViewUser = username;
+            document.getElementById('homeView').classList.add('hidden');
+            document.getElementById('profileView').classList.remove('hidden');
+            
+            document.getElementById('viewName').textContent = username;
+            document.getElementById('viewAvatar').textContent = username[0].toUpperCase();
+            document.getElementById('viewBio').textContent = '这个人很懒，什么都没留下';
+            
+            const userPosts = allPosts.filter(p => p.author === username);
+            const userComments = [];
+            allPosts.forEach(p => {
+                if (p.comments) {
+                    p.comments.forEach(c => {
+                        if (c.author === username) userComments.push(c);
+                    });
+                }
+            });
+            const totalLikes = userPosts.reduce((sum, p) => sum + (p.likes || 0), 0);
+            const followerCount = followers[username]?.length || 0;
+            
+            document.getElementById('viewPostCount').textContent = userPosts.length;
+            document.getElementById('viewCommentCount').textContent = userComments.length;
+            document.getElementById('viewLikeCount').textContent = totalLikes;
+            document.getElementById('viewFollowerCount').textContent = followerCount;
+            
+            renderProfilePosts(username);
+            
+            if (currentUser) {
+                const myUsername = currentUser.email.split('@')[0];
+                const isFollowing = (following[myUsername] || []).includes(username);
+                const followBtn = document.getElementById('followBtn');
+                
+                if (isFollowing) {
+                    followBtn.classList.add('following');
+                    followBtn.innerHTML = '<span class="material-symbols-outlined">check</span> 已关注';
+                } else {
+                    followBtn.classList.remove('following');
+                    followBtn.innerHTML = '<span class="material-symbols-outlined">person_add</span> 关注';
+                }
+            }
+        }
+
+        function renderProfilePosts(username) {
+            const userPosts = allPosts.filter(p => p.author === username);
+            let html = '';
+            if (userPosts.length === 0) {
+                html = '<div style="text-align:center; padding:30px;">暂无帖子</div>';
+            } else {
+                userPosts.forEach(post => {
+                    html += `
+                        <div class="post">
+                            <div class="post-content">${post.content}</div>
+                            <div class="post-time" style="margin-left:0;">${new Date(post.created_at).toLocaleString()}</div>
+                            <div class="post-actions" style="margin-left:0;">
+                                <span>❤️ ${post.likes || 0}</span>
+                                <span>💬 ${post.comments?.length || 0}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            document.getElementById('profilePostsList').innerHTML = html;
+        }
+
+        function toggleFollow() {
+            if (!currentUser) {
+                showToast('请先登录', true);
+                return;
+            }
+            
+            const myUsername = currentUser.email.split('@')[0];
+            
+            if (!following[myUsername]) {
+                following[myUsername] = [];
+            }
+            
+            const index = following[myUsername].indexOf(currentViewUser);
+            if (index === -1) {
+                following[myUsername].push(currentViewUser);
+                
+                if (!followers[currentViewUser]) {
+                    followers[currentViewUser] = [];
+                }
+                followers[currentViewUser].push(myUsername);
+                
+                showToast('关注成功');
+            } else {
+                following[myUsername].splice(index, 1);
+                
+                if (followers[currentViewUser]) {
+                    const followerIndex = followers[currentViewUser].indexOf(myUsername);
+                    if (followerIndex !== -1) {
+                        followers[currentViewUser].splice(followerIndex, 1);
+                    }
+                }
+                
+                showToast('已取消关注');
+            }
+            
+            localStorage.setItem('following', JSON.stringify(following));
+            localStorage.setItem('followers', JSON.stringify(followers));
+            viewProfile(currentViewUser);
+            updateStats();
+        }
+
+        function showReportModal(type, id) {
+            if (!currentUser) {
+                showToast('请先登录', true);
+                return;
+            }
+            currentReportTarget = { type, id };
+            document.getElementById('reportModal').classList.remove('hidden');
+        }
+
+        function selectReason(element, reason) {
+            document.querySelectorAll('.report-reason').forEach(el => {
+                el.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            selectedReason = reason;
+            
+            if (reason === 'other') {
+                document.getElementById('customReason').classList.remove('hidden');
+            } else {
+                document.getElementById('customReason').classList.add('hidden');
+            }
+        }
+
+        function submitReport() {
+            if (!currentUser) {
+                showToast('请先登录', true);
+                return;
+            }
+            
+            let reason = selectedReason;
+            if (reason === 'other') {
+                reason = document.getElementById('customReason').value;
+            }
+            
+            if (!reason) {
+                showToast('请选择举报原因', true);
+                return;
+            }
+            
+            reports.push({
+                id: Date.now(),
+                user: currentUser.email,
+                target: currentReportTarget,
+                reason: reason,
+                status: 'pending',
+                time: new Date().toISOString()
+            });
+            
+            localStorage.setItem('reports', JSON.stringify(reports));
+            hideReportModal();
+            showToast('举报已提交，感谢你的反馈');
+        }
+
+        function hideReportModal() {
+            document.getElementById('reportModal').classList.add('hidden');
+            document.querySelectorAll('.report-reason').forEach(el => {
+                el.classList.remove('selected');
+            });
+            document.getElementById('customReason').classList.add('hidden');
+            selectedReason = '';
+        }
+
+        function showReportsPanel() {
+            const pendingReports = reports.filter(r => r.status === 'pending');
+            const list = document.getElementById('reportsList');
+            
+            if (pendingReports.length === 0) {
+                list.innerHTML = '<div style="text-align:center;">暂无待处理举报</div>';
+            } else {
+                list.innerHTML = pendingReports.map(r => `
+                    <div class="report-item">
+                        <div><strong>举报人:</strong> ${r.user}</div>
+                        <div><strong>类型:</strong> ${r.target.type}</div>
+                        <div><strong>原因:</strong> ${r.reason}</div>
+                        <div><strong>时间:</strong> ${new Date(r.time).toLocaleString()}</div>
+                        <div class="report-actions">
+                            <button class="btn small" onclick="handleReport(${r.id}, 'approve')">通过</button>
+                            <button class="btn secondary small" onclick="handleReport(${r.id}, 'reject')">驳回</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            document.getElementById('reportsModal').classList.remove('hidden');
+        }
+
+        async function handleReport(reportId, action) {
+            const report = reports.find(r => r.id === reportId);
+            if (report) {
+                report.status = action === 'approve' ? 'approved' : 'rejected';
+                localStorage.setItem('reports', JSON.stringify(reports));
+                
+                if (action === 'approve' && report.target.type === 'post') {
+                    await deletePost(parseInt(report.target.id));
+                }
+                
+                showReportsPanel();
+                showToast(`举报已${action === 'approve' ? '通过' : '驳回'}`);
+            }
+        }
+
+        function hideReportsModal() {
+            document.getElementById('reportsModal').classList.add('hidden');
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.closest('.tab').classList.add('active');
+            
+            document.getElementById('postsList').classList.add('hidden');
+            document.getElementById('hotPostsList').classList.add('hidden');
+            document.getElementById('followingPostsList').classList.add('hidden');
+            
+            if (tab === 'posts') {
+                document.getElementById('postsList').classList.remove('hidden');
+            } else if (tab === 'hot') {
+                document.getElementById('hotPostsList').classList.remove('hidden');
+            } else {
+                document.getElementById('followingPostsList').classList.remove('hidden');
+            }
+        }
+
+        function switchProfileTab(tab) {
+            document.querySelectorAll('#profileView .tab').forEach(t => t.classList.remove('active'));
+            event.target.closest('.tab').classList.add('active');
+            
+            document.getElementById('profilePostsList').classList.add('hidden');
+            document.getElementById('profileCommentsList').classList.add('hidden');
+            
+            if (tab === 'posts') {
+                document.getElementById('profilePostsList').classList.remove('hidden');
+            } else {
+                document.getElementById('profileCommentsList').classList.remove('hidden');
+            }
+        }
+
+        function showMyPosts() {
+            if (!currentUser) {
+                showToast('请先登录', true);
+                return;
+            }
+            const username = currentUser.email.split('@')[0];
+            viewProfile(username);
+        }
+
+        function showMyComments() {
+            if (!currentUser) {
+                showToast('请先登录', true);
+                return;
+            }
+            showToast('我的评论功能开发中');
+        }
+
+        function showMyLikes() {
+            if (!currentUser) {
+                showToast('请先登录', true);
+                return;
+            }
+            showToast('我的获赞功能开发中');
+        }
+
+        function showMyFollowers() {
+            if (!currentUser) {
+                showToast('请先登录', true);
+                return;
+            }
+            const username = currentUser.email.split('@')[0];
+            const followerList = followers[username] || [];
+            if (followerList.length === 0) {
+                showToast('暂无粉丝');
+            } else {
+                showToast(`你有 ${followerList.length} 个粉丝`);
+            }
+        }
+
+        function showHome() {
+            document.getElementById('homeView').classList.remove('hidden');
+            document.getElementById('profileView').classList.add('hidden');
+        }
+
+        async function doLogin() {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
             
             if (!email || !password) {
-                document.getElementById('loginErrorText').textContent = '请输入邮箱和密码';
-                document.getElementById('loginError').classList.remove('hidden');
+                showToast('请输入邮箱和密码', true);
                 return;
             }
             
@@ -876,64 +1803,58 @@
                 
                 if (data.error) {
                     if (data.error_description === 'Email not confirmed') {
-                        document.getElementById('loginErrorText').textContent = '邮箱未验证，请查收验证邮件';
+                        showToast('请先验证邮箱', true);
                     } else if (data.error_description === 'Invalid login credentials') {
-                        document.getElementById('loginErrorText').textContent = '邮箱或密码错误';
+                        showToast('邮箱或密码错误', true);
                     } else {
-                        document.getElementById('loginErrorText').textContent = data.error_description || data.msg || '登录失败';
+                        showToast(data.error_description || data.msg, true);
                     }
-                    document.getElementById('loginError').classList.remove('hidden');
-                    refreshLoginCaptcha();
                 } else {
                     if (!data.user.email_confirmed_at) {
-                        document.getElementById('loginErrorText').textContent = '请先验证邮箱';
-                        document.getElementById('loginError').classList.remove('hidden');
+                        showToast('请先验证邮箱', true);
                         return;
                     }
                     
                     currentUser = data.user;
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
                     
-                    updateUIForUser();
-                    loadNotifications();
-                    startNotificationPolling();
+                    document.getElementById('auth-section').classList.add('hidden');
+                    document.getElementById('user-section').classList.remove('hidden');
+                    document.getElementById('compose-section').classList.remove('hidden');
+                    document.getElementById('notificationSection').classList.remove('hidden');
+                    
+                    if (currentUser.email === '511651251@qq.com') {
+                        document.getElementById('adminBadge').classList.remove('hidden');
+                        document.getElementById('adminPanelBtn').classList.remove('hidden');
+                    }
+                    
                     hideLogin();
-                    loadPosts();
+                    await loadPosts();
+                    updateOnlineStatus();
+                    showToast('登录成功');
                 }
             } catch (err) {
-                document.getElementById('loginErrorText').textContent = '网络错误';
-                document.getElementById('loginError').classList.remove('hidden');
+                showToast('网络错误，请检查连接', true);
             }
         }
 
         async function doRegister() {
-            const inputCaptcha = document.getElementById('registerCaptcha').value.toUpperCase();
-            if (inputCaptcha !== registerCaptcha) {
-                document.getElementById('registerErrorText').textContent = '验证码错误';
-                document.getElementById('registerError').classList.remove('hidden');
-                refreshRegisterCaptcha();
-                return;
-            }
-            
             const email = document.getElementById('registerEmail').value;
             const password = document.getElementById('registerPassword').value;
-            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            const confirm = document.getElementById('registerConfirmPassword').value;
             
             if (!email || !password) {
-                document.getElementById('registerErrorText').textContent = '请输入邮箱和密码';
-                document.getElementById('registerError').classList.remove('hidden');
+                showToast('请输入邮箱和密码', true);
                 return;
             }
             
-            if (password !== confirmPassword) {
-                document.getElementById('registerErrorText').textContent = '两次密码不一致';
-                document.getElementById('registerError').classList.remove('hidden');
+            if (password !== confirm) {
+                showToast('两次密码不一致', true);
                 return;
             }
             
             if (password.length < 6) {
-                document.getElementById('registerErrorText').textContent = '密码至少6位';
-                document.getElementById('registerError').classList.remove('hidden');
+                showToast('密码至少6位', true);
                 return;
             }
             
@@ -947,9 +1868,7 @@
                     body: JSON.stringify({ 
                         email, 
                         password,
-                        options: {
-                            emailRedirectTo: window.location.origin
-                        }
+                        options: { emailRedirectTo: window.location.origin }
                     })
                 });
                 
@@ -957,297 +1876,58 @@
                 
                 if (data.error) {
                     if (data.msg === 'User already registered') {
-                        document.getElementById('registerErrorText').textContent = '该邮箱已注册，请直接登录';
+                        showToast('该邮箱已注册，请直接登录', true);
                     } else {
-                        document.getElementById('registerErrorText').textContent = data.error_description || data.msg || '注册失败';
+                        showToast(data.error_description || data.msg, true);
                     }
-                    document.getElementById('registerError').classList.remove('hidden');
-                    refreshRegisterCaptcha();
                 } else {
-                    if (data.user && data.user.identities && data.user.identities.length === 0) {
-                        document.getElementById('registerErrorText').textContent = '该邮箱已注册，请直接登录';
-                        document.getElementById('registerError').classList.remove('hidden');
-                        refreshRegisterCaptcha();
-                        return;
-                    }
-                    
-                    document.getElementById('registerSuccess').classList.remove('hidden');
-                    document.getElementById('registerError').classList.add('hidden');
-                    
-                    document.getElementById('registerEmail').value = '';
-                    document.getElementById('registerPassword').value = '';
-                    document.getElementById('registerConfirmPassword').value = '';
-                    
-                    setTimeout(() => {
-                        hideRegister();
-                        document.getElementById('registerSuccess').classList.add('hidden');
-                        document.getElementById('loginEmail').value = email;
-                        showLogin();
-                    }, 3000);
+                    showToast('注册成功！请查收验证邮件');
+                    hideRegister();
+                    showLogin();
                 }
             } catch (err) {
-                document.getElementById('registerErrorText').textContent = '网络错误';
-                document.getElementById('registerError').classList.remove('hidden');
-            }
-        }
-
-        async function loadPosts() {
-            try {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/posts?select=*&order=created_at.desc`, {
-                    headers: { 'apikey': SUPABASE_KEY }
-                });
-                const posts = await res.json();
-                
-                let html = '';
-                posts.forEach(post => {
-                    const date = new Date(post.created_at).toLocaleString();
-                    html += `<div class="post" data-id="${post.id}" data-author="${post.author}">
-                        <div class="post-header">
-                            <div class="avatar">${(post.author?.[0] || 'U').toUpperCase()}</div>
-                            <div>
-                                <div class="post-author">${post.author || '匿名'}</div>
-                                <div class="post-time">
-                                    <span class="material-symbols-outlined" style="font-size: 14px;">schedule</span>
-                                    ${date}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="post-content">${post.content}</div>
-                        <div class="post-actions">
-                            <button class="action-btn" onclick="handleLike(${post.id}, '${post.author}')">
-                                <span class="material-symbols-outlined">favorite</span> ${post.likes || 0}
-                            </button>
-                            <button class="action-btn" onclick="toggleComments(${post.id})">
-                                <span class="material-symbols-outlined">comment</span> ${(post.comments || []).length}
-                            </button>
-                        </div>
-                        <div id="comments-${post.id}" class="comments-section hidden">
-                            ${renderComments(post.comments || [])}
-                            <div class="add-comment">
-                                <input type="text" id="comment-${post.id}" placeholder="写评论...">
-                                <button class="btn-icon" onclick="addComment(${post.id}, '${post.author}')">
-                                    <span class="material-symbols-outlined">send</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>`;
-                });
-                document.getElementById('posts-list').innerHTML = html || '<div style="text-align:center; padding:40px;">暂无帖子</div>';
-            } catch (err) {
-                document.getElementById('posts-list').innerHTML = '加载失败';
-            }
-        }
-
-        function renderComments(comments) {
-            if (!comments || comments.length === 0) return '';
-            
-            return comments.map(c => `
-                <div class="comment">
-                    <span class="comment-avatar">${(c.author?.[0] || 'U').toUpperCase()}</span>
-                    <div class="comment-content">
-                        <span class="comment-author">${c.author}</span>
-                        <span class="comment-time">${new Date(c.created_at).toLocaleString()}</span>
-                        <div class="comment-text">${c.content}</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function toggleComments(postId) {
-            const el = document.getElementById(`comments-${postId}`);
-            if (el) el.classList.toggle('hidden');
-        }
-
-        async function handleLike(postId, postAuthor) {
-            if (!currentUser) {
-                alert('请先登录');
-                return;
-            }
-            
-            try {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
-                    headers: { 'apikey': SUPABASE_KEY }
-                });
-                const posts = await res.json();
-                const post = posts[0];
-                
-                const newLikes = (post.likes || 0) + 1;
-                
-                const updateRes = await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ likes: newLikes })
-                });
-                
-                if (!updateRes.ok) {
-                    throw new Error('更新失败');
-                }
-                
-                if (postAuthor !== currentUser.email.split('@')[0]) {
-                    addNotification('like', {
-                        author: currentUser.email.split('@')[0],
-                        postId: postId
-                    });
-                }
-                
-                loadPosts();
-            } catch (err) {
-                alert('点赞失败: ' + err.message);
-            }
-        }
-
-        async function addComment(postId, postAuthor) {
-            if (!currentUser) {
-                alert('请先登录');
-                return;
-            }
-            
-            const input = document.getElementById(`comment-${postId}`);
-            const content = input.value.trim();
-            if (!content) {
-                alert('请输入评论内容');
-                return;
-            }
-            
-            try {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
-                    headers: { 'apikey': SUPABASE_KEY }
-                });
-                
-                if (!res.ok) {
-                    throw new Error(`获取帖子失败: ${res.status}`);
-                }
-                
-                const posts = await res.json();
-                const post = posts[0];
-                
-                if (!post) {
-                    throw new Error('帖子不存在');
-                }
-                
-                const comments = post.comments || [];
-                const newComment = {
-                    author: currentUser.email.split('@')[0],
-                    content: content,
-                    created_at: new Date().toISOString()
-                };
-                comments.push(newComment);
-                
-                const updateRes = await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ comments: comments })
-                });
-                
-                if (!updateRes.ok) {
-                    const errorText = await updateRes.text();
-                    throw new Error(`更新失败: ${errorText}`);
-                }
-                
-                if (postAuthor !== currentUser.email.split('@')[0]) {
-                    addNotification('comment', {
-                        author: currentUser.email.split('@')[0],
-                        content: content,
-                        postId: postId
-                    });
-                }
-                
-                input.value = '';
-                loadPosts();
-                
-            } catch (err) {
-                console.error('评论错误:', err);
-                alert('评论失败: ' + err.message);
-            }
-        }
-
-        async function publishPost() {
-            if (!currentUser) {
-                alert('请先登录');
-                return;
-            }
-            
-            const content = document.getElementById('postContent').value.trim();
-            if (!content) {
-                alert('请输入内容');
-                return;
-            }
-            
-            try {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/posts`, {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify([{
-                        author: currentUser.email.split('@')[0],
-                        content: content,
-                        likes: 0,
-                        comments: []
-                    }])
-                });
-                
-                if (!res.ok) {
-                    throw new Error('发布失败');
-                }
-                
-                document.getElementById('postContent').value = '';
-                loadPosts();
-            } catch (err) {
-                alert('发布失败: ' + err.message);
+                showToast('网络错误，请检查连接', true);
             }
         }
 
         function logout() {
+            if (currentUser) {
+                const username = currentUser.email.split('@')[0];
+                onlineUsers = onlineUsers.filter(u => u !== username);
+                localStorage.setItem('onlineUsers', JSON.stringify(onlineUsers));
+            }
+            
             currentUser = null;
-            notifications = [];
-            unreadCount = 0;
             localStorage.removeItem('currentUser');
-            updateUIForUser();
-            document.getElementById('notificationBadge').classList.add('hidden');
+            
+            document.getElementById('auth-section').classList.remove('hidden');
+            document.getElementById('user-section').classList.add('hidden');
+            document.getElementById('compose-section').classList.add('hidden');
+            document.getElementById('notificationSection').classList.add('hidden');
+            document.getElementById('adminBadge').classList.add('hidden');
+            document.getElementById('adminPanelBtn').classList.add('hidden');
+            
+            updateOnlineStatus();
+            showToast('已退出登录');
         }
 
-        function showLogin() { 
-            document.getElementById('loginModal').classList.remove('hidden');
-            refreshLoginCaptcha();
-        }
-        function hideLogin() { 
-            document.getElementById('loginModal').classList.add('hidden');
-            document.getElementById('loginError').classList.add('hidden');
-        }
-        function showRegister() { 
-            document.getElementById('registerModal').classList.remove('hidden');
-            refreshRegisterCaptcha();
-        }
-        function hideRegister() { 
-            document.getElementById('registerModal').classList.add('hidden');
-            document.getElementById('registerError').classList.add('hidden');
-        }
+        function showLogin() { document.getElementById('loginModal').classList.remove('hidden'); }
+        function hideLogin() { document.getElementById('loginModal').classList.add('hidden'); }
+        function showRegister() { document.getElementById('registerModal').classList.remove('hidden'); }
+        function hideRegister() { document.getElementById('registerModal').classList.add('hidden'); }
         function switchToRegister() { hideLogin(); showRegister(); }
         function switchToLogin() { hideRegister(); showLogin(); }
 
-        window.addEventListener('click', (e) => {
-            if (!e.target.closest('.notification-icon') && !e.target.closest('.notification-dropdown')) {
-                document.getElementById('notificationDropdown').classList.remove('show');
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.post-menu')) {
+                document.querySelectorAll('.post-menu-dropdown').forEach(m => m.classList.remove('show'));
             }
-            if (e.target.classList.contains('modal')) {
-                e.target.classList.add('hidden');
+            if (!e.target.closest('.notification-icon')) {
+                document.getElementById('notificationDropdown').classList.remove('show');
             }
         });
 
-        loadUserFromStorage();
-        updateUIForUser();
-        loadPosts();
+        init();
     </script>
 </body>
 </html>
