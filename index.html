@@ -621,8 +621,13 @@
                 const data = await res.json();
                 
                 if (data.error) {
-                    document.getElementById('loginErrorText').textContent = 
-                        data.error_description || data.msg || '登录失败';
+                    if (data.error_description === 'Email not confirmed') {
+                        document.getElementById('loginErrorText').textContent = '邮箱未验证，请查收验证邮件';
+                    } else if (data.error_description === 'Invalid login credentials') {
+                        document.getElementById('loginErrorText').textContent = '邮箱或密码错误';
+                    } else {
+                        document.getElementById('loginErrorText').textContent = data.error_description || data.msg || '登录失败';
+                    }
                     document.getElementById('loginError').classList.remove('hidden');
                     refreshLoginCaptcha();
                 } else {
@@ -695,11 +700,21 @@
                 const data = await res.json();
                 
                 if (data.error) {
-                    document.getElementById('registerErrorText').textContent = 
-                        data.error_description || data.msg || '注册失败';
+                    if (data.msg === 'User already registered') {
+                        document.getElementById('registerErrorText').textContent = '该邮箱已注册，请直接登录';
+                    } else {
+                        document.getElementById('registerErrorText').textContent = data.error_description || data.msg || '注册失败';
+                    }
                     document.getElementById('registerError').classList.remove('hidden');
                     refreshRegisterCaptcha();
                 } else {
+                    if (data.user && data.user.identities && data.user.identities.length === 0) {
+                        document.getElementById('registerErrorText').textContent = '该邮箱已注册，请直接登录';
+                        document.getElementById('registerError').classList.remove('hidden');
+                        refreshRegisterCaptcha();
+                        return;
+                    }
+                    
                     document.getElementById('registerSuccess').classList.remove('hidden');
                     document.getElementById('registerError').classList.add('hidden');
                     
