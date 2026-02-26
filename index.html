@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>开发者社区 - 已修复安全隐患</title>
-    <!-- Material Icons 全补全 -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0,200" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -388,7 +387,6 @@
         </div>
     </div>
 
-    <!-- 发帖框 -->
     <div id="compose-section" class="compose-card hidden">
         <textarea id="postContent" placeholder="分享你的开发心得..." rows="3"></textarea>
         <button class="btn" onclick="publishPost()" style="width: 100%;">
@@ -396,10 +394,8 @@
         </button>
     </div>
 
-    <!-- 帖子列表 -->
     <div id="posts-list"></div>
 
-    <!-- 登录弹窗（所有输入框为空） -->
     <div id="loginModal" class="modal hidden">
         <div class="modal-content">
             <h3>
@@ -424,7 +420,6 @@
                 <input type="password" id="loginPassword" placeholder="密码" value="" style="padding-left: 45px;">
             </div>
             
-            <!-- 验证码 -->
             <div class="captcha-box">
                 <div style="position: relative; flex: 1;">
                     <span class="material-symbols-outlined" style="position: absolute; left: 15px; top: 12px; color: #999; z-index: 1;">pin</span>
@@ -451,7 +446,6 @@
         </div>
     </div>
 
-    <!-- 注册弹窗（所有输入框为空） -->
     <div id="registerModal" class="modal hidden">
         <div class="modal-content">
             <h3>
@@ -481,7 +475,6 @@
                 <input type="password" id="registerConfirmPassword" placeholder="确认密码" value="" style="padding-left: 45px;">
             </div>
             
-            <!-- 验证码 -->
             <div class="captcha-box">
                 <div style="position: relative; flex: 1;">
                     <span class="material-symbols-outlined" style="position: absolute; left: 15px; top: 12px; color: #999; z-index: 1;">pin</span>
@@ -508,7 +501,6 @@
         </div>
     </div>
 
-    <!-- 底部 -->
     <div class="footer">
         <span class="material-symbols-outlined" style="font-size: 16px;">security</span> 
         安全保护已开启 · 验证码 + 限流 + 登录状态持久化
@@ -520,7 +512,6 @@
         
         let currentUser = null;
         
-        // ===== 从 localStorage 恢复登录状态 =====
         function loadUserFromStorage() {
             const savedUser = localStorage.getItem('currentUser');
             if (savedUser) {
@@ -533,7 +524,6 @@
             }
         }
         
-        // ===== 更新UI =====
         function updateUIForUser() {
             if (currentUser) {
                 document.getElementById('auth-section').classList.add('hidden');
@@ -547,7 +537,6 @@
             }
         }
         
-        // ===== 验证码生成 =====
         function generateCaptcha() {
             const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
             let captcha = '';
@@ -557,11 +546,9 @@
             return captcha;
         }
         
-        // 登录验证码
         let loginCaptcha = generateCaptcha();
         document.getElementById('loginCaptchaImage').textContent = loginCaptcha;
         
-        // 注册验证码
         let registerCaptcha = generateCaptcha();
         document.getElementById('registerCaptchaImage').textContent = registerCaptcha;
         
@@ -575,7 +562,6 @@
             document.getElementById('registerCaptchaImage').textContent = registerCaptcha;
         }
         
-        // ===== 限流 =====
         let loginAttempts = 0;
         let lastLoginAttempt = 0;
         
@@ -602,7 +588,6 @@
             return true;
         }
 
-        // ===== 登录 =====
         async function doLogin() {
             const inputCaptcha = document.getElementById('loginCaptcha').value.toUpperCase();
             if (inputCaptcha !== loginCaptcha) {
@@ -647,7 +632,6 @@
                         return;
                     }
                     
-                    // 保存用户信息到 localStorage
                     currentUser = data.user;
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
                     
@@ -661,7 +645,6 @@
             }
         }
 
-        // ===== 注册 =====
         async function doRegister() {
             const inputCaptcha = document.getElementById('registerCaptcha').value.toUpperCase();
             if (inputCaptcha !== registerCaptcha) {
@@ -737,7 +720,6 @@
             }
         }
 
-        // ===== 加载帖子 =====
         async function loadPosts() {
             try {
                 const res = await fetch(`${SUPABASE_URL}/rest/v1/posts?select=*&order=created_at.desc`, {
@@ -785,7 +767,6 @@
             }
         }
 
-        // ===== 渲染评论 =====
         function renderComments(comments) {
             if (!comments || comments.length === 0) return '';
             
@@ -801,13 +782,11 @@
             `).join('');
         }
 
-        // ===== 切换评论显示 =====
         function toggleComments(postId) {
             const el = document.getElementById(`comments-${postId}`);
             if (el) el.classList.toggle('hidden');
         }
 
-        // ===== 点赞 =====
         async function handleLike(postId) {
             if (!currentUser) {
                 alert('请先登录');
@@ -839,7 +818,6 @@
             }
         }
 
-        // ===== 添加评论 =====
         async function addComment(postId) {
             if (!currentUser) {
                 alert('请先登录');
@@ -881,7 +859,6 @@
             }
         }
 
-        // ===== 发布帖子 =====
         async function publishPost() {
             if (!currentUser) {
                 alert('请先登录');
@@ -914,14 +891,12 @@
             }
         }
 
-        // ===== 退出 =====
         function logout() {
             currentUser = null;
             localStorage.removeItem('currentUser');
             updateUIForUser();
         }
 
-        // ===== 弹窗控制 =====
         function showLogin() { 
             document.getElementById('loginModal').classList.remove('hidden');
             refreshLoginCaptcha();
@@ -941,14 +916,12 @@
         function switchToRegister() { hideLogin(); showRegister(); }
         function switchToLogin() { hideRegister(); showLogin(); }
 
-        // 点击背景关闭弹窗
         window.addEventListener('click', (e) => {
             if (e.target.classList.contains('modal')) {
                 e.target.classList.add('hidden');
             }
         });
 
-        // ===== 初始化 =====
         loadUserFromStorage();
         updateUIForUser();
         loadPosts();
