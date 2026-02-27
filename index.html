@@ -2146,105 +2146,115 @@
             }
         }
 
-        // ===== 修复的登录函数（已删除邮箱验证检查） =====
         async function doLogin() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            if (!email || !password) {
-                showToast('请输入邮箱和密码', true);
-                return;
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    if (!email || !password) {
+        showToast('请输入邮箱和密码', true);
+        return;
+    }
+    
+    try {
+        const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+            method: 'POST',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        });
+        
+        const data = await res.json();
+        
+        if (data.error) {
+            if (data.error_description === 'Email not confirmed') {
+                showToast('请先验证邮箱', true);
+            } else if (data.error_description === 'Invalid login credentials') {
+                showToast('邮箱或密码错误', true);
+            } else {
+                showToast(data.error_description || data.msg, true);
             }
-            
-            try {
-                const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password })
-                });
-                
-                const data = await res.json();
-                
-                if (data.error) {
-                    if (data.error_description === 'Email not confirmed') {
-                        showToast('请先验证邮箱', true);
-                    } else if (data.error_description === 'Invalid login credentials') {
-                        showToast('邮箱或密码错误', true);
-                    } else {
-                        showToast(data.error_description || data.msg, true);
-                    }
-                    return;
-                }
-                
-                // ✅ 邮箱验证已关闭，直接登录成功
-                currentUser = data.user;
-                localStorage.setItem('currentUser', JSON.stringify(data));
-                
-                // 从 users 表获取用户资料
-                const userRes = await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${currentUser.id}`, {
-                    headers: { 'apikey': SUPABASE_KEY }
-                });
-                const userData = await userRes.json();
-                
-                if (userData && userData.length > 0) {
-                    userProfile = {
-                        name: userData[0].username || currentUser.email.split('@')[0],
-                        bio: userData[0].bio || '热爱编程的开发者',
-                        avatar: userData[0].avatar || currentUser.email[0].toUpperCase(),
-                        role: userData[0].role || 'user'
-                    };
-                } else {
-                    userProfile = {
-                        name: currentUser.email.split('@')[0],
-                        bio: '热爱编程的开发者',
-                        avatar: currentUser.email[0].toUpperCase(),
-                        role: 'user'
-                    };
-                    
-                    await fetch(`${SUPABASE_URL}/rest/v1/users`, {
-                        method: 'POST',
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            id: currentUser.id,
-                            email: currentUser.email,
-                            username: userProfile.name,
-                            bio: userProfile.bio,
-                            avatar: userProfile.avatar,
-                            role: 'user',
-                            status: 'active',
-                            email_confirmed: true,
-                            last_login: new Date().toISOString()
-                        })
-                    });
-                }
-                
-                await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${currentUser.id}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ last_login: new Date().toISOString() })
-                });
-                
-                localStorage.setItem('userProfile', JSON.stringify(userProfile));
-                
-                updateUIForUser(true);
-                hideLogin();
-                await loadPosts();
-                updateOnlineStatus();
-                showToast('登录成功');
-            } catch (err) {
-                console.error('登录错误:', err);
-                showToast('网络错误: ' + err.message, true);
-            }
+            return;
         }
+        
+        // ✅ 确保返回的数据里有 user
+        if (!data.user) {
+            showToast('登录返回数据异常', true);
+            return;
+        }
+        
+        currentUser = data.user;
+        localStorage.setItem('currentUser', JSON.stringify(data));
+        
+        // ✅ 确保 currentUser.id 存在
+        if (!currentUser.id) {
+            showToast('用户ID不存在', true);
+            return;
+        }
+        
+        // 从 users 表获取用户资料
+        const userRes = await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${currentUser.id}`, {
+            headers: { 'apikey': SUPABASE_KEY }
+        });
+        const userData = await userRes.json();
+        
+        if (userData && userData.length > 0) {
+            userProfile = {
+                name: userData[0].username || currentUser.email.split('@')[0],
+                bio: userData[0].bio || '热爱编程的开发者',
+                avatar: userData[0].avatar || currentUser.email[0].toUpperCase(),
+                role: userData[0].role || 'user'
+            };
+        } else {
+            userProfile = {
+                name: currentUser.email.split('@')[0],
+                bio: '热爱编程的开发者',
+                avatar: currentUser.email[0].toUpperCase(),
+                role: 'user'
+            };
+            
+            await fetch(`${SUPABASE_URL}/rest/v1/users`, {
+                method: 'POST',
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentUser.id,
+                    email: currentUser.email,
+                    username: userProfile.name,
+                    bio: userProfile.bio,
+                    avatar: userProfile.avatar,
+                    role: 'user',
+                    status: 'active',
+                    email_confirmed: true,
+                    last_login: new Date().toISOString()
+                })
+            });
+        }
+        
+        await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${currentUser.id}`, {
+            method: 'PATCH',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ last_login: new Date().toISOString() })
+        });
+        
+        localStorage.setItem('userProfile', JSON.stringify(userProfile));
+        
+        updateUIForUser(true);
+        hideLogin();
+        await loadPosts();
+        updateOnlineStatus();
+        showToast('登录成功');
+    } catch (err) {
+        console.error('登录错误:', err);
+        showToast('网络错误: ' + err.message, true);
+    }
+}
 
         // ===== 修复的注册函数 =====
         async function doRegister() {
