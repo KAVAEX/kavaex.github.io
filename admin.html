@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>管理员面板 · 我已急哭</title>
+    <title>管理员面板 · 真实版</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0,200" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,6 +41,11 @@
             margin-bottom: 30px;
             color: #fff;
             font-size: 1.8rem;
+        }
+        
+        .login-card h1 .material-symbols-outlined {
+            font-size: 36px;
+            color: #ffd700;
         }
         
         .login-card input {
@@ -87,6 +92,10 @@
             margin-bottom: 15px;
             display: none;
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         /* 主面板 */
@@ -121,10 +130,17 @@
             font-size: 1.4rem;
         }
         
+        .sidebar-header h2 .material-symbols-outlined {
+            font-size: 28px;
+        }
+        
         .sidebar-header p {
             color: #888;
             font-size: 0.85rem;
             margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
         
         .sidebar-menu {
@@ -151,6 +167,14 @@
         .sidebar-menu li.active {
             background: #ffd700;
             color: #1a1a1a;
+        }
+        
+        .sidebar-menu li.active .material-symbols-outlined {
+            color: #1a1a1a;
+        }
+        
+        .sidebar-menu .material-symbols-outlined {
+            font-size: 20px;
         }
         
         .main-content {
@@ -194,6 +218,9 @@
             font-size: 0.9rem;
             color: #888;
             margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
         
         .stat-info .stat-number {
@@ -224,6 +251,10 @@
             font-size: 1.2rem;
         }
         
+        .panel-header h3 .material-symbols-outlined {
+            color: #ffd700;
+        }
+        
         .search-box {
             display: flex;
             align-items: center;
@@ -232,6 +263,11 @@
             padding: 8px 15px;
             border-radius: 40px;
             border: 1px solid #444;
+        }
+        
+        .search-box .material-symbols-outlined {
+            color: #888;
+            font-size: 20px;
         }
         
         .search-box input {
@@ -272,7 +308,9 @@
             padding: 4px 12px;
             border-radius: 40px;
             font-size: 0.8rem;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
         
         .badge.admin {
@@ -309,6 +347,10 @@
             gap: 4px;
         }
         
+        .action-btn .material-symbols-outlined {
+            font-size: 16px;
+        }
+        
         .action-btn:hover {
             background: #ffd700;
             border-color: #ffd700;
@@ -318,6 +360,10 @@
         .action-btn.danger:hover {
             background: #ff4444;
             border-color: #ff4444;
+            color: white;
+        }
+        
+        .action-btn.danger:hover .material-symbols-outlined {
             color: white;
         }
         
@@ -331,6 +377,13 @@
             border-radius: 40px;
             z-index: 2000;
             animation: slideIn 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .toast .material-symbols-outlined {
+            font-size: 20px;
         }
         
         .toast.error {
@@ -348,6 +401,19 @@
             text-align: center;
             padding: 40px;
             color: #888;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .loading .material-symbols-outlined {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
         
         .logout-btn {
@@ -365,10 +431,76 @@
             margin-left: 20px;
         }
         
+        .logout-btn .material-symbols-outlined {
+            font-size: 20px;
+        }
+        
         .logout-btn:hover {
             background: #ff4444;
             border-color: #ff4444;
             color: white;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .empty-state .material-symbols-outlined {
+            font-size: 48px;
+            color: #444;
+        }
+        
+        .system-status {
+            background: #2d2d2d;
+            padding: 20px;
+            border-radius: 16px;
+            display: grid;
+            gap: 12px;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .status-item .material-symbols-outlined {
+            color: #00c853;
+        }
+        
+        .status-item .time-icon {
+            color: #ffd700;
+        }
+        
+        .danger-zone {
+            background: #2d2d2d;
+            padding: 20px;
+            border-radius: 16px;
+            margin-top: 20px;
+        }
+        
+        .danger-zone h4 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #ff4444;
+            margin-bottom: 15px;
+        }
+        
+        .danger-zone .material-symbols-outlined {
+            color: #ff4444;
+        }
+        
+        .danger-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
         }
     </style>
 </head>
@@ -380,9 +512,18 @@
                 <span class="material-symbols-outlined">admin_panel_settings</span>
                 超级管理员
             </h1>
-            <div id="loginError" class="error-message"></div>
-            <input type="text" id="adminUsername" placeholder="管理员用户名" value="renlei540">
-            <input type="password" id="adminPassword" placeholder="密码" value="admin123456">
+            <div id="loginError" class="error-message">
+                <span class="material-symbols-outlined">error</span>
+                <span></span>
+            </div>
+            <div style="position: relative;">
+                <span class="material-symbols-outlined" style="position: absolute; left: 15px; top: 14px; color: #888;">person</span>
+                <input type="text" id="adminUsername" placeholder="管理员用户名" value="renlei540" style="padding-left: 45px;">
+            </div>
+            <div style="position: relative;">
+                <span class="material-symbols-outlined" style="position: absolute; left: 15px; top: 14px; color: #888;">lock</span>
+                <input type="password" id="adminPassword" placeholder="密码" value="admin123456" style="padding-left: 45px;">
+            </div>
             <button onclick="adminLogin()">
                 <span class="material-symbols-outlined">login</span>
                 登录面板
@@ -398,7 +539,10 @@
                     <span class="material-symbols-outlined">admin_panel_settings</span>
                     Admin Console
                 </h2>
-                <p>超级管理员 · 完全控制</p>
+                <p>
+                    <span class="material-symbols-outlined" style="font-size: 16px;">verified</span>
+                    超级管理员 · 完全控制
+                </p>
             </div>
             
             <ul class="sidebar-menu">
@@ -418,17 +562,9 @@
                     <span class="material-symbols-outlined">comment</span>
                     评论管理
                 </li>
-                <li onclick="switchPanel('reports')">
-                    <span class="material-symbols-outlined">flag</span>
-                    举报中心
-                </li>
                 <li onclick="switchPanel('database')">
                     <span class="material-symbols-outlined">database</span>
                     数据库
-                </li>
-                <li onclick="switchPanel('settings')">
-                    <span class="material-symbols-outlined">settings</span>
-                    系统设置
                 </li>
             </ul>
             
@@ -445,39 +581,51 @@
                     <div class="stat-card">
                         <div class="stat-icon"><span class="material-symbols-outlined">group</span></div>
                         <div class="stat-info">
-                            <h3>总用户</h3>
+                            <h3><span class="material-symbols-outlined" style="font-size: 16px;">people</span> 总用户</h3>
                             <div class="stat-number" id="totalUsers">-</div>
                         </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon"><span class="material-symbols-outlined">post</span></div>
                         <div class="stat-info">
-                            <h3>总帖子</h3>
+                            <h3><span class="material-symbols-outlined" style="font-size: 16px;">article</span> 总帖子</h3>
                             <div class="stat-number" id="totalPosts">-</div>
                         </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon"><span class="material-symbols-outlined">comment</span></div>
                         <div class="stat-info">
-                            <h3>总评论</h3>
+                            <h3><span class="material-symbols-outlined" style="font-size: 16px;">chat</span> 总评论</h3>
                             <div class="stat-number" id="totalComments">-</div>
                         </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon"><span class="material-symbols-outlined">favorite</span></div>
                         <div class="stat-info">
-                            <h3>总点赞</h3>
+                            <h3><span class="material-symbols-outlined" style="font-size: 16px;">thumb_up</span> 总点赞</h3>
                             <div class="stat-number" id="totalLikes">-</div>
                         </div>
                     </div>
                 </div>
                 
                 <div style="margin-top: 30px;">
-                    <h3 style="margin-bottom: 20px;">📊 系统状态</h3>
-                    <div style="background: #2d2d2d; padding: 20px; border-radius: 16px;">
-                        <p>✅ 数据库连接正常</p>
-                        <p>✅ API 服务正常</p>
-                        <p>🕒 最后更新: <span id="lastUpdate">-</span></p>
+                    <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                        <span class="material-symbols-outlined" style="color: #ffd700;">monitoring</span>
+                        系统状态
+                    </h3>
+                    <div class="system-status">
+                        <div class="status-item">
+                            <span class="material-symbols-outlined">check_circle</span>
+                            <span>数据库连接正常</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="material-symbols-outlined">check_circle</span>
+                            <span>API 服务正常</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="material-symbols-outlined time-icon">schedule</span>
+                            <span>最后更新: <span id="lastUpdate">-</span></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -485,7 +633,10 @@
             <!-- 用户管理 -->
             <div id="usersPanel" class="panel hidden">
                 <div class="panel-header">
-                    <h3><span class="material-symbols-outlined">group</span> 用户管理</h3>
+                    <h3>
+                        <span class="material-symbols-outlined">group</span> 
+                        用户管理
+                    </h3>
                     <div class="search-box">
                         <span class="material-symbols-outlined">search</span>
                         <input type="text" id="userSearch" placeholder="搜索用户..." oninput="searchUsers()">
@@ -507,7 +658,9 @@
                             </tr>
                         </thead>
                         <tbody id="usersTableBody">
-                            <tr><td colspan="8" class="loading">加载中...</td></tr>
+                            <tr><td colspan="8" class="loading">
+                                <span class="material-symbols-outlined">hourglass_empty</span> 加载中...
+                            </td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -516,7 +669,10 @@
             <!-- 帖子管理 -->
             <div id="postsPanel" class="panel hidden">
                 <div class="panel-header">
-                    <h3><span class="material-symbols-outlined">post</span> 帖子管理</h3>
+                    <h3>
+                        <span class="material-symbols-outlined">post</span> 
+                        帖子管理
+                    </h3>
                     <div class="search-box">
                         <span class="material-symbols-outlined">search</span>
                         <input type="text" id="postSearch" placeholder="搜索帖子..." oninput="searchPosts()">
@@ -537,33 +693,42 @@
                             </tr>
                         </thead>
                         <tbody id="postsTableBody">
-                            <tr><td colspan="7" class="loading">加载中...</td></tr>
+                            <tr><td colspan="7" class="loading">
+                                <span class="material-symbols-outlined">hourglass_empty</span> 加载中...
+                            </td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
             
-            <!-- 举报中心 -->
-            <div id="reportsPanel" class="panel hidden">
+            <!-- 评论管理 -->
+            <div id="commentsPanel" class="panel hidden">
                 <div class="panel-header">
-                    <h3><span class="material-symbols-outlined">flag</span> 举报中心</h3>
+                    <h3>
+                        <span class="material-symbols-outlined">comment</span> 
+                        评论管理
+                    </h3>
+                    <div class="search-box">
+                        <span class="material-symbols-outlined">search</span>
+                        <input type="text" id="commentSearch" placeholder="搜索评论..." oninput="searchComments()">
+                    </div>
                 </div>
                 
                 <div class="table-container">
                     <table>
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>举报人</th>
-                                <th>类型</th>
-                                <th>原因</th>
-                                <th>状态</th>
+                                <th>帖子ID</th>
+                                <th>作者</th>
+                                <th>评论内容</th>
                                 <th>时间</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
-                        <tbody id="reportsTableBody">
-                            <tr><td colspan="7" class="loading">加载中...</td></tr>
+                        <tbody id="commentsTableBody">
+                            <tr><td colspan="5" class="loading">
+                                <span class="material-symbols-outlined">hourglass_empty</span> 加载中...
+                            </td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -571,53 +736,43 @@
             
             <!-- 数据库管理 -->
             <div id="databasePanel" class="panel hidden">
-                <h3 style="margin-bottom: 20px;">🗄️ 数据库管理</h3>
+                <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                    <span class="material-symbols-outlined" style="color: #ffd700;">database</span>
+                    数据库管理
+                </h3>
                 
                 <div style="display: grid; gap: 20px;">
                     <div style="background: #2d2d2d; padding: 20px; border-radius: 16px;">
-                        <h4 style="margin-bottom: 15px;">📦 表信息</h4>
-                        <p>users: <span id="dbUsers">-</span> 条记录</p>
-                        <p>posts: <span id="dbPosts">-</span> 条记录</p>
-                        <p>comments: <span id="dbComments">-</span> 条记录</p>
+                        <h4 style="margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                            <span class="material-symbols-outlined" style="color: #888;">table_rows</span>
+                            表信息
+                        </h4>
+                        <p style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <span class="material-symbols-outlined" style="color: #ffd700;">group</span>
+                            users: <span id="dbUsers">-</span> 条记录
+                        </p>
+                        <p style="display: flex; align-items: center; gap: 8px;">
+                            <span class="material-symbols-outlined" style="color: #ffd700;">post</span>
+                            posts: <span id="dbPosts">-</span> 条记录
+                        </p>
                     </div>
                     
-                    <div style="background: #2d2d2d; padding: 20px; border-radius: 16px;">
-                        <h4 style="margin-bottom: 15px;">⚠️ 危险操作</h4>
-                        <button class="action-btn danger" onclick="backupDatabase()">📥 备份数据库</button>
-                        <button class="action-btn danger" onclick="clearAllData()">🗑️ 清空所有数据</button>
+                    <div class="danger-zone">
+                        <h4>
+                            <span class="material-symbols-outlined">warning</span>
+                            危险操作
+                        </h4>
+                        <div class="danger-buttons">
+                            <button class="action-btn" onclick="backupDatabase()">
+                                <span class="material-symbols-outlined">download</span>
+                                备份数据库
+                            </button>
+                            <button class="action-btn danger" onclick="clearAllData()">
+                                <span class="material-symbols-outlined">delete_sweep</span>
+                                清空所有数据
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </div>
-            
-            <!-- 系统设置 -->
-            <div id="settingsPanel" class="panel hidden">
-                <h3 style="margin-bottom: 20px;">⚙️ 系统设置</h3>
-                
-                <div style="background: #2d2d2d; padding: 20px; border-radius: 16px; margin-bottom: 20px;">
-                    <h4 style="margin-bottom: 15px;">🔐 安全设置</h4>
-                    
-                    <div style="margin-bottom: 15px;">
-                        <label style="display: flex; align-items: center; gap: 10px;">
-                            <input type="checkbox" id="allowRegister" checked>
-                            <span>允许新用户注册</span>
-                        </label>
-                    </div>
-                    
-                    <div style="margin-bottom: 15px;">
-                        <label style="display: flex; align-items: center; gap: 10px;">
-                            <input type="checkbox" id="requireVerify">
-                            <span>需要邮箱验证</span>
-                        </label>
-                    </div>
-                    
-                    <div style="margin-bottom: 15px;">
-                        <label style="display: flex; align-items: center; gap: 10px;">
-                            <input type="checkbox" id="enableCaptcha" checked>
-                            <span>开启验证码</span>
-                        </label>
-                    </div>
-                    
-                    <button class="action-btn" onclick="saveSettings()">保存设置</button>
                 </div>
             </div>
         </div>
@@ -629,7 +784,6 @@
         
         let allUsers = [];
         let allPosts = [];
-        let allReports = JSON.parse(localStorage.getItem('reports') || '[]');
         let currentPanel = 'dashboard';
 
         // ===== 管理员登录 =====
@@ -637,14 +791,25 @@
             const username = document.getElementById('adminUsername').value;
             const password = document.getElementById('adminPassword').value;
             
-            // 这里可以改成从数据库验证
-            if (username === 'renlei540' && password === 'admin123456') {
-                document.getElementById('loginPage').style.display = 'none';
-                document.getElementById('adminPanel').style.display = 'block';
-                loadAllData();
-            } else {
-                document.getElementById('loginError').style.display = 'block';
-                document.getElementById('loginError').textContent = '用户名或密码错误';
+            try {
+                // 从数据库验证管理员
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/users?email=eq.${encodeURIComponent(username)}&role=eq.admin`, {
+                    headers: { 'apikey': SUPABASE_KEY }
+                });
+                
+                const users = await res.json();
+                
+                if (users && users.length > 0 && users[0].password === password) {
+                    document.getElementById('loginPage').style.display = 'none';
+                    document.getElementById('adminPanel').style.display = 'block';
+                    loadAllData();
+                    showToast('登录成功');
+                } else {
+                    document.getElementById('loginError').style.display = 'flex';
+                    document.getElementById('loginError').querySelector('span:last-child').textContent = '用户名或密码错误';
+                }
+            } catch (err) {
+                showToast('登录失败: ' + err.message, true);
             }
         }
 
@@ -677,6 +842,7 @@
                 });
                 allPosts = await res.json();
                 renderPosts();
+                renderComments();
             } catch (err) {
                 showToast('加载帖子失败', true);
             }
@@ -685,8 +851,8 @@
         // ===== 渲染用户 =====
         function renderUsers() {
             const tbody = document.getElementById('usersTableBody');
-            if (allUsers.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" class="loading">暂无用户</td></tr>';
+            if (!allUsers || allUsers.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="loading"><span class="material-symbols-outlined">inbox</span> 暂无用户</td></tr>';
                 return;
             }
             
@@ -697,13 +863,26 @@
                         <td>${user.id?.substring(0, 8) || '-'}</td>
                         <td>${user.email || '-'}</td>
                         <td>${user.username || '-'}</td>
-                        <td><span class="badge ${user.role === 'admin' ? 'admin' : 'user'}">${user.role || 'user'}</span></td>
-                        <td><span class="badge ${user.status === 'active' ? 'active' : 'banned'}">${user.status || 'active'}</span></td>
+                        <td><span class="badge ${user.role === 'admin' ? 'admin' : 'user'}">
+                            <span class="material-symbols-outlined" style="font-size: 14px;">${user.role === 'admin' ? 'verified' : 'person'}</span>
+                            ${user.role || 'user'}
+                        </span></td>
+                        <td><span class="badge ${user.status === 'active' ? 'active' : 'banned'}">
+                            <span class="material-symbols-outlined" style="font-size: 14px;">${user.status === 'active' ? 'check_circle' : 'block'}</span>
+                            ${user.status || 'active'}
+                        </span></td>
                         <td>${user.created_at ? new Date(user.created_at).toLocaleString() : '-'}</td>
                         <td>${user.last_login ? new Date(user.last_login).toLocaleString() : '从未'}</td>
                         <td>
-                            <button class="action-btn" onclick="setUserRole('${user.id}', 'admin')">设为管理</button>
-                            <button class="action-btn danger" onclick="banUser('${user.id}')">封禁</button>
+                            <button class="action-btn" onclick="setUserRole('${user.id}', 'admin')">
+                                <span class="material-symbols-outlined">admin_panel_settings</span> 设为管理
+                            </button>
+                            <button class="action-btn danger" onclick="banUser('${user.id}')">
+                                <span class="material-symbols-outlined">block</span> 封禁
+                            </button>
+                            <button class="action-btn danger" onclick="deleteUser('${user.id}')">
+                                <span class="material-symbols-outlined">delete</span> 删除
+                            </button>
                         </td>
                     </tr>
                 `;
@@ -714,8 +893,8 @@
         // ===== 渲染帖子 =====
         function renderPosts() {
             const tbody = document.getElementById('postsTableBody');
-            if (allPosts.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" class="loading">暂无帖子</td></tr>';
+            if (!allPosts || allPosts.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="loading"><span class="material-symbols-outlined">inbox</span> 暂无帖子</td></tr>';
                 return;
             }
             
@@ -726,11 +905,57 @@
                         <td>${post.id}</td>
                         <td>${post.author || '匿名'}</td>
                         <td>${post.content?.substring(0, 30)}${post.content?.length > 30 ? '...' : ''}</td>
-                        <td>${post.likes || 0}</td>
-                        <td>${post.comments?.length || 0}</td>
+                        <td><span style="display: flex; align-items: center; gap: 4px;"><span class="material-symbols-outlined" style="font-size: 16px; color: #ff4444;">favorite</span> ${post.likes || 0}</span></td>
+                        <td><span style="display: flex; align-items: center; gap: 4px;"><span class="material-symbols-outlined" style="font-size: 16px;">comment</span> ${post.comments?.length || 0}</span></td>
                         <td>${new Date(post.created_at).toLocaleString()}</td>
                         <td>
-                            <button class="action-btn danger" onclick="deletePost('${post.id}')">删除</button>
+                            <button class="action-btn danger" onclick="deletePost('${post.id}')">
+                                <span class="material-symbols-outlined">delete</span> 删除
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // ===== 渲染评论 =====
+        function renderComments() {
+            const tbody = document.getElementById('commentsTableBody');
+            let allComments = [];
+            
+            allPosts.forEach(post => {
+                if (post.comments && post.comments.length > 0) {
+                    post.comments.forEach((comment, index) => {
+                        allComments.push({
+                            id: `${post.id}-${index}`,
+                            postId: post.id,
+                            postContent: post.content,
+                            author: comment.author,
+                            content: comment.content,
+                            created_at: comment.created_at
+                        });
+                    });
+                }
+            });
+            
+            if (allComments.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="loading"><span class="material-symbols-outlined">inbox</span> 暂无评论</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            allComments.forEach(comment => {
+                html += `
+                    <tr>
+                        <td>${comment.postId}</td>
+                        <td>${comment.author || '匿名'}</td>
+                        <td>${comment.content?.substring(0, 30)}${comment.content?.length > 30 ? '...' : ''}</td>
+                        <td>${new Date(comment.created_at).toLocaleString()}</td>
+                        <td>
+                            <button class="action-btn danger" onclick="deleteComment('${comment.id}', '${comment.postId}')">
+                                <span class="material-symbols-outlined">delete</span> 删除
+                            </button>
                         </td>
                     </tr>
                 `;
@@ -755,7 +980,6 @@
             
             document.getElementById('dbUsers').textContent = allUsers.length;
             document.getElementById('dbPosts').textContent = allPosts.length;
-            document.getElementById('dbComments').textContent = totalComments;
         }
 
         // ===== 搜索用户 =====
@@ -768,7 +992,7 @@
             
             const tbody = document.getElementById('usersTableBody');
             if (filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" class="loading">未找到用户</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8" class="loading"><span class="material-symbols-outlined">search_off</span> 未找到用户</td></tr>';
                 return;
             }
             
@@ -779,13 +1003,26 @@
                         <td>${user.id?.substring(0, 8) || '-'}</td>
                         <td>${user.email || '-'}</td>
                         <td>${user.username || '-'}</td>
-                        <td><span class="badge ${user.role === 'admin' ? 'admin' : 'user'}">${user.role || 'user'}</span></td>
-                        <td><span class="badge ${user.status === 'active' ? 'active' : 'banned'}">${user.status || 'active'}</span></td>
+                        <td><span class="badge ${user.role === 'admin' ? 'admin' : 'user'}">
+                            <span class="material-symbols-outlined" style="font-size: 14px;">${user.role === 'admin' ? 'verified' : 'person'}</span>
+                            ${user.role || 'user'}
+                        </span></td>
+                        <td><span class="badge ${user.status === 'active' ? 'active' : 'banned'}">
+                            <span class="material-symbols-outlined" style="font-size: 14px;">${user.status === 'active' ? 'check_circle' : 'block'}</span>
+                            ${user.status || 'active'}
+                        </span></td>
                         <td>${user.created_at ? new Date(user.created_at).toLocaleString() : '-'}</td>
                         <td>${user.last_login ? new Date(user.last_login).toLocaleString() : '从未'}</td>
                         <td>
-                            <button class="action-btn" onclick="setUserRole('${user.id}', 'admin')">设为管理</button>
-                            <button class="action-btn danger" onclick="banUser('${user.id}')">封禁</button>
+                            <button class="action-btn" onclick="setUserRole('${user.id}', 'admin')">
+                                <span class="material-symbols-outlined">admin_panel_settings</span> 设为管理
+                            </button>
+                            <button class="action-btn danger" onclick="banUser('${user.id}')">
+                                <span class="material-symbols-outlined">block</span> 封禁
+                            </button>
+                            <button class="action-btn danger" onclick="deleteUser('${user.id}')">
+                                <span class="material-symbols-outlined">delete</span> 删除
+                            </button>
                         </td>
                     </tr>
                 `;
@@ -803,7 +1040,7 @@
             
             const tbody = document.getElementById('postsTableBody');
             if (filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" class="loading">未找到帖子</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" class="loading"><span class="material-symbols-outlined">search_off</span> 未找到帖子</td></tr>';
                 return;
             }
             
@@ -814,11 +1051,61 @@
                         <td>${post.id}</td>
                         <td>${post.author || '匿名'}</td>
                         <td>${post.content?.substring(0, 30)}${post.content?.length > 30 ? '...' : ''}</td>
-                        <td>${post.likes || 0}</td>
-                        <td>${post.comments?.length || 0}</td>
+                        <td><span style="display: flex; align-items: center; gap: 4px;"><span class="material-symbols-outlined" style="font-size: 16px; color: #ff4444;">favorite</span> ${post.likes || 0}</span></td>
+                        <td><span style="display: flex; align-items: center; gap: 4px;"><span class="material-symbols-outlined" style="font-size: 16px;">comment</span> ${post.comments?.length || 0}</span></td>
                         <td>${new Date(post.created_at).toLocaleString()}</td>
                         <td>
-                            <button class="action-btn danger" onclick="deletePost('${post.id}')">删除</button>
+                            <button class="action-btn danger" onclick="deletePost('${post.id}')">
+                                <span class="material-symbols-outlined">delete</span> 删除
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // ===== 搜索评论 =====
+        function searchComments() {
+            const search = document.getElementById('commentSearch').value.toLowerCase();
+            const tbody = document.getElementById('commentsTableBody');
+            
+            let allComments = [];
+            allPosts.forEach(post => {
+                if (post.comments && post.comments.length > 0) {
+                    post.comments.forEach((comment, index) => {
+                        if (comment.author?.toLowerCase().includes(search) || 
+                            comment.content?.toLowerCase().includes(search)) {
+                            allComments.push({
+                                id: `${post.id}-${index}`,
+                                postId: post.id,
+                                postContent: post.content,
+                                author: comment.author,
+                                content: comment.content,
+                                created_at: comment.created_at
+                            });
+                        }
+                    });
+                }
+            });
+            
+            if (allComments.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="loading"><span class="material-symbols-outlined">search_off</span> 未找到评论</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            allComments.forEach(comment => {
+                html += `
+                    <tr>
+                        <td>${comment.postId}</td>
+                        <td>${comment.author || '匿名'}</td>
+                        <td>${comment.content?.substring(0, 30)}${comment.content?.length > 30 ? '...' : ''}</td>
+                        <td>${new Date(comment.created_at).toLocaleString()}</td>
+                        <td>
+                            <button class="action-btn danger" onclick="deleteComment('${comment.id}', '${comment.postId}')">
+                                <span class="material-symbols-outlined">delete</span> 删除
+                            </button>
                         </td>
                     </tr>
                 `;
@@ -829,7 +1116,7 @@
         // ===== 设置用户角色 =====
         async function setUserRole(userId, role) {
             try {
-                await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${userId}`, {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${userId}`, {
                     method: 'PATCH',
                     headers: {
                         'apikey': SUPABASE_KEY,
@@ -837,10 +1124,15 @@
                     },
                     body: JSON.stringify({ role: role })
                 });
-                showToast('角色已更新');
-                loadUsers();
+                
+                if (res.ok) {
+                    showToast('角色已更新');
+                    loadUsers();
+                } else {
+                    showToast('更新失败', true);
+                }
             } catch (err) {
-                showToast('更新失败', true);
+                showToast('更新失败: ' + err.message, true);
             }
         }
 
@@ -848,7 +1140,7 @@
         async function banUser(userId) {
             if (!confirm('确定要封禁该用户吗？')) return;
             try {
-                await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${userId}`, {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${userId}`, {
                     method: 'PATCH',
                     headers: {
                         'apikey': SUPABASE_KEY,
@@ -856,10 +1148,35 @@
                     },
                     body: JSON.stringify({ status: 'banned' })
                 });
-                showToast('用户已封禁');
-                loadUsers();
+                
+                if (res.ok) {
+                    showToast('用户已封禁');
+                    loadUsers();
+                } else {
+                    showToast('封禁失败', true);
+                }
             } catch (err) {
-                showToast('操作失败', true);
+                showToast('操作失败: ' + err.message, true);
+            }
+        }
+
+        // ===== 删除用户 =====
+        async function deleteUser(userId) {
+            if (!confirm('确定要删除该用户吗？此操作不可恢复！')) return;
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${userId}`, {
+                    method: 'DELETE',
+                    headers: { 'apikey': SUPABASE_KEY }
+                });
+                
+                if (res.ok) {
+                    showToast('用户已删除');
+                    loadUsers();
+                } else {
+                    showToast('删除失败', true);
+                }
+            } catch (err) {
+                showToast('删除失败: ' + err.message, true);
             }
         }
 
@@ -867,14 +1184,53 @@
         async function deletePost(postId) {
             if (!confirm('确定要删除这个帖子吗？')) return;
             try {
-                await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
                     method: 'DELETE',
                     headers: { 'apikey': SUPABASE_KEY }
                 });
-                showToast('帖子已删除');
-                loadPosts();
+                
+                if (res.ok) {
+                    showToast('帖子已删除');
+                    loadPosts();
+                } else {
+                    showToast('删除失败', true);
+                }
             } catch (err) {
-                showToast('删除失败', true);
+                showToast('删除失败: ' + err.message, true);
+            }
+        }
+
+        // ===== 删除评论 =====
+        async function deleteComment(commentId, postId) {
+            if (!confirm('确定要删除这个评论吗？')) return;
+            
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
+                    headers: { 'apikey': SUPABASE_KEY }
+                });
+                const posts = await res.json();
+                const post = posts[0];
+                
+                const comments = post.comments || [];
+                const newComments = comments.filter((c, index) => `${postId}-${index}` !== commentId);
+                
+                const updateRes = await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ comments: newComments })
+                });
+                
+                if (updateRes.ok) {
+                    showToast('评论已删除');
+                    loadPosts();
+                } else {
+                    showToast('删除失败', true);
+                }
+            } catch (err) {
+                showToast('删除失败: ' + err.message, true);
             }
         }
 
@@ -886,6 +1242,10 @@
             document.querySelectorAll('.panel').forEach(p => p.classList.add('hidden'));
             document.getElementById(`${panel}Panel`).classList.remove('hidden');
             currentPanel = panel;
+            
+            if (panel === 'comments') {
+                renderComments();
+            }
         }
 
         // ===== 备份数据库 =====
@@ -893,7 +1253,6 @@
             const backup = {
                 users: allUsers,
                 posts: allPosts,
-                reports: allReports,
                 time: new Date().toISOString()
             };
             
@@ -910,21 +1269,22 @@
 
         // ===== 清空所有数据 =====
         async function clearAllData() {
-            if (!confirm('⚠️ 警告：这将删除所有数据！确定吗？')) return;
+            if (!confirm('⚠️ 警告：这将删除所有帖子和评论！确定吗？')) return;
             if (!confirm('最后一次确认：真的要清空吗？')) return;
             
-            showToast('演示模式：未执行实际删除');
-        }
-
-        // ===== 保存设置 =====
-        function saveSettings() {
-            const settings = {
-                allowRegister: document.getElementById('allowRegister').checked,
-                requireVerify: document.getElementById('requireVerify').checked,
-                enableCaptcha: document.getElementById('enableCaptcha').checked
-            };
-            localStorage.setItem('adminSettings', JSON.stringify(settings));
-            showToast('设置已保存');
+            try {
+                for (const post of allPosts) {
+                    await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${post.id}`, {
+                        method: 'DELETE',
+                        headers: { 'apikey': SUPABASE_KEY }
+                    });
+                }
+                
+                showToast('所有数据已清空');
+                loadPosts();
+            } catch (err) {
+                showToast('清空失败: ' + err.message, true);
+            }
         }
 
         // ===== 退出登录 =====
@@ -937,7 +1297,10 @@
         function showToast(message, isError = false) {
             const toast = document.createElement('div');
             toast.className = `toast ${isError ? 'error' : ''}`;
-            toast.textContent = message;
+            toast.innerHTML = `
+                <span class="material-symbols-outlined">${isError ? 'error' : 'check_circle'}</span>
+                ${message}
+            `;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 2000);
         }
