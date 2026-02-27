@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>管理员面板 · 真实版</title>
+    <title>管理员面板 · 我已急哭</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0,200" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -14,7 +14,6 @@
             min-height: 100vh;
         }
         
-        /* 登录页 */
         .login-container {
             display: flex;
             align-items: center;
@@ -98,7 +97,6 @@
             gap: 8px;
         }
         
-        /* 主面板 */
         .admin-container {
             display: none;
             min-height: 100vh;
@@ -333,6 +331,21 @@
             color: white;
         }
         
+        .badge.pending {
+            background: #ff9800;
+            color: white;
+        }
+        
+        .badge.approved {
+            background: #00c853;
+            color: white;
+        }
+        
+        .badge.rejected {
+            background: #9e9e9e;
+            color: white;
+        }
+        
         .action-btn {
             background: transparent;
             border: 1px solid #444;
@@ -363,7 +376,9 @@
             color: white;
         }
         
-        .action-btn.danger:hover .material-symbols-outlined {
+        .action-btn.success:hover {
+            background: #00c853;
+            border-color: #00c853;
             color: white;
         }
         
@@ -456,51 +471,65 @@
             color: #444;
         }
         
-        .system-status {
+        .report-details {
             background: #2d2d2d;
-            padding: 20px;
             border-radius: 16px;
-            display: grid;
-            gap: 12px;
+            padding: 20px;
+            margin-top: 10px;
         }
         
-        .status-item {
+        .detail-row {
+            display: flex;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #444;
+        }
+        
+        .detail-label {
+            width: 100px;
+            color: #888;
+        }
+        
+        .detail-value {
+            flex: 1;
+            color: #fff;
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
             display: flex;
             align-items: center;
-            gap: 12px;
+            justify-content: center;
+            z-index: 3000;
+            backdrop-filter: blur(4px);
         }
         
-        .status-item .material-symbols-outlined {
-            color: #00c853;
+        .modal-content {
+            background: #1e1e1e;
+            border-radius: 24px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
         }
         
-        .status-item .time-icon {
-            color: #ffd700;
-        }
-        
-        .danger-zone {
-            background: #2d2d2d;
-            padding: 20px;
-            border-radius: 16px;
-            margin-top: 20px;
-        }
-        
-        .danger-zone h4 {
+        .modal-content h3 {
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #ff4444;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         
-        .danger-zone .material-symbols-outlined {
-            color: #ff4444;
-        }
-        
-        .danger-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+        .modal-content .close-btn {
+            float: right;
+            cursor: pointer;
+            color: #888;
         }
     </style>
 </head>
@@ -554,6 +583,14 @@
                     <span class="material-symbols-outlined">group</span>
                     用户管理
                 </li>
+                <li onclick="switchPanel('banned')">
+                    <span class="material-symbols-outlined">block</span>
+                    封禁管理
+                </li>
+                <li onclick="switchPanel('reports')">
+                    <span class="material-symbols-outlined">flag</span>
+                    举报中心
+                </li>
                 <li onclick="switchPanel('posts')">
                     <span class="material-symbols-outlined">post</span>
                     帖子管理
@@ -586,24 +623,24 @@
                         </div>
                     </div>
                     <div class="stat-card">
+                        <div class="stat-icon"><span class="material-symbols-outlined">block</span></div>
+                        <div class="stat-info">
+                            <h3><span class="material-symbols-outlined" style="font-size: 16px;">gpp_bad</span> 封禁用户</h3>
+                            <div class="stat-number" id="totalBanned">-</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><span class="material-symbols-outlined">flag</span></div>
+                        <div class="stat-info">
+                            <h3><span class="material-symbols-outlined" style="font-size: 16px;">pending</span> 待处理举报</h3>
+                            <div class="stat-number" id="totalReports">-</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
                         <div class="stat-icon"><span class="material-symbols-outlined">post</span></div>
                         <div class="stat-info">
                             <h3><span class="material-symbols-outlined" style="font-size: 16px;">article</span> 总帖子</h3>
                             <div class="stat-number" id="totalPosts">-</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon"><span class="material-symbols-outlined">comment</span></div>
-                        <div class="stat-info">
-                            <h3><span class="material-symbols-outlined" style="font-size: 16px;">chat</span> 总评论</h3>
-                            <div class="stat-number" id="totalComments">-</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon"><span class="material-symbols-outlined">favorite</span></div>
-                        <div class="stat-info">
-                            <h3><span class="material-symbols-outlined" style="font-size: 16px;">thumb_up</span> 总点赞</h3>
-                            <div class="stat-number" id="totalLikes">-</div>
                         </div>
                     </div>
                 </div>
@@ -613,17 +650,17 @@
                         <span class="material-symbols-outlined" style="color: #ffd700;">monitoring</span>
                         系统状态
                     </h3>
-                    <div class="system-status">
-                        <div class="status-item">
-                            <span class="material-symbols-outlined">check_circle</span>
+                    <div style="background: #2d2d2d; padding: 20px; border-radius: 16px;">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                            <span class="material-symbols-outlined" style="color: #00c853;">check_circle</span>
                             <span>数据库连接正常</span>
                         </div>
-                        <div class="status-item">
-                            <span class="material-symbols-outlined">check_circle</span>
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                            <span class="material-symbols-outlined" style="color: #00c853;">check_circle</span>
                             <span>API 服务正常</span>
                         </div>
-                        <div class="status-item">
-                            <span class="material-symbols-outlined time-icon">schedule</span>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span class="material-symbols-outlined" style="color: #ffd700;">schedule</span>
                             <span>最后更新: <span id="lastUpdate">-</span></span>
                         </div>
                     </div>
@@ -658,6 +695,84 @@
                             </tr>
                         </thead>
                         <tbody id="usersTableBody">
+                            <tr><td colspan="8" class="loading">
+                                <span class="material-symbols-outlined">hourglass_empty</span> 加载中...
+                            </td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- 封禁管理 -->
+            <div id="bannedPanel" class="panel hidden">
+                <div class="panel-header">
+                    <h3>
+                        <span class="material-symbols-outlined">block</span> 
+                        封禁管理
+                    </h3>
+                    <div class="search-box">
+                        <span class="material-symbols-outlined">search</span>
+                        <input type="text" id="bannedSearch" placeholder="搜索封禁用户..." oninput="searchBanned()">
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>邮箱</th>
+                                <th>用户名</th>
+                                <th>封禁时间</th>
+                                <th>封禁原因</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bannedTableBody">
+                            <tr><td colspan="6" class="loading">
+                                <span class="material-symbols-outlined">hourglass_empty</span> 加载中...
+                            </td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- 举报中心 -->
+            <div id="reportsPanel" class="panel hidden">
+                <div class="panel-header">
+                    <h3>
+                        <span class="material-symbols-outlined">flag</span> 
+                        举报中心
+                    </h3>
+                    <div style="display: flex; gap: 10px;">
+                        <select id="reportFilter" onchange="filterReports()" style="background: #2d2d2d; color: #fff; border: 1px solid #444; border-radius: 40px; padding: 8px 15px;">
+                            <option value="all">全部</option>
+                            <option value="pending">待处理</option>
+                            <option value="approved">已通过</option>
+                            <option value="rejected">已驳回</option>
+                        </select>
+                        <div class="search-box">
+                            <span class="material-symbols-outlined">search</span>
+                            <input type="text" id="reportSearch" placeholder="搜索举报..." oninput="searchReports()">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>举报人</th>
+                                <th>被举报人</th>
+                                <th>类型</th>
+                                <th>原因</th>
+                                <th>状态</th>
+                                <th>时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportsTableBody">
                             <tr><td colspan="8" class="loading">
                                 <span class="material-symbols-outlined">hourglass_empty</span> 加载中...
                             </td></tr>
@@ -757,12 +872,12 @@
                         </p>
                     </div>
                     
-                    <div class="danger-zone">
-                        <h4>
+                    <div style="background: #2d2d2d; padding: 20px; border-radius: 16px;">
+                        <h4 style="margin-bottom: 15px; display: flex; align-items: center; gap: 8px; color: #ff4444;">
                             <span class="material-symbols-outlined">warning</span>
                             危险操作
                         </h4>
-                        <div class="danger-buttons">
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                             <button class="action-btn" onclick="backupDatabase()">
                                 <span class="material-symbols-outlined">download</span>
                                 备份数据库
@@ -778,12 +893,37 @@
         </div>
     </div>
 
+    <!-- 举报详情弹窗 -->
+    <div id="reportDetailModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn material-symbols-outlined" onclick="closeReportModal()">close</span>
+            <h3>
+                <span class="material-symbols-outlined">flag</span>
+                举报详情
+            </h3>
+            <div id="reportDetailContent"></div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="action-btn success" onclick="handleReport('approve')">
+                    <span class="material-symbols-outlined">check_circle</span> 通过
+                </button>
+                <button class="action-btn danger" onclick="handleReport('reject')">
+                    <span class="material-symbols-outlined">cancel</span> 驳回
+                </button>
+                <button class="action-btn" onclick="closeReportModal()">
+                    <span class="material-symbols-outlined">close</span> 关闭
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const SUPABASE_URL = 'https://fnlaryjanmfqvnonqfyj.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZubGFyeWphbm1mcXZub25xZnlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwNzQzNzgsImV4cCI6MjA4NzY1MDM3OH0.4uGXyVd_6XQnK3o1vu_sDhpdRyrM67JFaBm2SnuJf1M';
         
         let allUsers = [];
         let allPosts = [];
+        let allReports = JSON.parse(localStorage.getItem('reports') || '[]');
+        let currentReportId = null;
         let currentPanel = 'dashboard';
 
         // ===== 管理员登录 =====
@@ -792,7 +932,6 @@
             const password = document.getElementById('adminPassword').value;
             
             try {
-                // 从数据库验证管理员
                 const res = await fetch(`${SUPABASE_URL}/rest/v1/users?email=eq.${encodeURIComponent(username)}&role=eq.admin`, {
                     headers: { 'apikey': SUPABASE_KEY }
                 });
@@ -829,6 +968,7 @@
                 });
                 allUsers = await res.json();
                 renderUsers();
+                renderBanned();
             } catch (err) {
                 showToast('加载用户失败', true);
             }
@@ -877,8 +1017,46 @@
                             <button class="action-btn" onclick="setUserRole('${user.id}', 'admin')">
                                 <span class="material-symbols-outlined">admin_panel_settings</span> 设为管理
                             </button>
-                            <button class="action-btn danger" onclick="banUser('${user.id}')">
-                                <span class="material-symbols-outlined">block</span> 封禁
+                            ${user.status === 'active' ? 
+                                `<button class="action-btn danger" onclick="banUser('${user.id}')">
+                                    <span class="material-symbols-outlined">block</span> 封禁
+                                </button>` : 
+                                `<button class="action-btn success" onclick="unbanUser('${user.id}')">
+                                    <span class="material-symbols-outlined">check_circle</span> 解封
+                                </button>`
+                            }
+                            <button class="action-btn danger" onclick="deleteUser('${user.id}')">
+                                <span class="material-symbols-outlined">delete</span> 删除
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // ===== 渲染封禁用户 =====
+        function renderBanned() {
+            const tbody = document.getElementById('bannedTableBody');
+            const bannedUsers = allUsers.filter(u => u.status === 'banned');
+            
+            if (bannedUsers.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="loading"><span class="material-symbols-outlined">block</span> 暂无封禁用户</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            bannedUsers.forEach(user => {
+                html += `
+                    <tr>
+                        <td>${user.id?.substring(0, 8) || '-'}</td>
+                        <td>${user.email || '-'}</td>
+                        <td>${user.username || '-'}</td>
+                        <td>${user.banned_at ? new Date(user.banned_at).toLocaleString() : '未知'}</td>
+                        <td>${user.ban_reason || '无'}</td>
+                        <td>
+                            <button class="action-btn success" onclick="unbanUser('${user.id}')">
+                                <span class="material-symbols-outlined">check_circle</span> 解封
                             </button>
                             <button class="action-btn danger" onclick="deleteUser('${user.id}')">
                                 <span class="material-symbols-outlined">delete</span> 删除
@@ -963,21 +1141,257 @@
             tbody.innerHTML = html;
         }
 
+        // ===== 渲染举报 =====
+        function renderReports() {
+            const tbody = document.getElementById('reportsTableBody');
+            const filter = document.getElementById('reportFilter').value;
+            
+            let filteredReports = allReports;
+            if (filter !== 'all') {
+                filteredReports = allReports.filter(r => r.status === filter);
+            }
+            
+            if (filteredReports.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="loading"><span class="material-symbols-outlined">inbox</span> 暂无举报</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            filteredReports.forEach(report => {
+                const user = allUsers.find(u => u.email === report.reportedUser);
+                html += `
+                    <tr>
+                        <td>${report.id}</td>
+                        <td>${report.reporter}</td>
+                        <td>${report.reportedUser} (${user?.username || '未知'})</td>
+                        <td>${report.type}</td>
+                        <td>${report.reason.substring(0, 20)}${report.reason.length > 20 ? '...' : ''}</td>
+                        <td><span class="badge ${report.status}">${report.status}</span></td>
+                        <td>${new Date(report.time).toLocaleString()}</td>
+                        <td>
+                            <button class="action-btn" onclick="viewReportDetail('${report.id}')">
+                                <span class="material-symbols-outlined">visibility</span> 详情
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // ===== 查看举报详情 =====
+        function viewReportDetail(reportId) {
+            const report = allReports.find(r => r.id == reportId);
+            if (!report) return;
+            
+            currentReportId = reportId;
+            const user = allUsers.find(u => u.email === report.reportedUser);
+            
+            const content = `
+                <div class="report-details">
+                    <div class="detail-row">
+                        <div class="detail-label">举报ID</div>
+                        <div class="detail-value">${report.id}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">举报人</div>
+                        <div class="detail-value">${report.reporter}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">被举报人</div>
+                        <div class="detail-value">${report.reportedUser} (${user?.username || '未知'})</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">类型</div>
+                        <div class="detail-value">${report.type}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">原因</div>
+                        <div class="detail-value">${report.reason}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">时间</div>
+                        <div class="detail-value">${new Date(report.time).toLocaleString()}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">状态</div>
+                        <div class="detail-value"><span class="badge ${report.status}">${report.status}</span></div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('reportDetailContent').innerHTML = content;
+            document.getElementById('reportDetailModal').classList.remove('hidden');
+        }
+
+        // ===== 处理举报 =====
+        function handleReport(action) {
+            const report = allReports.find(r => r.id == currentReportId);
+            if (report) {
+                report.status = action === 'approve' ? 'approved' : 'rejected';
+                localStorage.setItem('reports', JSON.stringify(allReports));
+                
+                if (action === 'approve' && report.target?.type === 'post') {
+                    deletePost(parseInt(report.target.id));
+                }
+                
+                showToast(`举报已${action === 'approve' ? '通过' : '驳回'}`);
+                closeReportModal();
+                renderReports();
+                updateStats();
+            }
+        }
+
+        // ===== 关闭举报弹窗 =====
+        function closeReportModal() {
+            document.getElementById('reportDetailModal').classList.add('hidden');
+        }
+
+        // ===== 封禁用户 =====
+        async function banUser(userId) {
+            const reason = prompt('请输入封禁原因：');
+            if (reason === null) return;
+            
+            try {
+                await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${userId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        status: 'banned',
+                        banned_at: new Date().toISOString(),
+                        ban_reason: reason
+                    })
+                });
+                
+                showToast('用户已封禁');
+                loadUsers();
+            } catch (err) {
+                showToast('封禁失败: ' + err.message, true);
+            }
+        }
+
+        // ===== 解封用户 =====
+        async function unbanUser(userId) {
+            if (!confirm('确定要解封该用户吗？')) return;
+            
+            try {
+                await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${userId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        status: 'active',
+                        banned_at: null,
+                        ban_reason: null
+                    })
+                });
+                
+                showToast('用户已解封');
+                loadUsers();
+            } catch (err) {
+                showToast('解封失败: ' + err.message, true);
+            }
+        }
+
+        // ===== 设置用户角色 =====
+        async function setUserRole(userId, role) {
+            try {
+                await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${userId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ role: role })
+                });
+                
+                showToast('角色已更新');
+                loadUsers();
+            } catch (err) {
+                showToast('更新失败: ' + err.message, true);
+            }
+        }
+
+        // ===== 删除用户 =====
+        async function deleteUser(userId) {
+            if (!confirm('确定要删除该用户吗？此操作不可恢复！')) return;
+            try {
+                await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${userId}`, {
+                    method: 'DELETE',
+                    headers: { 'apikey': SUPABASE_KEY }
+                });
+                
+                showToast('用户已删除');
+                loadUsers();
+            } catch (err) {
+                showToast('删除失败: ' + err.message, true);
+            }
+        }
+
+        // ===== 删除帖子 =====
+        async function deletePost(postId) {
+            if (!confirm('确定要删除这个帖子吗？')) return;
+            try {
+                await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
+                    method: 'DELETE',
+                    headers: { 'apikey': SUPABASE_KEY }
+                });
+                
+                showToast('帖子已删除');
+                loadPosts();
+            } catch (err) {
+                showToast('删除失败: ' + err.message, true);
+            }
+        }
+
+        // ===== 删除评论 =====
+        async function deleteComment(commentId, postId) {
+            if (!confirm('确定要删除这个评论吗？')) return;
+            
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
+                    headers: { 'apikey': SUPABASE_KEY }
+                });
+                const posts = await res.json();
+                const post = posts[0];
+                
+                const comments = post.comments || [];
+                const newComments = comments.filter((c, index) => `${postId}-${index}` !== commentId);
+                
+                await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ comments: newComments })
+                });
+                
+                showToast('评论已删除');
+                loadPosts();
+            } catch (err) {
+                showToast('删除失败: ' + err.message, true);
+            }
+        }
+
         // ===== 更新统计 =====
         function updateStats() {
             document.getElementById('totalUsers').textContent = allUsers.length;
+            document.getElementById('totalBanned').textContent = allUsers.filter(u => u.status === 'banned').length;
+            document.getElementById('totalReports').textContent = allReports.filter(r => r.status === 'pending').length;
             document.getElementById('totalPosts').textContent = allPosts.length;
             
             let totalComments = 0;
-            let totalLikes = 0;
             allPosts.forEach(post => {
                 totalComments += post.comments?.length || 0;
-                totalLikes += post.likes || 0;
             });
             
             document.getElementById('totalComments').textContent = totalComments;
-            document.getElementById('totalLikes').textContent = totalLikes;
-            
             document.getElementById('dbUsers').textContent = allUsers.length;
             document.getElementById('dbPosts').textContent = allPosts.length;
         }
@@ -1017,8 +1431,51 @@
                             <button class="action-btn" onclick="setUserRole('${user.id}', 'admin')">
                                 <span class="material-symbols-outlined">admin_panel_settings</span> 设为管理
                             </button>
-                            <button class="action-btn danger" onclick="banUser('${user.id}')">
-                                <span class="material-symbols-outlined">block</span> 封禁
+                            ${user.status === 'active' ? 
+                                `<button class="action-btn danger" onclick="banUser('${user.id}')">
+                                    <span class="material-symbols-outlined">block</span> 封禁
+                                </button>` : 
+                                `<button class="action-btn success" onclick="unbanUser('${user.id}')">
+                                    <span class="material-symbols-outlined">check_circle</span> 解封
+                                </button>`
+                            }
+                            <button class="action-btn danger" onclick="deleteUser('${user.id}')">
+                                <span class="material-symbols-outlined">delete</span> 删除
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // ===== 搜索封禁用户 =====
+        function searchBanned() {
+            const search = document.getElementById('bannedSearch').value.toLowerCase();
+            const bannedUsers = allUsers.filter(u => u.status === 'banned');
+            const filtered = bannedUsers.filter(u => 
+                u.email?.toLowerCase().includes(search) ||
+                u.username?.toLowerCase().includes(search)
+            );
+            
+            const tbody = document.getElementById('bannedTableBody');
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="loading"><span class="material-symbols-outlined">search_off</span> 未找到封禁用户</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            filtered.forEach(user => {
+                html += `
+                    <tr>
+                        <td>${user.id?.substring(0, 8) || '-'}</td>
+                        <td>${user.email || '-'}</td>
+                        <td>${user.username || '-'}</td>
+                        <td>${user.banned_at ? new Date(user.banned_at).toLocaleString() : '未知'}</td>
+                        <td>${user.ban_reason || '无'}</td>
+                        <td>
+                            <button class="action-btn success" onclick="unbanUser('${user.id}')">
+                                <span class="material-symbols-outlined">check_circle</span> 解封
                             </button>
                             <button class="action-btn danger" onclick="deleteUser('${user.id}')">
                                 <span class="material-symbols-outlined">delete</span> 删除
@@ -1113,125 +1570,54 @@
             tbody.innerHTML = html;
         }
 
-        // ===== 设置用户角色 =====
-        async function setUserRole(userId, role) {
-            try {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${userId}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ role: role })
-                });
-                
-                if (res.ok) {
-                    showToast('角色已更新');
-                    loadUsers();
-                } else {
-                    showToast('更新失败', true);
-                }
-            } catch (err) {
-                showToast('更新失败: ' + err.message, true);
-            }
+        // ===== 过滤举报 =====
+        function filterReports() {
+            renderReports();
         }
 
-        // ===== 封禁用户 =====
-        async function banUser(userId) {
-            if (!confirm('确定要封禁该用户吗？')) return;
-            try {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${userId}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ status: 'banned' })
-                });
-                
-                if (res.ok) {
-                    showToast('用户已封禁');
-                    loadUsers();
-                } else {
-                    showToast('封禁失败', true);
-                }
-            } catch (err) {
-                showToast('操作失败: ' + err.message, true);
-            }
-        }
-
-        // ===== 删除用户 =====
-        async function deleteUser(userId) {
-            if (!confirm('确定要删除该用户吗？此操作不可恢复！')) return;
-            try {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${userId}`, {
-                    method: 'DELETE',
-                    headers: { 'apikey': SUPABASE_KEY }
-                });
-                
-                if (res.ok) {
-                    showToast('用户已删除');
-                    loadUsers();
-                } else {
-                    showToast('删除失败', true);
-                }
-            } catch (err) {
-                showToast('删除失败: ' + err.message, true);
-            }
-        }
-
-        // ===== 删除帖子 =====
-        async function deletePost(postId) {
-            if (!confirm('确定要删除这个帖子吗？')) return;
-            try {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
-                    method: 'DELETE',
-                    headers: { 'apikey': SUPABASE_KEY }
-                });
-                
-                if (res.ok) {
-                    showToast('帖子已删除');
-                    loadPosts();
-                } else {
-                    showToast('删除失败', true);
-                }
-            } catch (err) {
-                showToast('删除失败: ' + err.message, true);
-            }
-        }
-
-        // ===== 删除评论 =====
-        async function deleteComment(commentId, postId) {
-            if (!confirm('确定要删除这个评论吗？')) return;
+        // ===== 搜索举报 =====
+        function searchReports() {
+            const search = document.getElementById('reportSearch').value.toLowerCase();
+            const filter = document.getElementById('reportFilter').value;
             
-            try {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
-                    headers: { 'apikey': SUPABASE_KEY }
-                });
-                const posts = await res.json();
-                const post = posts[0];
-                
-                const comments = post.comments || [];
-                const newComments = comments.filter((c, index) => `${postId}-${index}` !== commentId);
-                
-                const updateRes = await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ comments: newComments })
-                });
-                
-                if (updateRes.ok) {
-                    showToast('评论已删除');
-                    loadPosts();
-                } else {
-                    showToast('删除失败', true);
-                }
-            } catch (err) {
-                showToast('删除失败: ' + err.message, true);
+            let filtered = allReports;
+            if (filter !== 'all') {
+                filtered = filtered.filter(r => r.status === filter);
             }
+            
+            filtered = filtered.filter(r => 
+                r.reporter?.toLowerCase().includes(search) ||
+                r.reportedUser?.toLowerCase().includes(search) ||
+                r.reason?.toLowerCase().includes(search)
+            );
+            
+            const tbody = document.getElementById('reportsTableBody');
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="loading"><span class="material-symbols-outlined">search_off</span> 未找到举报</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            filtered.forEach(report => {
+                const user = allUsers.find(u => u.email === report.reportedUser);
+                html += `
+                    <tr>
+                        <td>${report.id}</td>
+                        <td>${report.reporter}</td>
+                        <td>${report.reportedUser} (${user?.username || '未知'})</td>
+                        <td>${report.type}</td>
+                        <td>${report.reason.substring(0, 20)}${report.reason.length > 20 ? '...' : ''}</td>
+                        <td><span class="badge ${report.status}">${report.status}</span></td>
+                        <td>${new Date(report.time).toLocaleString()}</td>
+                        <td>
+                            <button class="action-btn" onclick="viewReportDetail('${report.id}')">
+                                <span class="material-symbols-outlined">visibility</span> 详情
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
         }
 
         // ===== 切换面板 =====
@@ -1243,8 +1629,12 @@
             document.getElementById(`${panel}Panel`).classList.remove('hidden');
             currentPanel = panel;
             
-            if (panel === 'comments') {
+            if (panel === 'reports') {
+                renderReports();
+            } else if (panel === 'comments') {
                 renderComments();
+            } else if (panel === 'banned') {
+                renderBanned();
             }
         }
 
@@ -1253,6 +1643,7 @@
             const backup = {
                 users: allUsers,
                 posts: allPosts,
+                reports: allReports,
                 time: new Date().toISOString()
             };
             
