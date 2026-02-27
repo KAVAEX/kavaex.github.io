@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>开发者社区 - 已修复</title>
+    <title>开发者社区 - 已完善</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0,200" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -2146,7 +2146,7 @@
             }
         }
 
-        // ===== 修复的登录函数（安全版本） =====
+        // ===== 修复的登录函数（已删除邮箱验证检查） =====
         async function doLogin() {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
@@ -2179,18 +2179,7 @@
                     return;
                 }
                 
-                // 安全地检查邮箱验证状态
-                // 有些 Supabase 项目用 email_confirmed_at，有些用 confirmed_at
-                const isEmailConfirmed = data.user && (
-                    data.user.email_confirmed_at != null || 
-                    data.user.confirmed_at != null
-                );
-                
-                if (!isEmailConfirmed) {
-                    showToast('请先验证邮箱', true);
-                    return;
-                }
-                
+                // ✅ 邮箱验证已关闭，直接登录成功
                 currentUser = data.user;
                 localStorage.setItem('currentUser', JSON.stringify(data));
                 
