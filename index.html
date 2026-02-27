@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>开发者社区 - 用户记录版</title>
+    <title>开发者社区 - 完整版</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0,200" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -712,7 +712,6 @@
             color: #333;
         }
         
-        /* 用户表格 */
         .user-table {
             width: 100%;
             border-collapse: collapse;
@@ -1114,6 +1113,21 @@
             </div>
         </div>
 
+        <div id="forgotPasswordModal" class="modal hidden">
+            <div class="modal-content">
+                <h3>
+                    <span class="material-symbols-outlined">lock_reset</span>
+                    重置密码
+                </h3>
+                <div id="forgotSuccess" class="toast hidden" style="position:static; margin-bottom:15px;">重置邮件已发送！</div>
+                <div id="forgotError" class="error-message hidden"></div>
+                <p style="margin-bottom: 15px;">请输入你的邮箱，我们将发送重置密码的链接。</p>
+                <input type="email" id="forgotEmail" placeholder="邮箱">
+                <button class="btn" onclick="doForgotPassword()" style="width:100%; margin-bottom:10px;">发送重置邮件</button>
+                <button class="btn secondary" onclick="hideForgotPassword()" style="width:100%;">返回登录</button>
+            </div>
+        </div>
+
         <div id="loginModal" class="modal hidden">
             <div class="modal-content">
                 <h3>
@@ -1123,7 +1137,10 @@
                 <input type="email" id="loginEmail" placeholder="邮箱">
                 <input type="password" id="loginPassword" placeholder="密码">
                 <button class="btn" onclick="doLogin()" style="width:100%;">登录</button>
-                <p style="text-align:center; margin-top:12px;">
+                <p style="text-align:center; margin:10px 0;">
+                    <button class="btn secondary small" onclick="showForgotPassword()">忘记密码？</button>
+                </p>
+                <p style="text-align:center;">
                     <button class="btn secondary small" onclick="switchToRegister()">没有账号？注册</button>
                 </p>
             </div>
@@ -1146,7 +1163,7 @@
         </div>
 
         <footer class="footer">
-            <span class="material-symbols-outlined" style="font-size: 14px;">security</span> 开发者社区 · 用户记录版
+            <span class="material-symbols-outlined" style="font-size: 14px;">security</span> 开发者社区 · 完整版
         </footer>
     </div>
 
@@ -1208,7 +1225,6 @@
                 const user = await res.json();
                 currentUser = user;
                 
-                // 从 users 表加载用户资料
                 const userRes = await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${currentUser.id}`, {
                     headers: { 'apikey': SUPABASE_KEY }
                 });
@@ -1308,7 +1324,6 @@
             userProfile.name = document.getElementById('editName').value || currentUser.email.split('@')[0];
             userProfile.bio = document.getElementById('editBio').value || '热爱编程的开发者';
             
-            // 更新到 users 表
             await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${currentUser.id}`, {
                 method: 'PATCH',
                 headers: {
@@ -1960,6 +1975,14 @@
             document.getElementById('userTableBody').innerHTML = html;
         }
 
+        function changeUserRole(userId) {
+            alert('修改角色功能开发中');
+        }
+
+        function banUser(userId) {
+            alert('封禁用户功能开发中');
+        }
+
         function hideReportsModal() {
             document.getElementById('reportsModal').classList.add('hidden');
         }
@@ -2068,6 +2091,61 @@
             document.getElementById('adminView').classList.add('hidden');
         }
 
+        // ===== 忘记密码功能 =====
+        function showForgotPassword() {
+            hideLogin();
+            document.getElementById('forgotEmail').value = '';
+            document.getElementById('forgotSuccess').classList.add('hidden');
+            document.getElementById('forgotError').classList.add('hidden');
+            document.getElementById('forgotPasswordModal').classList.remove('hidden');
+        }
+
+        function hideForgotPassword() {
+            document.getElementById('forgotPasswordModal').classList.add('hidden');
+            showLogin();
+        }
+
+        async function doForgotPassword() {
+            const email = document.getElementById('forgotEmail').value.trim();
+            
+            if (!email) {
+                document.getElementById('forgotError').textContent = '请输入邮箱';
+                document.getElementById('forgotError').classList.remove('hidden');
+                return;
+            }
+            
+            try {
+                const res = await fetch(`${SUPABASE_URL}/auth/v1/recover`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        email,
+                        options: { redirectTo: window.location.origin }
+                    })
+                });
+                
+                const data = await res.json();
+                
+                if (data.error) {
+                    document.getElementById('forgotError').textContent = data.error_description || data.msg || '发送失败';
+                    document.getElementById('forgotError').classList.remove('hidden');
+                } else {
+                    document.getElementById('forgotSuccess').classList.remove('hidden');
+                    document.getElementById('forgotError').classList.add('hidden');
+                    
+                    setTimeout(() => {
+                        hideForgotPassword();
+                    }, 3000);
+                }
+            } catch (err) {
+                document.getElementById('forgotError').textContent = '网络错误';
+                document.getElementById('forgotError').classList.remove('hidden');
+            }
+        }
+
         async function doLogin() {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
@@ -2106,7 +2184,6 @@
                     currentUser = data.user;
                     localStorage.setItem('currentUser', JSON.stringify(data));
                     
-                    // 从 users 表获取用户资料
                     const userRes = await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${currentUser.id}`, {
                         headers: { 'apikey': SUPABASE_KEY }
                     });
@@ -2127,7 +2204,6 @@
                             role: 'user'
                         };
                         
-                        // 创建用户记录
                         await fetch(`${SUPABASE_URL}/rest/v1/users`, {
                             method: 'POST',
                             headers: {
@@ -2148,7 +2224,6 @@
                         });
                     }
                     
-                    // 更新最后登录时间
                     await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${currentUser.id}`, {
                         method: 'PATCH',
                         headers: {
