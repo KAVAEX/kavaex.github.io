@@ -1247,45 +1247,58 @@
         }
 
         function updateUIForUser(isLoggedIn) {
-            if (isLoggedIn && currentUser) {
-                document.getElementById('auth-section').classList.add('hidden');
-                document.getElementById('user-section').classList.remove('hidden');
-                document.getElementById('compose-section').classList.remove('hidden');
-                document.getElementById('notificationSection').classList.remove('hidden');
-                
-                if (userProfile && userProfile.role === 'admin') {
-                    document.getElementById('adminBadge').classList.remove('hidden');
-                    document.getElementById('adminPanelBtn').classList.remove('hidden');
-                } else {
-                    document.getElementById('adminBadge').classList.add('hidden');
-                    document.getElementById('adminPanelBtn').classList.add('hidden');
-                }
-                
-                document.getElementById('homeOnlineBadge').classList.add('online');
-                updateOnlineStatus();
-                
-                if (userProfile) {
-                    document.getElementById('homeAvatar').textContent = userProfile.avatar || currentUser.email[0].toUpperCase();
-                    document.getElementById('homeDisplayName').textContent = userProfile.name || currentUser.email.split('@')[0];
-                    document.getElementById('homeBio').textContent = userProfile.bio || '热爱编程的开发者';
-                }
-            } else {
-                document.getElementById('auth-section').classList.remove('hidden');
-                document.getElementById('user-section').classList.add('hidden');
-                document.getElementById('compose-section').classList.add('hidden');
-                document.getElementById('notificationSection').classList.add('hidden');
-                document.getElementById('adminBadge').classList.add('hidden');
-                document.getElementById('adminPanelBtn').classList.add('hidden');
-                document.getElementById('homeOnlineBadge').classList.remove('online');
-                
-                document.getElementById('homeAvatar').textContent = 'U';
-                document.getElementById('homeDisplayName').textContent = '未登录';
-                document.getElementById('homeBio').textContent = '请先登录';
-                
-                currentUser = null;
-            }
+    // 获取所有可能用到的元素
+    const authSection = document.getElementById('auth-section');
+    const userSection = document.getElementById('user-section');
+    const composeSection = document.getElementById('compose-section');
+    const notificationSection = document.getElementById('notificationSection');
+    const adminBadge = document.getElementById('adminBadge');
+    const adminPanelBtn = document.getElementById('adminPanelBtn');
+    const homeOnlineBadge = document.getElementById('homeOnlineBadge');
+    const homeAvatar = document.getElementById('homeAvatar');
+    const homeDisplayName = document.getElementById('homeDisplayName');
+    const homeBio = document.getElementById('homeBio');
+    
+    if (isLoggedIn && currentUser) {
+        // 登录状态
+        if (authSection) authSection.classList.add('hidden');
+        if (userSection) userSection.classList.remove('hidden');
+        if (composeSection) composeSection.classList.remove('hidden');
+        if (notificationSection) notificationSection.classList.remove('hidden');
+        
+        if (userProfile && userProfile.role === 'admin') {
+            if (adminBadge) adminBadge.classList.remove('hidden');
+            if (adminPanelBtn) adminPanelBtn.classList.remove('hidden');
+        } else {
+            if (adminBadge) adminBadge.classList.add('hidden');
+            if (adminPanelBtn) adminPanelBtn.classList.add('hidden');
         }
-
+        
+        if (homeOnlineBadge) homeOnlineBadge.classList.add('online');
+        updateOnlineStatus();
+        
+        if (userProfile) {
+            if (homeAvatar) homeAvatar.textContent = userProfile.avatar || (currentUser.email ? currentUser.email[0].toUpperCase() : 'U');
+            if (homeDisplayName) homeDisplayName.textContent = userProfile.name || (currentUser.email ? currentUser.email.split('@')[0] : '用户');
+            if (homeBio) homeBio.textContent = userProfile.bio || '热爱编程的开发者';
+        }
+    } else {
+        // 未登录状态
+        if (authSection) authSection.classList.remove('hidden');
+        if (userSection) userSection.classList.add('hidden');
+        if (composeSection) composeSection.classList.add('hidden');
+        if (notificationSection) notificationSection.classList.add('hidden');
+        if (adminBadge) adminBadge.classList.add('hidden');
+        if (adminPanelBtn) adminPanelBtn.classList.add('hidden');
+        if (homeOnlineBadge) homeOnlineBadge.classList.remove('online');
+        
+        if (homeAvatar) homeAvatar.textContent = 'U';
+        if (homeDisplayName) homeDisplayName.textContent = '未登录';
+        if (homeBio) homeBio.textContent = '请先登录';
+        
+        currentUser = null;
+    }
+}
         function updateHomeProfile() {
             if (currentUser && userProfile) {
                 document.getElementById('homeAvatar').textContent = userProfile.avatar || currentUser.email[0].toUpperCase();
