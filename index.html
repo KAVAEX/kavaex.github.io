@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>开发者社区 · KAVAEX</title>
+    <title>开发者社区 · KAVAX</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0,200" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -18,7 +18,6 @@
             --success: #4caf50;
             --warning: #ff9800;
             --danger: #f44336;
-            --gold: #ffd700;
         }
         
         body {
@@ -75,12 +74,12 @@
             flex-wrap: wrap;
         }
         
-        .notification-icon, .message-icon {
+        .notification-icon {
             position: relative;
             cursor: pointer;
         }
         
-        .notification-badge, .message-badge {
+        .notification-badge {
             position: absolute;
             top: -5px;
             right: -5px;
@@ -96,7 +95,7 @@
             padding: 0 4px;
         }
         
-        .notification-dropdown, .message-dropdown {
+        .notification-dropdown {
             position: absolute;
             top: 50px;
             right: 0;
@@ -110,11 +109,11 @@
             z-index: 1000;
         }
         
-        .notification-dropdown.show, .message-dropdown.show {
+        .notification-dropdown.show {
             display: block;
         }
         
-        .notification-header, .message-header {
+        .notification-header {
             padding: 12px 16px;
             border-bottom: 1px solid var(--border);
             display: flex;
@@ -123,21 +122,21 @@
             font-weight: 600;
         }
         
-        .notification-item, .message-item {
+        .notification-item {
             padding: 12px 16px;
             border-bottom: 1px solid var(--border);
             cursor: pointer;
         }
         
-        .notification-item:hover, .message-item:hover {
+        .notification-item:hover {
             background: #f5f5f5;
         }
         
-        .notification-item.unread, .message-item.unread {
+        .notification-item.unread {
             background: #e8f0fe;
         }
         
-        .notification-time, .message-time {
+        .notification-time {
             font-size: 0.7rem;
             color: var(--text-secondary);
             margin-top: 4px;
@@ -206,11 +205,6 @@
         
         .btn.success {
             background: var(--success);
-        }
-        
-        .btn.gold {
-            background: var(--gold);
-            color: #1a1a1a;
         }
         
         .profile-grid {
@@ -287,7 +281,7 @@
         
         .profile-stats {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 8px;
             padding: 16px 0;
             border-top: 1px solid var(--border);
@@ -330,29 +324,6 @@
             justify-content: center;
             gap: 6px;
             margin-bottom: 8px;
-        }
-        
-        .signin-btn {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #ffd700, #ffb347);
-            color: #1a1a1a;
-            border: none;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 8px;
-        }
-        
-        .signin-btn.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            background: #ccc;
         }
         
         .main-content {
@@ -646,6 +617,155 @@
             border-color: var(--primary);
         }
         
+        .report-reason {
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .report-reason:hover {
+            background: #f5f5f5;
+        }
+        
+        .report-reason.selected {
+            background: #e8f0fe;
+            border-color: var(--primary);
+        }
+        
+        .report-reason strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .report-reason div {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .reports-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 16px;
+        }
+        
+        .report-item {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .report-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .profile-view {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 16px;
+        }
+        
+        .profile-header {
+            background: var(--surface);
+            border-radius: 24px;
+            padding: 24px;
+            text-align: center;
+            position: sticky;
+            top: 80px;
+        }
+        
+        .profile-header .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 60px;
+            background: #EADDFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 16px;
+            position: relative;
+        }
+        
+        .follow-btn {
+            width: 100%;
+            padding: 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            margin-top: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .follow-btn.following {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .user-table th {
+            text-align: left;
+            padding: 12px 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .user-table td {
+            padding: 12px 8px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .user-table tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .role-badge {
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        .role-badge.admin {
+            background: var(--warning);
+            color: #333;
+        }
+        
+        .role-badge.user {
+            background: #e0e0e0;
+            color: #333;
+        }
+        
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        .status-badge.active {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .status-badge.banned {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
         .hidden { display: none !important; }
         
         .toast {
@@ -735,99 +855,10 @@
             font-size: 0.8rem;
         }
         
-        .points-badge {
-            background: linear-gradient(135deg, #ffd700, #ffb347);
-            color: #1a1a1a;
-            padding: 4px 10px;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        .level-badge {
-            background: var(--primary);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 30px;
-            font-size: 0.7rem;
-        }
-        
         .empty-state {
             text-align: center;
             padding: 40px;
             color: #999;
-        }
-        
-        .shop-item {
-            background: #f8f9fa;
-            border-radius: 20px;
-            padding: 16px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        
-        .shop-item-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 30px;
-            background: #EADDFF;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-        }
-        
-        .shop-item-info {
-            flex: 1;
-        }
-        
-        .shop-item-title {
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-        
-        .shop-item-price {
-            color: var(--gold);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        .leaderboard-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .rank {
-            width: 30px;
-            height: 30px;
-            border-radius: 15px;
-            background: #f0f0f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-        }
-        
-        .rank.gold {
-            background: #ffd700;
-        }
-        
-        .rank.silver {
-            background: #c0c0c0;
-        }
-        
-        .rank.bronze {
-            background: #cd7f32;
         }
     </style>
 </head>
@@ -869,10 +900,6 @@
                 </div>
                 
                 <div id="user-section" class="hidden">
-                    <span class="points-badge">
-                        <span class="material-symbols-outlined" style="font-size: 16px;">toll</span>
-                        <span id="userPoints">0</span>
-                    </span>
                     <span class="badge">
                         <span class="material-symbols-outlined" style="font-size: 16px;">verified</span> 已验证
                     </span>
@@ -893,7 +920,6 @@
                     </div>
                     <div class="profile-name" id="homeDisplayName">
                         未登录
-                        <span class="level-badge" id="userLevel">Lv.0</span>
                     </div>
                     <div class="profile-bio" id="homeBio">
                         请先登录
@@ -912,20 +938,11 @@
                             <div class="stat-value" id="homeLikeCount">0</div>
                             <div class="stat-label">获赞</div>
                         </div>
-                        <div class="stat-item" onclick="showMyPoints()">
-                            <div class="stat-value" id="homePoints">0</div>
-                            <div class="stat-label">积分</div>
-                        </div>
-                        <div class="stat-item" onclick="showMyCheckins()">
-                            <div class="stat-value" id="homeCheckins">0</div>
-                            <div class="stat-label">签到</div>
+                        <div class="stat-item" onclick="showMyFollowers()">
+                            <div class="stat-value" id="homeFollowerCount">0</div>
+                            <div class="stat-label">粉丝</div>
                         </div>
                     </div>
-                    
-                    <button class="signin-btn" id="signinBtn" onclick="dailySignin()">
-                        <span class="material-symbols-outlined">celebration</span>
-                        每日签到 +10
-                    </button>
                     
                     <button class="edit-profile-btn" onclick="showEditProfile()">
                         <span class="material-symbols-outlined">edit</span> 编辑资料
@@ -940,7 +957,7 @@
                     <div id="compose-section" class="compose-box hidden">
                         <textarea id="postContent" placeholder="分享你的开发心得..."></textarea>
                         <button class="btn" onclick="publishPost()" style="width:100%;">
-                            <span class="material-symbols-outlined">send</span> 发布
+                            <span class="material-symbols-outlined">send</span> 发布帖子
                         </button>
                     </div>
                     
@@ -954,24 +971,15 @@
                         <div class="tab" onclick="switchTab('following')">
                             <span class="material-symbols-outlined">group</span> 关注
                         </div>
-                        <div class="tab" onclick="switchTab('leaderboard')">
-                            <span class="material-symbols-outlined">leaderboard</span> 排行榜
-                        </div>
-                        <div class="tab" onclick="switchTab('shop')">
-                            <span class="material-symbols-outlined">shopping_cart</span> 积分商城
-                        </div>
                     </div>
                     
                     <div id="postsList"></div>
                     <div id="hotPostsList" class="hidden"></div>
                     <div id="followingPostsList" class="hidden"></div>
-                    <div id="leaderboardList" class="hidden"></div>
-                    <div id="shopList" class="hidden"></div>
                 </div>
             </div>
         </div>
 
-        <!-- 管理员面板 -->
         <div id="adminView" class="hidden">
             <div class="back-btn" onclick="showHome()">
                 <span class="material-symbols-outlined">arrow_back</span> 返回首页
@@ -980,15 +988,15 @@
             <div class="main-content">
                 <h3 style="margin-bottom: 20px;">用户管理</h3>
                 <div style="overflow-x: auto;">
-                    <table class="user-table" style="width:100%; border-collapse:collapse;">
+                    <table class="user-table">
                         <thead>
                             <tr>
                                 <th>邮箱</th>
                                 <th>用户名</th>
                                 <th>角色</th>
                                 <th>状态</th>
-                                <th>积分</th>
-                                <th>等级</th>
+                                <th>注册时间</th>
+                                <th>最后登录</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
@@ -1000,7 +1008,52 @@
             </div>
         </div>
 
-        <!-- 编辑资料弹窗 -->
+        <div id="profileView" class="hidden">
+            <div class="back-btn" onclick="showHome()">
+                <span class="material-symbols-outlined">arrow_back</span> 返回首页
+            </div>
+            
+            <div class="profile-view">
+                <div class="profile-header">
+                    <div class="avatar" id="viewAvatar">U</div>
+                    <h2 id="viewName">用户名</h2>
+                    <p id="viewBio">个人简介</p>
+                    
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="viewPostCount">0</div>
+                            <div class="stat-label">帖子</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="viewCommentCount">0</div>
+                            <div class="stat-label">评论</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="viewLikeCount">0</div>
+                            <div class="stat-label">获赞</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="viewFollowerCount">0</div>
+                            <div class="stat-label">粉丝</div>
+                        </div>
+                    </div>
+                    
+                    <button class="follow-btn" id="followBtn" onclick="toggleFollow()">
+                        <span class="material-symbols-outlined">person_add</span> 关注
+                    </button>
+                </div>
+                
+                <div class="main-content">
+                    <div class="tabs">
+                        <div class="tab active" onclick="switchProfileTab('posts')">他的帖子</div>
+                        <div class="tab" onclick="switchProfileTab('comments')">他的评论</div>
+                    </div>
+                    <div id="profilePostsList"></div>
+                    <div id="profileCommentsList" class="hidden"></div>
+                </div>
+            </div>
+        </div>
+
         <div id="editProfileModal" class="modal hidden">
             <div class="modal-content">
                 <h3>
@@ -1009,65 +1062,57 @@
                 </h3>
                 <input type="text" id="editName" placeholder="昵称">
                 <textarea id="editBio" placeholder="个人简介" rows="3"></textarea>
+                <div style="margin-bottom: 12px;">
+                    <label style="display:block; margin-bottom:8px;">选择头像</label>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <span class="profile-avatar" style="width:50px; height:50px; font-size:1.5rem; margin:0; cursor:pointer;" onclick="selectAvatar('😊')">😊</span>
+                        <span class="profile-avatar" style="width:50px; height:50px; font-size:1.5rem; margin:0; cursor:pointer;" onclick="selectAvatar('🚀')">🚀</span>
+                        <span class="profile-avatar" style="width:50px; height:50px; font-size:1.5rem; margin:0; cursor:pointer;" onclick="selectAvatar('💻')">💻</span>
+                        <span class="profile-avatar" style="width:50px; height:50px; font-size:1.5rem; margin:0; cursor:pointer;" onclick="selectAvatar('👨‍💻')">👨‍💻</span>
+                        <span class="profile-avatar" style="width:50px; height:50px; font-size:1.5rem; margin:0; cursor:pointer;" onclick="selectAvatar('👩‍💻')">👩‍💻</span>
+                        <span class="profile-avatar" style="width:50px; height:50px; font-size:1.5rem; margin:0; cursor:pointer;" onclick="selectAvatar('🐍')">🐍</span>
+                    </div>
+                </div>
                 <div style="display: flex; gap: 10px;">
-                    <button class="btn" onclick="saveProfile()">保存</button>
-                    <button class="btn secondary" onclick="hideEditProfile()">取消</button>
+                    <button class="btn" style="flex:1;" onclick="saveProfile()">保存</button>
+                    <button class="btn secondary" style="flex:1;" onclick="hideEditProfile()">取消</button>
                 </div>
             </div>
         </div>
 
-        <!-- 登录弹窗（原始样式） -->
-        <div id="loginModal" class="modal hidden">
+        <div id="reportModal" class="modal hidden">
             <div class="modal-content">
                 <h3>
-                    <span class="material-symbols-outlined">login</span>
-                    登录
+                    <span class="material-symbols-outlined">flag</span>
+                    举报
                 </h3>
-                <div style="position: relative;">
-                    <span class="material-symbols-outlined" style="position: absolute; left: 15px; top: 14px; color: #999; z-index: 1;">mail</span>
-                    <input type="email" id="loginEmail" placeholder="邮箱" value="" style="padding-left: 45px;">
+                <div class="report-reason" onclick="selectReason(this, 'spam')">
+                    <strong>垃圾广告</strong>
+                    <div>包含垃圾广告、引流内容</div>
                 </div>
-                <div style="position: relative;">
-                    <span class="material-symbols-outlined" style="position: absolute; left: 15px; top: 14px; color: #999; z-index: 1;">lock</span>
-                    <input type="password" id="loginPassword" placeholder="密码" value="" style="padding-left: 45px;">
+                <div class="report-reason" onclick="selectReason(this, 'harassment')">
+                    <strong>人身攻击</strong>
+                    <div>辱骂、骚扰、歧视等不当言论</div>
                 </div>
-                <button class="btn" onclick="doLogin()" style="width:100%;">登录</button>
-                <p style="text-align:center; margin:10px 0;">
-                    <button class="btn secondary small" onclick="showForgotPassword()">忘记密码？</button>
-                </p>
-                <p style="text-align:center;">
-                    <button class="btn secondary small" onclick="switchToRegister()">没有账号？注册</button>
-                </p>
+                <div class="report-reason" onclick="selectReason(this, 'porn')">
+                    <strong>色情低俗</strong>
+                    <div>包含色情、低俗内容</div>
+                </div>
+                <div class="report-reason" onclick="selectReason(this, 'illegal')">
+                    <strong>违法违规</strong>
+                    <div>违反法律法规的内容</div>
+                </div>
+                <div class="report-reason" onclick="selectReason(this, 'other')">
+                    <strong>其他原因</strong>
+                </div>
+                <textarea id="customReason" class="hidden" placeholder="请详细说明原因..." rows="3"></textarea>
+                <div style="display: flex; gap: 10px; margin-top: 16px;">
+                    <button class="btn" onclick="submitReport()">提交举报</button>
+                    <button class="btn secondary" onclick="hideReportModal()">取消</button>
+                </div>
             </div>
         </div>
 
-        <!-- 注册弹窗（原始样式） -->
-        <div id="registerModal" class="modal hidden">
-            <div class="modal-content">
-                <h3>
-                    <span class="material-symbols-outlined">person_add</span>
-                    注册
-                </h3>
-                <div style="position: relative;">
-                    <span class="material-symbols-outlined" style="position: absolute; left: 15px; top: 14px; color: #999; z-index: 1;">mail</span>
-                    <input type="email" id="registerEmail" placeholder="邮箱" value="" style="padding-left: 45px;">
-                </div>
-                <div style="position: relative;">
-                    <span class="material-symbols-outlined" style="position: absolute; left: 15px; top: 14px; color: #999; z-index: 1;">lock</span>
-                    <input type="password" id="registerPassword" placeholder="密码" value="" style="padding-left: 45px;">
-                </div>
-                <div style="position: relative;">
-                    <span class="material-symbols-outlined" style="position: absolute; left: 15px; top: 14px; color: #999; z-index: 1;">lock_reset</span>
-                    <input type="password" id="registerConfirmPassword" placeholder="确认密码" value="" style="padding-left: 45px;">
-                </div>
-                <button class="btn" onclick="doRegister()" style="width:100%;">注册</button>
-                <p style="text-align:center; margin-top:12px;">
-                    <button class="btn secondary small" onclick="switchToLogin()">返回登录</button>
-                </p>
-            </div>
-        </div>
-
-        <!-- 忘记密码弹窗 -->
         <div id="forgotPasswordModal" class="modal hidden">
             <div class="modal-content">
                 <h3>
@@ -1083,8 +1128,42 @@
             </div>
         </div>
 
+        <div id="loginModal" class="modal hidden">
+            <div class="modal-content">
+                <h3>
+                    <span class="material-symbols-outlined">login</span>
+                    登录
+                </h3>
+                <input type="email" id="loginEmail" placeholder="邮箱">
+                <input type="password" id="loginPassword" placeholder="密码">
+                <button class="btn" onclick="doLogin()" style="width:100%;">登录</button>
+                <p style="text-align:center; margin:10px 0;">
+                    <button class="btn secondary small" onclick="showForgotPassword()">忘记密码？</button>
+                </p>
+                <p style="text-align:center;">
+                    <button class="btn secondary small" onclick="switchToRegister()">没有账号？注册</button>
+                </p>
+            </div>
+        </div>
+
+        <div id="registerModal" class="modal hidden">
+            <div class="modal-content">
+                <h3>
+                    <span class="material-symbols-outlined">person_add</span>
+                    注册
+                </h3>
+                <input type="email" id="registerEmail" placeholder="邮箱">
+                <input type="password" id="registerPassword" placeholder="密码">
+                <input type="password" id="registerConfirmPassword" placeholder="确认密码">
+                <button class="btn" onclick="doRegister()" style="width:100%;">注册</button>
+                <p style="text-align:center; margin-top:12px;">
+                    <button class="btn secondary small" onclick="switchToLogin()">返回登录</button>
+                </p>
+            </div>
+        </div>
+
         <footer class="footer">
-            <span class="material-symbols-outlined" style="font-size: 14px;">security</span> 开发者社区 · 积分系统
+            <span class="material-symbols-outlined" style="font-size: 14px;">security</span> 开发者社区 · 完整版
         </footer>
     </div>
 
@@ -1095,16 +1174,15 @@
         let currentUser = null;
         let allPosts = [];
         let notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+        let reports = JSON.parse(localStorage.getItem('reports') || '[]');
         let followers = JSON.parse(localStorage.getItem('followers') || '{}');
         let following = JSON.parse(localStorage.getItem('following') || '{}');
         let onlineUsers = JSON.parse(localStorage.getItem('onlineUsers') || '[]');
-        let userProfile = JSON.parse(localStorage.getItem('userProfile') || 'null');
+        let currentReportTarget = null;
+        let selectedReason = '';
+        let currentViewUser = null;
         
-        // 积分相关
-        let userPoints = 0;
-        let userCheckins = 0;
-        let userLevel = 1;
-        let lastCheckin = null;
+        let userProfile = null;
 
         function showToast(message, isError = false) {
             const toast = document.createElement('div');
@@ -1122,161 +1200,6 @@
             if (element && isLoading) {
                 element.innerHTML = '<div style="text-align:center; padding:30px;"><div class="loading-spinner"></div> 加载中...</div>';
             }
-        }
-
-        // ===== 积分系统 =====
-        function calculateLevel(points) {
-            return Math.floor(points / 100) + 1;
-        }
-
-        async function dailySignin() {
-            if (!currentUser) {
-                showToast('请先登录', true);
-                return;
-            }
-
-            const today = new Date().toDateString();
-            if (lastCheckin === today) {
-                showToast('今天已经签到过了', true);
-                return;
-            }
-
-            userPoints += 10;
-            userCheckins += 1;
-            userLevel = calculateLevel(userPoints);
-
-            // 更新用户积分
-            await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${currentUser.id}`, {
-                method: 'PATCH',
-                headers: {
-                    'apikey': SUPABASE_KEY,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    points: userPoints,
-                    checkins: userCheckins,
-                    level: userLevel,
-                    last_checkin: new Date().toISOString()
-                })
-            });
-
-            lastCheckin = today;
-            updateUserStats();
-            showToast('签到成功 +10 积分');
-            
-            // 更新签到按钮状态
-            document.getElementById('signinBtn').classList.add('disabled');
-            document.getElementById('signinBtn').innerHTML = '<span class="material-symbols-outlined">check_circle</span> 今日已签到';
-        }
-
-        async function rewardPoints(action, points) {
-            if (!currentUser) return;
-            
-            userPoints += points;
-            userLevel = calculateLevel(userPoints);
-
-            await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${currentUser.id}`, {
-                method: 'PATCH',
-                headers: {
-                    'apikey': SUPABASE_KEY,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    points: userPoints,
-                    level: userLevel
-                })
-            });
-
-            updateUserStats();
-            addNotification('points', `获得 ${points} 积分`);
-        }
-
-        function updateUserStats() {
-            document.getElementById('userPoints').textContent = userPoints;
-            document.getElementById('homePoints').textContent = userPoints;
-            document.getElementById('homeCheckins').textContent = userCheckins;
-            document.getElementById('userLevel').textContent = `Lv.${userLevel}`;
-        }
-
-        // ===== 通知系统 =====
-        function updateNotificationBadge() {
-            const unread = notifications.filter(n => !n.read).length;
-            const badge = document.getElementById('notificationBadge');
-            if (unread > 0) {
-                badge.textContent = unread;
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-            }
-        }
-
-        function toggleNotifications() {
-            const dropdown = document.getElementById('notificationDropdown');
-            dropdown.classList.toggle('show');
-            renderNotifications();
-        }
-
-        function renderNotifications() {
-            const list = document.getElementById('notificationList');
-            if (notifications.length === 0) {
-                list.innerHTML = '<div class="empty-state">暂无通知</div>';
-                return;
-            }
-            list.innerHTML = notifications.slice(0, 10).map(n => `
-                <div class="notification-item ${n.read ? '' : 'unread'}" onclick="markAsRead('${n.id}')">
-                    <div>${n.type === 'like' ? '❤️' : n.type === 'points' ? '⭐' : '💬'} ${n.content}</div>
-                    <div class="notification-time">${new Date(n.time).toLocaleString()}</div>
-                </div>
-            `).join('');
-        }
-
-        function markAsRead(id) {
-            const notification = notifications.find(n => n.id == id);
-            if (notification) {
-                notification.read = true;
-                localStorage.setItem('notifications', JSON.stringify(notifications));
-                updateNotificationBadge();
-                renderNotifications();
-            }
-        }
-
-        function markAllAsRead() {
-            notifications.forEach(n => n.read = true);
-            localStorage.setItem('notifications', JSON.stringify(notifications));
-            updateNotificationBadge();
-            renderNotifications();
-            showToast('全部已读');
-        }
-
-        function addNotification(type, content) {
-            if (!currentUser) return;
-            const notification = {
-                id: Date.now(),
-                type: type,
-                content: content,
-                read: false,
-                time: new Date().toISOString()
-            };
-            notifications.unshift(notification);
-            localStorage.setItem('notifications', JSON.stringify(notifications));
-            updateNotificationBadge();
-        }
-
-        // ===== 在线状态 =====
-        function updateOnlineStatus() {
-            onlineUsers = JSON.parse(localStorage.getItem('onlineUsers') || '[]');
-            if (currentUser) {
-                const username = currentUser.email.split('@')[0];
-                if (!onlineUsers.includes(username)) {
-                    onlineUsers.push(username);
-                    localStorage.setItem('onlineUsers', JSON.stringify(onlineUsers));
-                }
-            }
-            document.getElementById('onlineCount').textContent = onlineUsers.length;
-        }
-
-        function startOnlineStatusPing() {
-            setInterval(updateOnlineStatus, 30000);
         }
 
         async function validateSession() {
@@ -1301,6 +1224,21 @@
                 
                 const user = await res.json();
                 currentUser = user;
+                
+                const userRes = await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${currentUser.id}`, {
+                    headers: { 'apikey': SUPABASE_KEY }
+                });
+                const userData2 = await userRes.json();
+                
+                if (userData2 && userData2.length > 0) {
+                    userProfile = {
+                        name: userData2[0].username || currentUser.email.split('@')[0],
+                        bio: userData2[0].bio || '热爱编程的开发者',
+                        avatar: userData2[0].avatar || currentUser.email[0].toUpperCase(),
+                        role: userData2[0].role || 'user'
+                    };
+                }
+                
                 return true;
             } catch (e) {
                 localStorage.removeItem('currentUser');
@@ -1342,12 +1280,6 @@
                     if (homeDisplayName) homeDisplayName.textContent = userProfile.name || currentUser.email.split('@')[0];
                     if (homeBio) homeBio.textContent = userProfile.bio || '热爱编程的开发者';
                 }
-                
-                // 检查今天是否已签到
-                if (lastCheckin === new Date().toDateString()) {
-                    document.getElementById('signinBtn').classList.add('disabled');
-                    document.getElementById('signinBtn').innerHTML = '<span class="material-symbols-outlined">check_circle</span> 今日已签到';
-                }
             } else {
                 if (authSection) authSection.classList.remove('hidden');
                 if (userSection) userSection.classList.add('hidden');
@@ -1363,6 +1295,22 @@
             }
         }
 
+        function updateOnlineStatus() {
+            onlineUsers = JSON.parse(localStorage.getItem('onlineUsers') || '[]');
+            if (currentUser) {
+                const username = currentUser.email.split('@')[0];
+                if (!onlineUsers.includes(username)) {
+                    onlineUsers.push(username);
+                    localStorage.setItem('onlineUsers', JSON.stringify(onlineUsers));
+                }
+            }
+            document.getElementById('onlineCount').textContent = onlineUsers.length;
+        }
+
+        function startOnlineStatusPing() {
+            setInterval(updateOnlineStatus, 30000);
+        }
+
         async function loadPosts() {
             setLoading('postsList', true);
             try {
@@ -1376,9 +1324,32 @@
                 renderPosts();
                 renderHotPosts();
                 renderFollowingPosts();
+                updateStats();
             } catch (err) {
                 console.error('加载失败:', err);
                 document.getElementById('postsList').innerHTML = '<div class="empty-state" style="color:var(--danger);">❌ 加载失败，请刷新页面</div>';
+            }
+        }
+
+        function updateStats() {
+            if (currentUser) {
+                const username = currentUser.email.split('@')[0];
+                const userPosts = allPosts.filter(p => p.author === username);
+                const userComments = [];
+                allPosts.forEach(p => {
+                    if (p.comments) {
+                        p.comments.forEach(c => {
+                            if (c.author === username) userComments.push(c);
+                        });
+                    }
+                });
+                const totalLikes = userPosts.reduce((sum, p) => sum + (p.likes || 0), 0);
+                const followerCount = followers[username]?.length || 0;
+                
+                document.getElementById('homePostCount').textContent = userPosts.length;
+                document.getElementById('homeCommentCount').textContent = userComments.length;
+                document.getElementById('homeLikeCount').textContent = totalLikes;
+                document.getElementById('homeFollowerCount').textContent = followerCount;
             }
         }
 
@@ -1396,6 +1367,12 @@
                             <div class="post-menu-dropdown" id="menu-${post.id}">
                                 <div class="menu-item" onclick="copyPostLink(${post.id})">
                                     <span class="material-symbols-outlined">link</span> 复制链接
+                                </div>
+                                <div class="menu-item" onclick="sharePost(${post.id})">
+                                    <span class="material-symbols-outlined">share</span> 分享
+                                </div>
+                                <div class="menu-item danger" onclick="showReportModal('post', ${post.id})">
+                                    <span class="material-symbols-outlined">flag</span> 举报
                                 </div>
                                 ${currentUser && post.author === currentUser.email.split('@')[0] ? `
                                     <div class="menu-item danger" onclick="deletePost(${post.id})">
@@ -1506,76 +1483,6 @@
             document.getElementById('followingPostsList').innerHTML = html;
         }
 
-        function renderLeaderboard() {
-            const leaderboard = document.getElementById('leaderboardList');
-            // 模拟数据
-            let html = '';
-            for (let i = 1; i <= 10; i++) {
-                let rankClass = '';
-                if (i === 1) rankClass = 'gold';
-                else if (i === 2) rankClass = 'silver';
-                else if (i === 3) rankClass = 'bronze';
-                
-                html += `
-                    <div class="leaderboard-item">
-                        <div class="rank ${rankClass}">${i}</div>
-                        <div class="post-avatar" style="width:32px; height:32px;">U</div>
-                        <div style="flex:1;">用户${i}</div>
-                        <div class="level-badge">Lv.${Math.floor(i * 1.5)}</div>
-                        <div class="points-badge">${1000 - i * 50} 积分</div>
-                    </div>
-                `;
-            }
-            leaderboard.innerHTML = html;
-        }
-
-        function renderShop() {
-            const shop = document.getElementById('shopList');
-            const items = [
-                { name: '专属头衔', desc: '解锁特殊称号', price: 500, icon: 'badge' },
-                { name: '彩色昵称', desc: '让你的昵称更醒目', price: 300, icon: 'palette' },
-                { name: '置顶帖子', desc: '帖子置顶24小时', price: 1000, icon: 'push_pin' },
-                { name: '自定义背景', desc: '个人主页背景', price: 800, icon: 'wallpaper' }
-            ];
-            
-            let html = '';
-            items.forEach(item => {
-                html += `
-                    <div class="shop-item">
-                        <div class="shop-item-icon">
-                            <span class="material-symbols-outlined">${item.icon}</span>
-                        </div>
-                        <div class="shop-item-info">
-                            <div class="shop-item-title">${item.name}</div>
-                            <div style="font-size:0.85rem; color:#666;">${item.desc}</div>
-                            <div class="shop-item-price">
-                                <span class="material-symbols-outlined" style="color:#ffd700;">toll</span>
-                                ${item.price} 积分
-                            </div>
-                        </div>
-                        <button class="btn small" onclick="buyItem('${item.name}', ${item.price})" ${userPoints < item.price ? 'disabled' : ''}>购买</button>
-                    </div>
-                `;
-            });
-            shop.innerHTML = html;
-        }
-
-        function buyItem(name, price) {
-            if (!currentUser) {
-                showToast('请先登录', true);
-                return;
-            }
-            if (userPoints < price) {
-                showToast('积分不足', true);
-                return;
-            }
-            
-            userPoints -= price;
-            userLevel = calculateLevel(userPoints);
-            updateUserStats();
-            showToast(`购买成功！获得 ${name}`);
-        }
-
         function togglePostMenu(postId) {
             document.querySelectorAll('.post-menu-dropdown').forEach(m => m.classList.remove('show'));
             document.getElementById(`menu-${postId}`).classList.toggle('show');
@@ -1585,6 +1492,18 @@
             const url = `${window.location.origin}?post=${postId}`;
             navigator.clipboard.writeText(url);
             showToast('链接已复制');
+        }
+
+        function sharePost(postId) {
+            if (navigator.share) {
+                navigator.share({
+                    title: '开发者社区',
+                    text: '看看这个帖子',
+                    url: `${window.location.origin}?post=${postId}`
+                }).catch(() => copyPostLink(postId));
+            } else {
+                copyPostLink(postId);
+            }
         }
 
         async function deletePost(postId) {
@@ -1602,6 +1521,7 @@
                 renderPosts();
                 renderHotPosts();
                 renderFollowingPosts();
+                updateStats();
                 showToast('帖子已删除');
             } catch (err) {
                 showToast('删除失败', true);
@@ -1639,10 +1559,12 @@
                 post.likes = newLikes;
                 renderPosts();
                 renderHotPosts();
+                updateStats();
                 
                 if (post.author !== currentUser.email.split('@')[0]) {
-                    addNotification('like', `${currentUser.email.split('@')[0]} 点赞了你的帖子`);
-                    rewardPoints('like', 1);
+                    addNotification('like', {
+                        content: `${currentUser.email.split('@')[0]} 点赞了你的帖子`
+                    });
                 }
                 
                 showToast('点赞成功');
@@ -1688,8 +1610,9 @@
                 renderPosts();
                 
                 if (post.author !== currentUser.email.split('@')[0]) {
-                    addNotification('comment', `${currentUser.email.split('@')[0]} 评论了你的帖子`);
-                    rewardPoints('comment', 2);
+                    addNotification('comment', {
+                        content: `${currentUser.email.split('@')[0]} 评论了你的帖子: ${content.substring(0, 20)}${content.length > 20 ? '...' : ''}`
+                    });
                 }
                 
                 showToast('评论成功');
@@ -1737,7 +1660,6 @@
                 
                 document.getElementById('postContent').value = '';
                 await loadPosts();
-                rewardPoints('post', 5);
                 showToast('发布成功！');
                 
             } catch (err) {
@@ -1745,8 +1667,213 @@
             }
         }
 
-        function viewProfile(username) {
-            alert('查看用户: ' + username);
+        async function viewProfile(username) {
+            currentViewUser = username;
+            document.getElementById('homeView').classList.add('hidden');
+            document.getElementById('profileView').classList.remove('hidden');
+            
+            document.getElementById('viewName').textContent = username;
+            document.getElementById('viewAvatar').textContent = username[0].toUpperCase();
+            document.getElementById('viewBio').textContent = '这个人很懒，什么都没留下';
+            
+            const userPosts = allPosts.filter(p => p.author === username);
+            const userComments = [];
+            allPosts.forEach(p => {
+                if (p.comments) {
+                    p.comments.forEach(c => {
+                        if (c.author === username) userComments.push(c);
+                    });
+                }
+            });
+            const totalLikes = userPosts.reduce((sum, p) => sum + (p.likes || 0), 0);
+            const followerCount = followers[username]?.length || 0;
+            
+            document.getElementById('viewPostCount').textContent = userPosts.length;
+            document.getElementById('viewCommentCount').textContent = userComments.length;
+            document.getElementById('viewLikeCount').textContent = totalLikes;
+            document.getElementById('viewFollowerCount').textContent = followerCount;
+            
+            renderProfilePosts(username);
+            
+            if (currentUser) {
+                const myUsername = currentUser.email.split('@')[0];
+                const isFollowing = (following[myUsername] || []).includes(username);
+                const followBtn = document.getElementById('followBtn');
+                
+                if (isFollowing) {
+                    followBtn.classList.add('following');
+                    followBtn.innerHTML = '<span class="material-symbols-outlined">check</span> 已关注';
+                } else {
+                    followBtn.classList.remove('following');
+                    followBtn.innerHTML = '<span class="material-symbols-outlined">person_add</span> 关注';
+                }
+            }
+        }
+
+        function renderProfilePosts(username) {
+            const userPosts = allPosts.filter(p => p.author === username);
+            let html = '';
+            if (userPosts.length === 0) {
+                html = '<div class="empty-state">暂无帖子</div>';
+            } else {
+                userPosts.forEach(post => {
+                    html += `
+                        <div class="post">
+                            <div class="post-content">${post.content}</div>
+                            <div class="post-time" style="margin-left:0;">${new Date(post.created_at).toLocaleString()}</div>
+                            <div class="post-actions" style="margin-left:0;">
+                                <span>❤️ ${post.likes || 0}</span>
+                                <span>💬 ${post.comments?.length || 0}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            document.getElementById('profilePostsList').innerHTML = html;
+        }
+
+        function toggleFollow() {
+            if (!currentUser) {
+                showToast('请先登录', true);
+                return;
+            }
+            
+            const myUsername = currentUser.email.split('@')[0];
+            
+            if (!following[myUsername]) {
+                following[myUsername] = [];
+            }
+            
+            const index = following[myUsername].indexOf(currentViewUser);
+            if (index === -1) {
+                following[myUsername].push(currentViewUser);
+                
+                if (!followers[currentViewUser]) {
+                    followers[currentViewUser] = [];
+                }
+                followers[currentViewUser].push(myUsername);
+                
+                showToast('关注成功');
+            } else {
+                following[myUsername].splice(index, 1);
+                
+                if (followers[currentViewUser]) {
+                    const followerIndex = followers[currentViewUser].indexOf(myUsername);
+                    if (followerIndex !== -1) {
+                        followers[currentViewUser].splice(followerIndex, 1);
+                    }
+                }
+                
+                showToast('已取消关注');
+            }
+            
+            localStorage.setItem('following', JSON.stringify(following));
+            localStorage.setItem('followers', JSON.stringify(followers));
+            viewProfile(currentViewUser);
+            updateStats();
+        }
+
+        function showReportModal(type, id) {
+            if (!currentUser) {
+                showToast('请先登录', true);
+                return;
+            }
+            currentReportTarget = { type, id };
+            document.getElementById('reportModal').classList.remove('hidden');
+        }
+
+        function selectReason(element, reason) {
+            document.querySelectorAll('.report-reason').forEach(el => {
+                el.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            selectedReason = reason;
+            
+            if (reason === 'other') {
+                document.getElementById('customReason').classList.remove('hidden');
+            } else {
+                document.getElementById('customReason').classList.add('hidden');
+            }
+        }
+
+        function submitReport() {
+            if (!currentUser) {
+                showToast('请先登录', true);
+                return;
+            }
+            
+            let reason = selectedReason;
+            if (reason === 'other') {
+                reason = document.getElementById('customReason').value;
+            }
+            
+            if (!reason) {
+                showToast('请选择举报原因', true);
+                return;
+            }
+            
+            reports.push({
+                id: Date.now(),
+                user: currentUser.email,
+                target: currentReportTarget,
+                reason: reason,
+                status: 'pending',
+                time: new Date().toISOString()
+            });
+            
+            localStorage.setItem('reports', JSON.stringify(reports));
+            hideReportModal();
+            showToast('举报已提交，感谢你的反馈');
+        }
+
+        function hideReportModal() {
+            document.getElementById('reportModal').classList.add('hidden');
+            document.querySelectorAll('.report-reason').forEach(el => {
+                el.classList.remove('selected');
+            });
+            document.getElementById('customReason').classList.add('hidden');
+            selectedReason = '';
+        }
+
+        async function showAdminPanel() {
+            document.getElementById('homeView').classList.add('hidden');
+            document.getElementById('adminView').classList.remove('hidden');
+            
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/users?order=created_at.desc`, {
+                headers: { 'apikey': SUPABASE_KEY }
+            });
+            const users = await res.json();
+            
+            let html = '';
+            users.forEach(user => {
+                html += `
+                    <tr>
+                        <td>${user.email}</td>
+                        <td>${user.username || '-'}</td>
+                        <td><span class="role-badge ${user.role}">${user.role || 'user'}</span></td>
+                        <td><span class="status-badge ${user.status}">${user.status || 'active'}</span></td>
+                        <td>${new Date(user.created_at).toLocaleString()}</td>
+                        <td>${user.last_login ? new Date(user.last_login).toLocaleString() : '从未'}</td>
+                        <td>
+                            <button class="btn small" onclick="changeUserRole('${user.id}')">改角色</button>
+                            <button class="btn small danger" onclick="banUser('${user.id}')">封禁</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            document.getElementById('userTableBody').innerHTML = html;
+        }
+
+        function changeUserRole(userId) {
+            alert('修改角色功能开发中');
+        }
+
+        function banUser(userId) {
+            alert('封禁用户功能开发中');
+        }
+
+        function hideReportsModal() {
+            document.getElementById('reportsModal').classList.add('hidden');
         }
 
         function switchTab(tab) {
@@ -1756,63 +1883,109 @@
             document.getElementById('postsList').classList.add('hidden');
             document.getElementById('hotPostsList').classList.add('hidden');
             document.getElementById('followingPostsList').classList.add('hidden');
-            document.getElementById('leaderboardList').classList.add('hidden');
-            document.getElementById('shopList').classList.add('hidden');
             
             if (tab === 'posts') {
                 document.getElementById('postsList').classList.remove('hidden');
             } else if (tab === 'hot') {
                 document.getElementById('hotPostsList').classList.remove('hidden');
-            } else if (tab === 'following') {
+            } else {
                 document.getElementById('followingPostsList').classList.remove('hidden');
-            } else if (tab === 'leaderboard') {
-                document.getElementById('leaderboardList').classList.remove('hidden');
-                renderLeaderboard();
-            } else if (tab === 'shop') {
-                document.getElementById('shopList').classList.remove('hidden');
-                renderShop();
             }
         }
 
-        function showEditProfile() {
+        function switchProfileTab(tab) {
+            document.querySelectorAll('#profileView .tab').forEach(t => t.classList.remove('active'));
+            event.target.closest('.tab').classList.add('active');
+            
+            document.getElementById('profilePostsList').classList.add('hidden');
+            document.getElementById('profileCommentsList').classList.add('hidden');
+            
+            if (tab === 'posts') {
+                document.getElementById('profilePostsList').classList.remove('hidden');
+            } else {
+                document.getElementById('profileCommentsList').classList.remove('hidden');
+            }
+        }
+
+        function showMyPosts() {
             if (!currentUser) {
                 showToast('请先登录', true);
                 return;
             }
-            document.getElementById('editName').value = userProfile?.name || '';
-            document.getElementById('editBio').value = userProfile?.bio || '';
-            document.getElementById('editProfileModal').classList.remove('hidden');
+            const username = currentUser.email.split('@')[0];
+            viewProfile(username);
         }
 
-        function hideEditProfile() {
-            document.getElementById('editProfileModal').classList.add('hidden');
+        function showMyComments() {
+            if (!currentUser) {
+                showToast('请先登录', true);
+                return;
+            }
+            
+            const username = currentUser.email.split('@')[0];
+            const userComments = [];
+            
+            allPosts.forEach(post => {
+                if (post.comments) {
+                    post.comments.forEach(c => {
+                        if (c.author === username) {
+                            userComments.push({
+                                ...c,
+                                postContent: post.content
+                            });
+                        }
+                    });
+                }
+            });
+            
+            if (userComments.length === 0) {
+                showToast('暂无评论');
+            } else {
+                showToast(`你有 ${userComments.length} 条评论`);
+            }
         }
 
-        function saveProfile() {
-            if (!currentUser) return;
-            userProfile = {
-                name: document.getElementById('editName').value || currentUser.email.split('@')[0],
-                bio: document.getElementById('editBio').value || '热爱编程的开发者',
-                avatar: currentUser.email[0].toUpperCase()
-            };
-            localStorage.setItem('userProfile', JSON.stringify(userProfile));
-            updateUIForUser(true);
-            hideEditProfile();
-            showToast('资料已更新');
+        function showMyLikes() {
+            if (!currentUser) {
+                showToast('请先登录', true);
+                return;
+            }
+            
+            const username = currentUser.email.split('@')[0];
+            const userPosts = allPosts.filter(p => p.author === username);
+            const totalLikes = userPosts.reduce((sum, p) => sum + (p.likes || 0), 0);
+            
+            showToast(`共获得 ${totalLikes} 个点赞`);
         }
 
-        function showAdminPanel() {
-            document.getElementById('homeView').classList.add('hidden');
-            document.getElementById('adminView').classList.remove('hidden');
+        function showMyFollowers() {
+            if (!currentUser) {
+                showToast('请先登录', true);
+                return;
+            }
+            
+            const username = currentUser.email.split('@')[0];
+            const followerList = followers[username] || [];
+            
+            if (followerList.length === 0) {
+                showToast('暂无粉丝');
+            } else {
+                showToast(`你有 ${followerList.length} 个粉丝`);
+            }
         }
 
         function showHome() {
             document.getElementById('homeView').classList.remove('hidden');
+            document.getElementById('profileView').classList.add('hidden');
             document.getElementById('adminView').classList.add('hidden');
         }
 
+        // ===== 忘记密码功能 =====
         function showForgotPassword() {
             hideLogin();
+            document.getElementById('forgotEmail').value = '';
+            document.getElementById('forgotSuccess').classList.add('hidden');
+            document.getElementById('forgotError').classList.add('hidden');
             document.getElementById('forgotPasswordModal').classList.remove('hidden');
         }
 
@@ -1862,6 +2035,7 @@
             }
         }
 
+        // ===== 修复的登录函数（使用 public.users 表）=====
         async function doLogin() {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
@@ -1872,75 +2046,76 @@
             }
             
             try {
-                const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
-                    method: 'POST',
-                    headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
+                console.log('1. 查找用户:', email);
+                
+                // 直接从你的 users 表查用户
+                const userRes = await fetch(`${SUPABASE_URL}/rest/v1/users?email=eq.${encodeURIComponent(email)}`, {
+                    headers: { 'apikey': SUPABASE_KEY }
                 });
                 
-                const data = await res.json();
+                const users = await userRes.json();
+                console.log('2. 找到用户:', users);
                 
-                if (data.error) {
-                    showToast(data.error_description || '登录失败', true);
+                // 检查用户是否存在
+                if (!users || users.length === 0) {
+                    showToast('用户不存在', true);
                     return;
                 }
                 
-                currentUser = data.user;
-                localStorage.setItem('currentUser', JSON.stringify(data));
+                const user = users[0];
                 
-                // 加载用户积分数据
-                const userRes = await fetch(`${SUPABASE_URL}/rest/v1/users?email=eq.${email}`, {
-                    headers: { 'apikey': SUPABASE_KEY }
-                });
-                const users = await userRes.json();
-                
-                if (users && users.length > 0) {
-                    userPoints = users[0].points || 0;
-                    userCheckins = users[0].checkins || 0;
-                    userLevel = users[0].level || 1;
-                    lastCheckin = users[0].last_checkin;
-                } else {
-                    // 创建用户积分记录
-                    const username = email.split('@')[0];
-                    await fetch(`${SUPABASE_URL}/rest/v1/users`, {
-                        method: 'POST',
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            id: currentUser.id,
-                            email: email,
-                            username: username,
-                            points: 0,
-                            checkins: 0,
-                            level: 1,
-                            avatar: username[0].toUpperCase(),
-                            bio: '热爱编程的开发者',
-                            role: 'user',
-                            status: 'active'
-                        })
-                    });
+                // 验证密码（直接对比）
+                if (user.password !== password) {
+                    showToast('密码错误', true);
+                    return;
                 }
                 
-                userProfile = {
-                    name: currentUser.email.split('@')[0],
-                    bio: '热爱编程的开发者',
-                    avatar: currentUser.email[0].toUpperCase()
+                console.log('3. 密码正确，登录成功');
+                
+                // 登录成功，设置当前用户
+                currentUser = {
+                    id: user.id,
+                    email: user.email,
+                    username: user.username
                 };
+                
+                // 保存到 localStorage
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                // 设置用户资料
+                userProfile = {
+                    name: user.username || user.email.split('@')[0],
+                    bio: user.bio || '热爱编程的开发者',
+                    avatar: user.avatar || user.email[0].toUpperCase(),
+                    role: user.role || 'user'
+                };
+                
                 localStorage.setItem('userProfile', JSON.stringify(userProfile));
                 
+                // 更新最后登录时间
+                await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${user.id}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ last_login: new Date().toISOString() })
+                });
+                
+                // 更新UI
                 updateUIForUser(true);
-                updateUserStats();
                 hideLogin();
                 await loadPosts();
                 updateOnlineStatus();
                 showToast('登录成功');
+                
             } catch (err) {
-                showToast('网络错误', true);
+                console.error('登录错误:', err);
+                showToast('网络错误: ' + err.message, true);
             }
         }
 
+        // ===== 修复的注册函数（存储到 public.users）=====
         async function doRegister() {
             const email = document.getElementById('registerEmail').value;
             const password = document.getElementById('registerPassword').value;
@@ -1962,24 +2137,53 @@
             }
             
             try {
-                const res = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
-                    method: 'POST',
-                    headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password, options: { emailRedirectTo: window.location.origin } })
+                // 检查邮箱是否已存在
+                const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/users?email=eq.${encodeURIComponent(email)}`, {
+                    headers: { 'apikey': SUPABASE_KEY }
                 });
+                const existingUsers = await checkRes.json();
                 
-                const data = await res.json();
-                
-                if (data.error) {
-                    showToast(data.error_description || '注册失败', true);
+                if (existingUsers && existingUsers.length > 0) {
+                    showToast('该邮箱已注册', true);
                     return;
                 }
                 
-                showToast('注册成功！请查收邮件');
+                // 创建新用户
+                const username = email.split('@')[0];
+                const newUser = {
+                    email: email,
+                    password: password,
+                    username: username,
+                    avatar: username[0].toUpperCase(),
+                    bio: '热爱编程的开发者',
+                    role: 'user',
+                    status: 'active',
+                    created_at: new Date().toISOString(),
+                    last_login: null
+                };
+                
+                const createRes = await fetch(`${SUPABASE_URL}/rest/v1/users`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify(newUser)
+                });
+                
+                if (!createRes.ok) {
+                    const err = await createRes.text();
+                    throw new Error('注册失败: ' + err);
+                }
+                
+                showToast('注册成功！请登录');
                 hideRegister();
                 showLogin();
+                
             } catch (err) {
-                showToast('网络错误', true);
+                console.error('注册错误:', err);
+                showToast('网络错误: ' + err.message, true);
             }
         }
 
@@ -1992,15 +2196,12 @@
             
             currentUser = null;
             userProfile = null;
-            userPoints = 0;
-            userCheckins = 0;
-            userLevel = 1;
             localStorage.removeItem('currentUser');
             localStorage.removeItem('userProfile');
             
             updateUIForUser(false);
             updateOnlineStatus();
-            showToast('已退出');
+            showToast('已退出登录');
         }
 
         function showLogin() { document.getElementById('loginModal').classList.remove('hidden'); }
@@ -2023,17 +2224,6 @@
             const isValid = await validateSession();
             
             if (isValid) {
-                // 加载用户积分数据
-                const userRes = await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${currentUser.id}`, {
-                    headers: { 'apikey': SUPABASE_KEY }
-                });
-                const users = await userRes.json();
-                if (users && users.length > 0) {
-                    userPoints = users[0].points || 0;
-                    userCheckins = users[0].checkins || 0;
-                    userLevel = users[0].level || 1;
-                    lastCheckin = users[0].last_checkin;
-                }
                 updateUIForUser(true);
             } else {
                 currentUser = null;
@@ -2045,13 +2235,6 @@
             updateNotificationBadge();
             startOnlineStatusPing();
         }
-
-        // 占位函数
-        function showMyPosts() { if (currentUser) viewProfile(currentUser.email.split('@')[0]); else showToast('请先登录', true); }
-        function showMyComments() { showToast('我的评论功能开发中'); }
-        function showMyLikes() { showToast(`共获得 ${allPosts.filter(p => p.author === currentUser?.email.split('@')[0]).reduce((s,p) => s + (p.likes || 0), 0)} 个点赞`); }
-        function showMyPoints() { showToast(`当前积分: ${userPoints}`); }
-        function showMyCheckins() { showToast(`累计签到: ${userCheckins} 天`); }
 
         init();
     </script>
