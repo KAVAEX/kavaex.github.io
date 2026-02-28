@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>开发者社区 · KAVAEX</title>
+    <title>开发者社区 · KAVAX</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0,200" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -740,6 +740,55 @@
         .refresh-btn:hover {
             background: var(--primary-light);
         }
+
+        /* 个人主页样式修复 */
+        .profile-view {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 16px;
+        }
+        
+        .profile-header {
+            background: var(--surface);
+            border-radius: 24px;
+            padding: 24px;
+            text-align: center;
+            position: sticky;
+            top: 80px;
+        }
+        
+        .profile-header .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 60px;
+            background: #EADDFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 16px;
+            color: #21005E;
+        }
+        
+        .follow-btn {
+            width: 100%;
+            padding: 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            margin-top: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .follow-btn.following {
+            background: #f0f0f0;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -791,6 +840,7 @@
             </div>
         </header>
 
+        <!-- 首页视图 -->
         <div id="homeView">
             <div class="profile-grid">
                 <div class="profile-card">
@@ -860,6 +910,7 @@
             </div>
         </div>
 
+        <!-- 管理员面板 -->
         <div id="adminView" class="hidden">
             <div class="back-btn" onclick="showHome()">
                 <span class="material-symbols-outlined">arrow_back</span> 返回首页
@@ -888,6 +939,7 @@
             </div>
         </div>
 
+        <!-- 他人个人主页视图（修复版） -->
         <div id="profileView" class="hidden">
             <div class="back-btn" onclick="showHome()">
                 <span class="material-symbols-outlined">arrow_back</span> 返回首页
@@ -934,6 +986,7 @@
             </div>
         </div>
 
+        <!-- 编辑资料弹窗 -->
         <div id="editProfileModal" class="modal hidden">
             <div class="modal-content">
                 <h3>
@@ -1065,15 +1118,11 @@
         let currentUser = null;
         let allPosts = [];
         let notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
-        let reports = JSON.parse(localStorage.getItem('reports') || '[]');
         let followers = JSON.parse(localStorage.getItem('followers') || '{}');
         let following = JSON.parse(localStorage.getItem('following') || '{}');
         let onlineUsers = JSON.parse(localStorage.getItem('onlineUsers') || '[]');
-        let currentReportTarget = null;
-        let selectedReason = '';
-        let currentViewUser = null;
-        
         let userProfile = null;
+        let currentViewUser = null;
         
         // 验证码变量
         let loginCaptcha = '';
@@ -1116,7 +1165,6 @@
             const password = document.getElementById('loginPassword').value;
             const captchaInput = document.getElementById('loginCaptcha').value.toUpperCase();
             
-            // 验证码验证
             if (captchaInput !== loginCaptcha) {
                 showToast('验证码错误', true);
                 refreshLoginCaptcha();
@@ -1129,17 +1177,12 @@
             }
             
             try {
-                console.log('1. 查找用户:', email);
-                
-                // 直接从你的 users 表查用户
                 const userRes = await fetch(`${SUPABASE_URL}/rest/v1/users?email=eq.${encodeURIComponent(email)}`, {
                     headers: { 'apikey': SUPABASE_KEY }
                 });
                 
                 const users = await userRes.json();
-                console.log('2. 找到用户:', users);
                 
-                // 检查用户是否存在
                 if (!users || users.length === 0) {
                     showToast('用户不存在', true);
                     refreshLoginCaptcha();
@@ -1148,26 +1191,20 @@
                 
                 const user = users[0];
                 
-                // 验证密码（直接对比）
                 if (user.password !== password) {
                     showToast('密码错误', true);
                     refreshLoginCaptcha();
                     return;
                 }
                 
-                console.log('3. 密码正确，登录成功');
-                
-                // 登录成功，设置当前用户
                 currentUser = {
                     id: user.id,
                     email: user.email,
                     username: user.username
                 };
                 
-                // 保存到 localStorage
                 localStorage.setItem('currentUser', JSON.stringify(currentUser));
                 
-                // 设置用户资料
                 userProfile = {
                     name: user.username || user.email.split('@')[0],
                     bio: user.bio || '热爱编程的开发者',
@@ -1177,7 +1214,6 @@
                 
                 localStorage.setItem('userProfile', JSON.stringify(userProfile));
                 
-                // 更新最后登录时间
                 await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${user.id}`, {
                     method: 'PATCH',
                     headers: {
@@ -1187,7 +1223,6 @@
                     body: JSON.stringify({ last_login: new Date().toISOString() })
                 });
                 
-                // 更新UI
                 updateUIForUser(true);
                 hideLogin();
                 await loadPosts();
@@ -1208,7 +1243,6 @@
             const confirm = document.getElementById('registerConfirmPassword').value;
             const captchaInput = document.getElementById('registerCaptcha').value.toUpperCase();
             
-            // 验证码验证
             if (captchaInput !== registerCaptcha) {
                 showToast('验证码错误', true);
                 refreshRegisterCaptcha();
@@ -1231,7 +1265,6 @@
             }
             
             try {
-                // 检查邮箱是否已存在
                 const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/users?email=eq.${encodeURIComponent(email)}`, {
                     headers: { 'apikey': SUPABASE_KEY }
                 });
@@ -1243,7 +1276,6 @@
                     return;
                 }
                 
-                // 创建新用户
                 const username = email.split('@')[0];
                 const newUser = {
                     email: email,
@@ -1283,76 +1315,101 @@
             }
         }
 
-        // ===== 忘记密码 =====
-        function showForgotPassword() {
-            hideLogin();
-            document.getElementById('forgotEmail').value = '';
-            document.getElementById('forgotSuccess').classList.add('hidden');
-            document.getElementById('forgotError').classList.add('hidden');
-            document.getElementById('forgotPasswordModal').classList.remove('hidden');
-        }
-
-        function hideForgotPassword() {
-            document.getElementById('forgotPasswordModal').classList.add('hidden');
-            showLogin();
-        }
-
-        async function doForgotPassword() {
-            const email = document.getElementById('forgotEmail').value.trim();
+        // ===== 个人主页（修复版）=====
+        async function viewProfile(username) {
+            currentViewUser = username;
+            document.getElementById('homeView').classList.add('hidden');
+            document.getElementById('profileView').classList.remove('hidden');
             
-            if (!email) {
-                document.getElementById('forgotError').textContent = '请输入邮箱';
-                document.getElementById('forgotError').classList.remove('hidden');
-                return;
-            }
+            document.getElementById('viewName').textContent = username;
             
             try {
-                const res = await fetch(`${SUPABASE_URL}/auth/v1/recover`, {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ 
-                        email,
-                        options: { redirectTo: window.location.origin }
-                    })
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/users?username=eq.${encodeURIComponent(username)}`, {
+                    headers: { 'apikey': SUPABASE_KEY }
                 });
+                const users = await res.json();
                 
-                const data = await res.json();
-                
-                if (data.error) {
-                    document.getElementById('forgotError').textContent = data.error_description || data.msg || '发送失败';
-                    document.getElementById('forgotError').classList.remove('hidden');
+                if (users && users.length > 0) {
+                    const user = users[0];
+                    document.getElementById('viewAvatar').textContent = user.avatar || username[0].toUpperCase();
+                    document.getElementById('viewBio').textContent = user.bio || '这个人很懒，什么都没留下';
                 } else {
-                    document.getElementById('forgotSuccess').classList.remove('hidden');
-                    document.getElementById('forgotError').classList.add('hidden');
-                    
-                    setTimeout(() => {
-                        hideForgotPassword();
-                    }, 3000);
+                    document.getElementById('viewAvatar').textContent = username[0].toUpperCase();
+                    document.getElementById('viewBio').textContent = '这个人很懒，什么都没留下';
                 }
             } catch (err) {
-                document.getElementById('forgotError').textContent = '网络错误';
-                document.getElementById('forgotError').classList.remove('hidden');
+                document.getElementById('viewAvatar').textContent = username[0].toUpperCase();
+                document.getElementById('viewBio').textContent = '这个人很懒，什么都没留下';
             }
-        }
-
-        // ===== 其他功能保持不变 =====
-        function validateSession() {
-            const savedUser = localStorage.getItem('currentUser');
-            if (!savedUser) return false;
             
-            try {
-                const userData = JSON.parse(savedUser);
-                currentUser = userData;
-                return true;
-            } catch (e) {
-                localStorage.removeItem('currentUser');
-                return false;
+            const userPosts = allPosts.filter(p => p.author === username);
+            const userComments = [];
+            allPosts.forEach(p => {
+                if (p.comments) {
+                    p.comments.forEach(c => {
+                        if (c.author === username) userComments.push(c);
+                    });
+                }
+            });
+            const totalLikes = userPosts.reduce((sum, p) => sum + (p.likes || 0), 0);
+            const followerCount = followers[username]?.length || 0;
+            
+            document.getElementById('viewPostCount').textContent = userPosts.length;
+            document.getElementById('viewCommentCount').textContent = userComments.length;
+            document.getElementById('viewLikeCount').textContent = totalLikes;
+            document.getElementById('viewFollowerCount').textContent = followerCount;
+            
+            renderProfilePosts(username);
+            
+            if (currentUser) {
+                const myUsername = currentUser.email.split('@')[0];
+                const isFollowing = (following[myUsername] || []).includes(username);
+                const followBtn = document.getElementById('followBtn');
+                
+                if (isFollowing) {
+                    followBtn.classList.add('following');
+                    followBtn.innerHTML = '<span class="material-symbols-outlined">check</span> 已关注';
+                } else {
+                    followBtn.classList.remove('following');
+                    followBtn.innerHTML = '<span class="material-symbols-outlined">person_add</span> 关注';
+                }
+                followBtn.style.display = 'flex';
+            } else {
+                document.getElementById('followBtn').style.display = 'none';
             }
         }
 
+        function renderProfilePosts(username) {
+            const userPosts = allPosts.filter(p => p.author === username);
+            let html = '';
+            userPosts.forEach(post => {
+                html += `
+                    <div class="post">
+                        <div class="post-content">${post.content}</div>
+                        <div class="post-time">${new Date(post.created_at).toLocaleString()}</div>
+                    </div>
+                `;
+            });
+            document.getElementById('profilePostsList').innerHTML = html || '<div class="empty-state">暂无帖子</div>';
+        }
+
+        function toggleFollow() {
+            if (!currentUser) return;
+            const myUsername = currentUser.email.split('@')[0];
+            if (!following[myUsername]) following[myUsername] = [];
+            const index = following[myUsername].indexOf(currentViewUser);
+            if (index === -1) {
+                following[myUsername].push(currentViewUser);
+                showToast('关注成功');
+            } else {
+                following[myUsername].splice(index, 1);
+                showToast('已取消关注');
+            }
+            localStorage.setItem('following', JSON.stringify(following));
+            viewProfile(currentViewUser);
+        }
+
+        // ===== 其他功能 =====
         function updateUIForUser(isLoggedIn) {
             const authSection = document.getElementById('auth-section');
             const userSection = document.getElementById('user-section');
@@ -1423,7 +1480,6 @@
                 const res = await fetch(`${SUPABASE_URL}/rest/v1/posts?select=*&order=created_at.desc`, {
                     headers: { 'apikey': SUPABASE_KEY }
                 });
-                
                 allPosts = await res.json();
                 renderPosts();
                 renderHotPosts();
@@ -1435,43 +1491,39 @@
 
         function renderPosts() {
             let html = '';
-            if (allPosts.length === 0) {
-                html = '<div class="empty-state">暂无帖子</div>';
-            } else {
-                allPosts.forEach(post => {
-                    html += `
-                        <div class="post" id="post-${post.id}">
-                            <div class="post-header" onclick="viewProfile('${post.author}')">
-                                <div class="post-avatar">
-                                    ${post.author[0].toUpperCase()}
-                                    ${onlineUsers.includes(post.author) ? '<span class="online-badge-small online"></span>' : ''}
-                                </div>
-                                <div>
-                                    <div class="post-author">${post.author}</div>
-                                    <div class="post-time">${new Date(post.created_at).toLocaleString()}</div>
-                                </div>
+            allPosts.forEach(post => {
+                html += `
+                    <div class="post" id="post-${post.id}">
+                        <div class="post-header" onclick="viewProfile('${post.author}')">
+                            <div class="post-avatar">
+                                ${post.author[0].toUpperCase()}
+                                ${onlineUsers.includes(post.author) ? '<span class="online-badge-small online"></span>' : ''}
                             </div>
-                            <div class="post-content">${post.content}</div>
-                            <div class="post-actions">
-                                <button class="action-btn" onclick="toggleLike(${post.id})">
-                                    <span class="material-symbols-outlined">favorite</span> ${post.likes || 0}
-                                </button>
-                                <button class="action-btn" onclick="toggleComments(${post.id})">
-                                    <span class="material-symbols-outlined">comment</span> ${post.comments?.length || 0}
-                                </button>
-                            </div>
-                            <div id="comments-${post.id}" class="comments-section hidden">
-                                ${renderComments(post.comments || [])}
-                                <div class="add-comment">
-                                    <input type="text" id="comment-${post.id}" placeholder="写评论...">
-                                    <button class="btn secondary small" onclick="addComment(${post.id})">发送</button>
-                                </div>
+                            <div>
+                                <div class="post-author">${post.author}</div>
+                                <div class="post-time">${new Date(post.created_at).toLocaleString()}</div>
                             </div>
                         </div>
-                    `;
-                });
-            }
-            document.getElementById('postsList').innerHTML = html;
+                        <div class="post-content">${post.content}</div>
+                        <div class="post-actions">
+                            <button class="action-btn" onclick="toggleLike(${post.id})">
+                                <span class="material-symbols-outlined">favorite</span> ${post.likes || 0}
+                            </button>
+                            <button class="action-btn" onclick="toggleComments(${post.id})">
+                                <span class="material-symbols-outlined">comment</span> ${post.comments?.length || 0}
+                            </button>
+                        </div>
+                        <div id="comments-${post.id}" class="comments-section hidden">
+                            ${renderComments(post.comments || [])}
+                            <div class="add-comment">
+                                <input type="text" id="comment-${post.id}" placeholder="写评论...">
+                                <button class="btn secondary small" onclick="addComment(${post.id})">发送</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('postsList').innerHTML = html || '<div class="empty-state">暂无帖子</div>';
         }
 
         function renderComments(comments) {
@@ -1648,59 +1700,6 @@
             }
         }
 
-        function viewProfile(username) {
-            currentViewUser = username;
-            document.getElementById('homeView').classList.add('hidden');
-            document.getElementById('profileView').classList.remove('hidden');
-            document.getElementById('viewName').textContent = username;
-            document.getElementById('viewAvatar').textContent = username[0].toUpperCase();
-            const userPosts = allPosts.filter(p => p.author === username);
-            renderProfilePosts(username);
-            
-            if (currentUser) {
-                const myUsername = currentUser.email.split('@')[0];
-                const isFollowing = (following[myUsername] || []).includes(username);
-                const followBtn = document.getElementById('followBtn');
-                if (isFollowing) {
-                    followBtn.classList.add('following');
-                    followBtn.innerHTML = '<span class="material-symbols-outlined">check</span> 已关注';
-                } else {
-                    followBtn.classList.remove('following');
-                    followBtn.innerHTML = '<span class="material-symbols-outlined">person_add</span> 关注';
-                }
-            }
-        }
-
-        function renderProfilePosts(username) {
-            const userPosts = allPosts.filter(p => p.author === username);
-            let html = '';
-            userPosts.forEach(post => {
-                html += `
-                    <div class="post">
-                        <div class="post-content">${post.content}</div>
-                        <div class="post-time">${new Date(post.created_at).toLocaleString()}</div>
-                    </div>
-                `;
-            });
-            document.getElementById('profilePostsList').innerHTML = html || '<div>暂无帖子</div>';
-        }
-
-        function toggleFollow() {
-            if (!currentUser) return;
-            const myUsername = currentUser.email.split('@')[0];
-            if (!following[myUsername]) following[myUsername] = [];
-            const index = following[myUsername].indexOf(currentViewUser);
-            if (index === -1) {
-                following[myUsername].push(currentViewUser);
-                showToast('关注成功');
-            } else {
-                following[myUsername].splice(index, 1);
-                showToast('已取消关注');
-            }
-            localStorage.setItem('following', JSON.stringify(following));
-            viewProfile(currentViewUser);
-        }
-
         function showEditProfile() {
             if (!currentUser) {
                 showToast('请先登录', true);
@@ -1741,10 +1740,102 @@
             else document.getElementById('followingPostsList').classList.remove('hidden');
         }
 
+        function switchProfileTab(tab) {
+            document.querySelectorAll('#profileView .tab').forEach(t => t.classList.remove('active'));
+            event.target.closest('.tab').classList.add('active');
+            document.getElementById('profilePostsList').classList.add('hidden');
+            document.getElementById('profileCommentsList').classList.add('hidden');
+            if (tab === 'posts') document.getElementById('profilePostsList').classList.remove('hidden');
+            else document.getElementById('profileCommentsList').classList.remove('hidden');
+        }
+
+        function showMyPosts() {
+            if (!currentUser) return;
+            viewProfile(currentUser.email.split('@')[0]);
+        }
+
         function showHome() {
             document.getElementById('homeView').classList.remove('hidden');
             document.getElementById('profileView').classList.add('hidden');
             document.getElementById('adminView').classList.add('hidden');
+        }
+
+        function showAdminPanel() {
+            document.getElementById('homeView').classList.add('hidden');
+            document.getElementById('adminView').classList.remove('hidden');
+            
+            fetch(`${SUPABASE_URL}/rest/v1/users?order=created_at.desc`, {
+                headers: { 'apikey': SUPABASE_KEY }
+            })
+            .then(res => res.json())
+            .then(users => {
+                let html = '';
+                users.forEach(user => {
+                    html += `
+                        <tr>
+                            <td>${user.email}</td>
+                            <td>${user.username || '-'}</td>
+                            <td>${user.role || 'user'}</td>
+                            <td>${user.status || 'active'}</td>
+                            <td>${user.created_at ? new Date(user.created_at).toLocaleString() : '-'}</td>
+                            <td>${user.last_login ? new Date(user.last_login).toLocaleString() : '从未'}</td>
+                            <td>
+                                <button class="btn small" onclick="alert('开发中')">改角色</button>
+                                <button class="btn small danger" onclick="alert('开发中')">封禁</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('userTableBody').innerHTML = html;
+            });
+        }
+
+        function showForgotPassword() {
+            hideLogin();
+            document.getElementById('forgotPasswordModal').classList.remove('hidden');
+        }
+
+        function hideForgotPassword() {
+            document.getElementById('forgotPasswordModal').classList.add('hidden');
+            showLogin();
+        }
+
+        async function doForgotPassword() {
+            const email = document.getElementById('forgotEmail').value.trim();
+            
+            if (!email) {
+                document.getElementById('forgotError').textContent = '请输入邮箱';
+                document.getElementById('forgotError').classList.remove('hidden');
+                return;
+            }
+            
+            try {
+                const res = await fetch(`${SUPABASE_URL}/auth/v1/recover`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        email,
+                        options: { redirectTo: window.location.origin }
+                    })
+                });
+                
+                const data = await res.json();
+                
+                if (data.error) {
+                    document.getElementById('forgotError').textContent = data.error_description || data.msg || '发送失败';
+                    document.getElementById('forgotError').classList.remove('hidden');
+                } else {
+                    document.getElementById('forgotSuccess').classList.remove('hidden');
+                    document.getElementById('forgotError').classList.add('hidden');
+                    setTimeout(() => hideForgotPassword(), 3000);
+                }
+            } catch (err) {
+                document.getElementById('forgotError').textContent = '网络错误';
+                document.getElementById('forgotError').classList.remove('hidden');
+            }
         }
 
         function logout() {
@@ -1774,14 +1865,22 @@
         function switchToRegister() { hideLogin(); showRegister(); }
         function switchToLogin() { hideRegister(); showLogin(); }
 
-        // 初始化验证码
+        // 初始化
         refreshLoginCaptcha();
         refreshRegisterCaptcha();
-
-        // 初始化
         loadPosts();
         updateOnlineStatus();
         startOnlineStatusPing();
+
+        // 检查登录状态
+        const savedUser = localStorage.getItem('currentUser');
+        if (savedUser) {
+            try {
+                currentUser = JSON.parse(savedUser);
+                userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+                updateUIForUser(true);
+            } catch (e) {}
+        }
     </script>
 </body>
 </html>
