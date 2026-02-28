@@ -18,6 +18,7 @@
             --success: #4caf50;
             --warning: #ff9800;
             --danger: #f44336;
+            --banned: #d32f2f;
         }
         
         body {
@@ -74,12 +75,12 @@
             flex-wrap: wrap;
         }
         
-        .notification-icon {
+        .notification-icon, .message-icon {
             position: relative;
             cursor: pointer;
         }
         
-        .notification-badge {
+        .notification-badge, .message-badge {
             position: absolute;
             top: -5px;
             right: -5px;
@@ -95,7 +96,7 @@
             padding: 0 4px;
         }
         
-        .notification-dropdown {
+        .notification-dropdown, .message-dropdown {
             position: absolute;
             top: 50px;
             right: 0;
@@ -109,11 +110,11 @@
             z-index: 1000;
         }
         
-        .notification-dropdown.show {
+        .notification-dropdown.show, .message-dropdown.show {
             display: block;
         }
         
-        .notification-header {
+        .notification-header, .message-header {
             padding: 12px 16px;
             border-bottom: 1px solid var(--border);
             display: flex;
@@ -122,21 +123,21 @@
             font-weight: 600;
         }
         
-        .notification-item {
+        .notification-item, .message-item {
             padding: 12px 16px;
             border-bottom: 1px solid var(--border);
             cursor: pointer;
         }
         
-        .notification-item:hover {
+        .notification-item:hover, .message-item:hover {
             background: #f5f5f5;
         }
         
-        .notification-item.unread {
+        .notification-item.unread, .message-item.unread {
             background: #e8f0fe;
         }
         
-        .notification-time {
+        .notification-time, .message-time {
             font-size: 0.7rem;
             color: var(--text-secondary);
             margin-top: 4px;
@@ -203,8 +204,34 @@
             background: var(--danger);
         }
         
-        .btn.success {
-            background: var(--success);
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .banned-badge {
+            background: var(--banned);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: 8px;
+        }
+        
+        .banned-overlay {
+            background: rgba(211, 47, 47, 0.1);
+            border-left: 4px solid var(--banned);
+            padding: 10px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--banned);
         }
         
         .profile-grid {
@@ -276,7 +303,6 @@
             color: var(--text-secondary);
             margin-bottom: 16px;
             font-size: 0.9rem;
-            word-break: break-word;
         }
         
         .profile-stats {
@@ -292,11 +318,6 @@
         .stat-item {
             text-align: center;
             cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .stat-item:hover {
-            transform: scale(1.05);
         }
         
         .stat-value {
@@ -324,6 +345,12 @@
             justify-content: center;
             gap: 6px;
             margin-bottom: 8px;
+        }
+        
+        .edit-profile-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #999;
         }
         
         .main-content {
@@ -383,6 +410,11 @@
             margin-bottom: 8px;
         }
         
+        .compose-box textarea:disabled {
+            background: #f0f0f0;
+            cursor: not-allowed;
+        }
+        
         .post {
             background: #f8f9fa;
             border-radius: 20px;
@@ -420,6 +452,20 @@
         .post-author {
             font-weight: 600;
             font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .post-author-banned {
+            background: var(--banned);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
         }
         
         .post-time {
@@ -501,8 +547,13 @@
             font-size: 0.85rem;
         }
         
-        .action-btn:hover {
+        .action-btn:hover:not(:disabled) {
             background: #f0f0f0;
+        }
+        
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
         
         .action-btn.liked {
@@ -538,6 +589,9 @@
             font-weight: 500;
             font-size: 0.9rem;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
         
         .comment-author:hover {
@@ -570,6 +624,11 @@
         .add-comment input:focus {
             outline: none;
             border-color: var(--primary);
+        }
+        
+        .add-comment input:disabled {
+            background: #f0f0f0;
+            cursor: not-allowed;
         }
         
         .modal {
@@ -710,6 +769,12 @@
         .follow-btn.following {
             background: #f0f0f0;
             color: #333;
+        }
+        
+        .follow-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #999;
         }
         
         .user-table {
@@ -860,6 +925,27 @@
             padding: 40px;
             color: #999;
         }
+        
+        .banned-page {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .banned-page .material-symbols-outlined {
+            font-size: 80px;
+            color: var(--banned);
+            margin-bottom: 20px;
+        }
+        
+        .banned-page h2 {
+            color: var(--banned);
+            margin-bottom: 10px;
+        }
+        
+        .banned-page p {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
     </style>
 </head>
 <body>
@@ -881,7 +967,21 @@
                             <span>通知</span>
                             <button class="btn small secondary" onclick="markAllAsRead()">全部已读</button>
                         </div>
-                        <div id="notificationList" class="notification-list"></div>
+                        <div id="notificationList"></div>
+                    </div>
+                </div>
+                
+                <div id="messageSection" class="hidden">
+                    <div class="message-icon" onclick="toggleMessages()">
+                        <span class="material-symbols-outlined">chat</span>
+                        <span id="messageBadge" class="message-badge hidden">0</span>
+                    </div>
+                    <div id="messageDropdown" class="message-dropdown">
+                        <div class="message-header">
+                            <span>私信</span>
+                            <button class="btn small secondary" onclick="markAllMessagesRead()">全部已读</button>
+                        </div>
+                        <div id="messageList"></div>
                     </div>
                 </div>
                 
@@ -900,6 +1000,9 @@
                 </div>
                 
                 <div id="user-section" class="hidden">
+                    <span id="userStatus" class="banned-badge hidden">
+                        <span class="material-symbols-outlined" style="font-size: 14px;">block</span> 封禁中
+                    </span>
                     <span class="badge">
                         <span class="material-symbols-outlined" style="font-size: 16px;">verified</span> 已验证
                     </span>
@@ -910,6 +1013,17 @@
                 </div>
             </div>
         </header>
+
+        <!-- 封禁提示页面 -->
+        <div id="bannedView" class="hidden">
+            <div class="banned-page">
+                <span class="material-symbols-outlined">gpp_bad</span>
+                <h2>账号已被封禁</h2>
+                <p id="banReason">原因：违反社区规定</p>
+                <p>如有疑问请联系管理员</p>
+                <button class="btn" onclick="logout()">返回登录</button>
+            </div>
+        </div>
 
         <div id="homeView">
             <div class="profile-grid">
@@ -923,6 +1037,12 @@
                     </div>
                     <div class="profile-bio" id="homeBio">
                         请先登录
+                    </div>
+                    
+                    <!-- 封禁警告 -->
+                    <div id="bannedWarning" class="banned-overlay hidden">
+                        <span class="material-symbols-outlined">error</span>
+                        <span>你的账号已被封禁，无法进行任何操作</span>
                     </div>
                     
                     <div class="profile-stats">
@@ -944,7 +1064,7 @@
                         </div>
                     </div>
                     
-                    <button class="edit-profile-btn" onclick="showEditProfile()">
+                    <button class="edit-profile-btn" id="editProfileBtn" onclick="showEditProfile()">
                         <span class="material-symbols-outlined">edit</span> 编辑资料
                     </button>
                     
@@ -956,7 +1076,7 @@
                 <div class="main-content">
                     <div id="compose-section" class="compose-box hidden">
                         <textarea id="postContent" placeholder="分享你的开发心得..."></textarea>
-                        <button class="btn" onclick="publishPost()" style="width:100%;">
+                        <button class="btn" id="publishBtn" onclick="publishPost()" style="width:100%;">
                             <span class="material-symbols-outlined">send</span> 发布帖子
                         </button>
                     </div>
@@ -991,6 +1111,7 @@
                     <table class="user-table">
                         <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>邮箱</th>
                                 <th>用户名</th>
                                 <th>角色</th>
@@ -1001,7 +1122,7 @@
                             </tr>
                         </thead>
                         <tbody id="userTableBody">
-                            <tr><td colspan="7" class="empty-state">加载中...</td></tr>
+                            <tr><td colspan="8" class="empty-state">加载中...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1038,7 +1159,11 @@
                         </div>
                     </div>
                     
-                    <button class="follow-btn" id="followBtn" onclick="toggleFollow()">
+                    <button class="follow-btn" id="followBtn" onclick="sendPrivateMessage()">
+                        <span class="material-symbols-outlined">chat</span> 发私信
+                    </button>
+                    
+                    <button class="follow-btn" style="background: #f0f0f0; color:#333;" onclick="toggleFollow()" id="followBtn2">
                         <span class="material-symbols-outlined">person_add</span> 关注
                     </button>
                 </div>
@@ -1181,8 +1306,13 @@
         let currentReportTarget = null;
         let selectedReason = '';
         let currentViewUser = null;
+        let messages = JSON.parse(localStorage.getItem('messages') || '[]');
+        let conversations = JSON.parse(localStorage.getItem('conversations') || '[]');
+        let currentChatUser = null;
         
-        let userProfile = null;
+        let userProfile = JSON.parse(localStorage.getItem('userProfile') || 'null');
+        let userStatus = 'active';
+        let banReason = '';
 
         function showToast(message, isError = false) {
             const toast = document.createElement('div');
@@ -1200,6 +1330,51 @@
             if (element && isLoading) {
                 element.innerHTML = '<div style="text-align:center; padding:30px;"><div class="loading-spinner"></div> 加载中...</div>';
             }
+        }
+
+        // ===== 封禁检查 =====
+        function checkBanned() {
+            if (userStatus === 'banned') {
+                document.getElementById('homeView').classList.add('hidden');
+                document.getElementById('bannedView').classList.remove('hidden');
+                document.getElementById('banReason').textContent = banReason || '原因：违反社区规定';
+                return true;
+            }
+            return false;
+        }
+
+        function updateUIForBanned() {
+            const isBanned = userStatus === 'banned';
+            
+            const userStatusEl = document.getElementById('userStatus');
+            if (isBanned) {
+                userStatusEl.classList.remove('hidden');
+            } else {
+                userStatusEl.classList.add('hidden');
+            }
+            
+            const bannedWarning = document.getElementById('bannedWarning');
+            if (isBanned) {
+                bannedWarning.classList.remove('hidden');
+            } else {
+                bannedWarning.classList.add('hidden');
+            }
+            
+            const postContent = document.getElementById('postContent');
+            const publishBtn = document.getElementById('publishBtn');
+            const editProfileBtn = document.getElementById('editProfileBtn');
+            
+            if (postContent) postContent.disabled = isBanned;
+            if (publishBtn) publishBtn.disabled = isBanned;
+            if (editProfileBtn) editProfileBtn.disabled = isBanned;
+        }
+
+        function checkActionPermission() {
+            if (userStatus === 'banned') {
+                showToast('你的账号已被封禁，无法执行此操作', true);
+                return false;
+            }
+            return true;
         }
 
         async function validateSession() {
@@ -1237,6 +1412,8 @@
                         avatar: userData2[0].avatar || currentUser.email[0].toUpperCase(),
                         role: userData2[0].role || 'user'
                     };
+                    userStatus = userData2[0].status || 'active';
+                    banReason = userData2[0].ban_reason || '原因：违反社区规定';
                 }
                 
                 return true;
@@ -1251,18 +1428,20 @@
             const userSection = document.getElementById('user-section');
             const composeSection = document.getElementById('compose-section');
             const notificationSection = document.getElementById('notificationSection');
+            const messageSection = document.getElementById('messageSection');
             const adminBadge = document.getElementById('adminBadge');
-            const adminPanelBtn = document.getElementById('adminPanelBtn');
             const homeOnlineBadge = document.getElementById('homeOnlineBadge');
             const homeAvatar = document.getElementById('homeAvatar');
             const homeDisplayName = document.getElementById('homeDisplayName');
             const homeBio = document.getElementById('homeBio');
+            const adminPanelBtn = document.getElementById('adminPanelBtn');
             
             if (isLoggedIn && currentUser) {
                 if (authSection) authSection.classList.add('hidden');
                 if (userSection) userSection.classList.remove('hidden');
                 if (composeSection) composeSection.classList.remove('hidden');
                 if (notificationSection) notificationSection.classList.remove('hidden');
+                if (messageSection) messageSection.classList.remove('hidden');
                 
                 if (currentUser.email === 'renlei540@qq.com') {
                     if (adminBadge) adminBadge.classList.remove('hidden');
@@ -1280,17 +1459,24 @@
                     if (homeDisplayName) homeDisplayName.textContent = userProfile.name || currentUser.email.split('@')[0];
                     if (homeBio) homeBio.textContent = userProfile.bio || '热爱编程的开发者';
                 }
+                
+                updateUIForBanned();
+                if (checkBanned()) return;
             } else {
                 if (authSection) authSection.classList.remove('hidden');
                 if (userSection) userSection.classList.add('hidden');
                 if (composeSection) composeSection.classList.add('hidden');
                 if (notificationSection) notificationSection.classList.add('hidden');
+                if (messageSection) messageSection.classList.add('hidden');
                 if (adminBadge) adminBadge.classList.add('hidden');
                 if (adminPanelBtn) adminPanelBtn.classList.add('hidden');
                 if (homeOnlineBadge) homeOnlineBadge.classList.remove('online');
                 if (homeAvatar) homeAvatar.textContent = 'U';
                 if (homeDisplayName) homeDisplayName.textContent = '未登录';
                 if (homeBio) homeBio.textContent = '请先登录';
+                document.getElementById('bannedView').classList.add('hidden');
+                document.getElementById('homeView').classList.remove('hidden');
+                
                 currentUser = null;
             }
         }
@@ -1321,8 +1507,24 @@
                 if (!res.ok) throw new Error(`HTTP错误: ${res.status}`);
                 
                 allPosts = await res.json();
-                renderPosts();
-                renderHotPosts();
+                
+                // 获取作者封禁状态
+                const authors = [...new Set(allPosts.map(p => p.author))];
+                let bannedMap = {};
+                
+                if (authors.length > 0) {
+                    const userRes = await fetch(`${SUPABASE_URL}/rest/v1/users?username=in.(${authors.map(a => `"${a}"`).join(',')})`, {
+                        headers: { 'apikey': SUPABASE_KEY }
+                    });
+                    const users = await userRes.json();
+                    
+                    users.forEach(u => {
+                        bannedMap[u.username] = u.status === 'banned';
+                    });
+                }
+                
+                renderPosts(bannedMap);
+                renderHotPosts(bannedMap);
                 renderFollowingPosts();
                 updateStats();
             } catch (err) {
@@ -1353,12 +1555,13 @@
             }
         }
 
-        function renderPosts() {
+        function renderPosts(bannedMap) {
             let html = '';
             if (allPosts.length === 0) {
                 html = '<div class="empty-state">暂无帖子</div>';
             } else {
                 allPosts.forEach(post => {
+                    const isBanned = bannedMap[post.author];
                     html += `
                         <div class="post" id="post-${post.id}">
                             <div class="post-menu" onclick="togglePostMenu(${post.id})">
@@ -1387,24 +1590,27 @@
                                     ${onlineUsers.includes(post.author) ? '<span class="online-badge-small online"></span>' : ''}
                                 </div>
                                 <div>
-                                    <div class="post-author">${post.author}</div>
+                                    <div class="post-author">
+                                        ${post.author}
+                                        ${isBanned ? '<span class="post-author-banned"><span class="material-symbols-outlined" style="font-size: 12px;">block</span> 已封禁</span>' : ''}
+                                    </div>
                                     <div class="post-time">${new Date(post.created_at).toLocaleString()}</div>
                                 </div>
                             </div>
                             <div class="post-content">${post.content}</div>
                             <div class="post-actions">
-                                <button class="action-btn" onclick="toggleLike(${post.id})">
+                                <button class="action-btn" onclick="toggleLike(${post.id})" ${currentUser && userStatus === 'banned' ? 'disabled' : ''}>
                                     <span class="material-symbols-outlined">favorite</span> ${post.likes || 0}
                                 </button>
-                                <button class="action-btn" onclick="toggleComments(${post.id})">
+                                <button class="action-btn" onclick="toggleComments(${post.id})" ${currentUser && userStatus === 'banned' ? 'disabled' : ''}>
                                     <span class="material-symbols-outlined">comment</span> ${post.comments?.length || 0}
                                 </button>
                             </div>
                             <div id="comments-${post.id}" class="comments-section hidden">
                                 ${renderComments(post.comments || [])}
                                 <div class="add-comment">
-                                    <input type="text" id="comment-${post.id}" placeholder="写评论...">
-                                    <button class="btn secondary small" onclick="addComment(${post.id})">发送</button>
+                                    <input type="text" id="comment-${post.id}" placeholder="写评论..." ${currentUser && userStatus === 'banned' ? 'disabled' : ''}>
+                                    <button class="btn secondary small" onclick="addComment(${post.id})" ${currentUser && userStatus === 'banned' ? 'disabled' : ''}>发送</button>
                                 </div>
                             </div>
                         </div>
@@ -1427,19 +1633,23 @@
             `).join('');
         }
 
-        function renderHotPosts() {
+        function renderHotPosts(bannedMap) {
             const hotPosts = [...allPosts].sort((a, b) => (b.likes || 0) - (a.likes || 0)).slice(0, 10);
             let html = '';
             if (hotPosts.length === 0) {
                 html = '<div class="empty-state">暂无热门帖子</div>';
             } else {
                 hotPosts.forEach(post => {
+                    const isBanned = bannedMap[post.author];
                     html += `
                         <div class="post">
                             <div class="post-header" onclick="viewProfile('${post.author}')">
                                 <div class="post-avatar">${post.author[0].toUpperCase()}</div>
                                 <div>
-                                    <div class="post-author">${post.author}</div>
+                                    <div class="post-author">
+                                        ${post.author}
+                                        ${isBanned ? '<span class="post-author-banned"><span class="material-symbols-outlined" style="font-size: 12px;">block</span> 已封禁</span>' : ''}
+                                    </div>
                                     <div class="post-time">🔥 ${post.likes || 0} 点赞</div>
                                 </div>
                             </div>
@@ -1518,8 +1728,8 @@
                 if (!res.ok) throw new Error('删除失败');
                 
                 allPosts = allPosts.filter(p => p.id !== postId);
-                renderPosts();
-                renderHotPosts();
+                renderPosts({});
+                renderHotPosts({});
                 renderFollowingPosts();
                 updateStats();
                 showToast('帖子已删除');
@@ -1538,6 +1748,7 @@
                 showToast('请先登录', true);
                 return;
             }
+            if (!checkActionPermission()) return;
             
             const post = allPosts.find(p => p.id === postId);
             if (!post) return;
@@ -1557,16 +1768,7 @@
                 if (!res.ok) throw new Error('点赞失败');
                 
                 post.likes = newLikes;
-                renderPosts();
-                renderHotPosts();
-                updateStats();
-                
-                if (post.author !== currentUser.email.split('@')[0]) {
-                    addNotification('like', {
-                        content: `${currentUser.email.split('@')[0]} 点赞了你的帖子`
-                    });
-                }
-                
+                await loadPosts();
                 showToast('点赞成功');
             } catch (err) {
                 showToast('点赞失败', true);
@@ -1578,6 +1780,7 @@
                 showToast('请先登录', true);
                 return;
             }
+            if (!checkActionPermission()) return;
             
             const input = document.getElementById(`comment-${postId}`);
             const content = input.value.trim();
@@ -1607,14 +1810,7 @@
                 
                 post.comments = comments;
                 input.value = '';
-                renderPosts();
-                
-                if (post.author !== currentUser.email.split('@')[0]) {
-                    addNotification('comment', {
-                        content: `${currentUser.email.split('@')[0]} 评论了你的帖子: ${content.substring(0, 20)}${content.length > 20 ? '...' : ''}`
-                    });
-                }
-                
+                await loadPosts();
                 showToast('评论成功');
             } catch (err) {
                 showToast('评论失败', true);
@@ -1626,6 +1822,7 @@
                 showToast('请先登录', true);
                 return;
             }
+            if (!checkActionPermission()) return;
             
             const content = document.getElementById('postContent').value.trim();
             if (!content) {
@@ -1698,7 +1895,7 @@
             if (currentUser) {
                 const myUsername = currentUser.email.split('@')[0];
                 const isFollowing = (following[myUsername] || []).includes(username);
-                const followBtn = document.getElementById('followBtn');
+                const followBtn = document.getElementById('followBtn2');
                 
                 if (isFollowing) {
                     followBtn.classList.add('following');
@@ -1706,6 +1903,11 @@
                 } else {
                     followBtn.classList.remove('following');
                     followBtn.innerHTML = '<span class="material-symbols-outlined">person_add</span> 关注';
+                }
+                
+                if (userStatus === 'banned') {
+                    document.getElementById('followBtn').disabled = true;
+                    document.getElementById('followBtn2').disabled = true;
                 }
             }
         }
@@ -1737,6 +1939,7 @@
                 showToast('请先登录', true);
                 return;
             }
+            if (!checkActionPermission()) return;
             
             const myUsername = currentUser.email.split('@')[0];
             
@@ -1773,11 +1976,27 @@
             updateStats();
         }
 
+        function sendPrivateMessage() {
+            if (!currentUser) {
+                showToast('请先登录', true);
+                return;
+            }
+            if (!checkActionPermission()) return;
+            openChat(currentViewUser);
+        }
+
+        function openChat(username) {
+            currentChatUser = username;
+            // 简化版，实际需要完整的聊天界面
+            alert(`打开与 ${username} 的聊天`);
+        }
+
         function showReportModal(type, id) {
             if (!currentUser) {
                 showToast('请先登录', true);
                 return;
             }
+            if (!checkActionPermission()) return;
             currentReportTarget = { type, id };
             document.getElementById('reportModal').classList.remove('hidden');
         }
@@ -1848,14 +2067,15 @@
             users.forEach(user => {
                 html += `
                     <tr>
-                        <td>${user.email}</td>
+                        <td>${user.id?.substring(0, 8) || '-'}</td>
+                        <td>${user.email || '-'}</td>
                         <td>${user.username || '-'}</td>
-                        <td><span class="role-badge ${user.role}">${user.role || 'user'}</span></td>
-                        <td><span class="status-badge ${user.status}">${user.status || 'active'}</span></td>
-                        <td>${new Date(user.created_at).toLocaleString()}</td>
+                        <td><span class="role-badge ${user.role === 'admin' ? 'admin' : 'user'}">${user.role || 'user'}</span></td>
+                        <td><span class="status-badge ${user.status === 'active' ? 'active' : 'banned'}">${user.status || 'active'}</span></td>
+                        <td>${user.created_at ? new Date(user.created_at).toLocaleString() : '-'}</td>
                         <td>${user.last_login ? new Date(user.last_login).toLocaleString() : '从未'}</td>
                         <td>
-                            <button class="btn small" onclick="changeUserRole('${user.id}')">改角色</button>
+                            <button class="btn small" onclick="setUserRole('${user.id}', 'admin')">改角色</button>
                             <button class="btn small danger" onclick="banUser('${user.id}')">封禁</button>
                         </td>
                     </tr>
@@ -1864,16 +2084,12 @@
             document.getElementById('userTableBody').innerHTML = html;
         }
 
-        function changeUserRole(userId) {
+        function setUserRole(userId, role) {
             alert('修改角色功能开发中');
         }
 
         function banUser(userId) {
             alert('封禁用户功能开发中');
-        }
-
-        function hideReportsModal() {
-            document.getElementById('reportsModal').classList.add('hidden');
         }
 
         function switchTab(tab) {
@@ -1907,15 +2123,7 @@
             }
         }
 
-        function showMyPosts() {
-            if (!currentUser) {
-                showToast('请先登录', true);
-                return;
-            }
-            const username = currentUser.email.split('@')[0];
-            viewProfile(username);
-        }
-
+        // ===== 修复的 showMyComments 函数 =====
         function showMyComments() {
             if (!currentUser) {
                 showToast('请先登录', true);
@@ -1925,13 +2133,18 @@
             const username = currentUser.email.split('@')[0];
             const userComments = [];
             
+            // 收集用户的所有评论
             allPosts.forEach(post => {
                 if (post.comments) {
-                    post.comments.forEach(c => {
-                        if (c.author === username) {
+                    post.comments.forEach((comment, index) => {
+                        if (comment.author === username) {
                             userComments.push({
-                                ...c,
-                                postContent: post.content
+                                id: `${post.id}-${index}`,
+                                postId: post.id,
+                                postContent: post.content,
+                                postAuthor: post.author,
+                                content: comment.content,
+                                created_at: comment.created_at
                             });
                         }
                     });
@@ -1939,12 +2152,20 @@
             });
             
             if (userComments.length === 0) {
-                showToast('暂无评论');
-            } else {
-                showToast(`你有 ${userComments.length} 条评论`);
+                showToast('你还没有发表过评论', true);
+                return;
             }
+            
+            // 显示评论列表弹窗
+            let commentList = '📝 你的评论：\n\n';
+            userComments.forEach((c, i) => {
+                commentList += `${i+1}. 在 "${c.postAuthor}" 的帖子下评论：\n   "${c.content}"\n   ${new Date(c.created_at).toLocaleString()}\n\n`;
+            });
+            
+            alert(commentList);
         }
 
+        // ===== 修复的 showMyLikes 函数 =====
         function showMyLikes() {
             if (!currentUser) {
                 showToast('请先登录', true);
@@ -1952,10 +2173,44 @@
             }
             
             const username = currentUser.email.split('@')[0];
-            const userPosts = allPosts.filter(p => p.author === username);
-            const totalLikes = userPosts.reduce((sum, p) => sum + (p.likes || 0), 0);
             
-            showToast(`共获得 ${totalLikes} 个点赞`);
+            // 统计用户获得的点赞数
+            let totalLikes = 0;
+            const likedPosts = [];
+            
+            allPosts.forEach(post => {
+                if (post.author === username) {
+                    totalLikes += post.likes || 0;
+                    if (post.likes > 0) {
+                        likedPosts.push({
+                            content: post.content,
+                            likes: post.likes
+                        });
+                    }
+                }
+            });
+            
+            if (totalLikes === 0) {
+                showToast('你还没有获得过点赞', true);
+                return;
+            }
+            
+            // 显示点赞统计
+            let likesDetail = `❤️ 共获得 ${totalLikes} 个点赞\n\n`;
+            likedPosts.forEach((p, i) => {
+                likesDetail += `${i+1}. "${p.content.substring(0, 30)}${p.content.length > 30 ? '...' : ''}" 获得 ${p.likes} 个点赞\n`;
+            });
+            
+            alert(likesDetail);
+        }
+
+        function showMyPosts() {
+            if (!currentUser) {
+                showToast('请先登录', true);
+                return;
+            }
+            const username = currentUser.email.split('@')[0];
+            viewProfile(username);
         }
 
         function showMyFollowers() {
@@ -1963,10 +2218,8 @@
                 showToast('请先登录', true);
                 return;
             }
-            
             const username = currentUser.email.split('@')[0];
             const followerList = followers[username] || [];
-            
             if (followerList.length === 0) {
                 showToast('暂无粉丝');
             } else {
@@ -1974,13 +2227,50 @@
             }
         }
 
+        function showEditProfile() {
+            if (!currentUser) {
+                showToast('请先登录', true);
+                return;
+            }
+            if (!checkActionPermission()) return;
+            if (userProfile) {
+                document.getElementById('editName').value = userProfile.name || '';
+                document.getElementById('editBio').value = userProfile.bio || '';
+            }
+            document.getElementById('editProfileModal').classList.remove('hidden');
+        }
+
+        function hideEditProfile() {
+            document.getElementById('editProfileModal').classList.add('hidden');
+        }
+
+        function selectAvatar(emoji) {
+            if (!userProfile) {
+                userProfile = {};
+            }
+            userProfile.avatar = emoji;
+            document.getElementById('homeAvatar').textContent = emoji;
+        }
+
+        function saveProfile() {
+            if (!currentUser || !userProfile) return;
+            
+            userProfile.name = document.getElementById('editName').value || currentUser.email.split('@')[0];
+            userProfile.bio = document.getElementById('editBio').value || '热爱编程的开发者';
+            
+            localStorage.setItem('userProfile', JSON.stringify(userProfile));
+            updateUIForUser(true);
+            hideEditProfile();
+            showToast('资料已更新');
+        }
+
         function showHome() {
             document.getElementById('homeView').classList.remove('hidden');
             document.getElementById('profileView').classList.add('hidden');
             document.getElementById('adminView').classList.add('hidden');
+            document.getElementById('bannedView').classList.add('hidden');
         }
 
-        // ===== 忘记密码功能 =====
         function showForgotPassword() {
             hideLogin();
             document.getElementById('forgotEmail').value = '';
@@ -2035,7 +2325,6 @@
             }
         }
 
-        // ===== 修复的登录函数（使用 public.users 表）=====
         async function doLogin() {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
@@ -2046,76 +2335,77 @@
             }
             
             try {
-                console.log('1. 查找用户:', email);
-                
-                // 直接从你的 users 表查用户
-                const userRes = await fetch(`${SUPABASE_URL}/rest/v1/users?email=eq.${encodeURIComponent(email)}`, {
-                    headers: { 'apikey': SUPABASE_KEY }
-                });
-                
-                const users = await userRes.json();
-                console.log('2. 找到用户:', users);
-                
-                // 检查用户是否存在
-                if (!users || users.length === 0) {
-                    showToast('用户不存在', true);
-                    return;
-                }
-                
-                const user = users[0];
-                
-                // 验证密码（直接对比）
-                if (user.password !== password) {
-                    showToast('密码错误', true);
-                    return;
-                }
-                
-                console.log('3. 密码正确，登录成功');
-                
-                // 登录成功，设置当前用户
-                currentUser = {
-                    id: user.id,
-                    email: user.email,
-                    username: user.username
-                };
-                
-                // 保存到 localStorage
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                
-                // 设置用户资料
-                userProfile = {
-                    name: user.username || user.email.split('@')[0],
-                    bio: user.bio || '热爱编程的开发者',
-                    avatar: user.avatar || user.email[0].toUpperCase(),
-                    role: user.role || 'user'
-                };
-                
-                localStorage.setItem('userProfile', JSON.stringify(userProfile));
-                
-                // 更新最后登录时间
-                await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${user.id}`, {
-                    method: 'PATCH',
+                const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+                    method: 'POST',
                     headers: {
                         'apikey': SUPABASE_KEY,
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ last_login: new Date().toISOString() })
+                    body: JSON.stringify({ email, password })
                 });
                 
-                // 更新UI
+                const data = await res.json();
+                
+                if (data.error) {
+                    if (data.error_description === 'Email not confirmed') {
+                        showToast('请先验证邮箱', true);
+                    } else if (data.error_description === 'Invalid login credentials') {
+                        showToast('邮箱或密码错误', true);
+                    } else {
+                        showToast(data.error_description || data.msg, true);
+                    }
+                    return;
+                }
+                
+                if (!data.user) {
+                    showToast('登录返回数据异常', true);
+                    return;
+                }
+                
+                currentUser = data.user;
+                localStorage.setItem('currentUser', JSON.stringify(data));
+                
+                const userRes = await fetch(`${SUPABASE_URL}/rest/v1/users?email=eq.${email}`, {
+                    headers: { 'apikey': SUPABASE_KEY }
+                });
+                const userData = await userRes.json();
+                
+                if (userData && userData.length > 0) {
+                    userProfile = {
+                        name: userData[0].username || currentUser.email.split('@')[0],
+                        bio: userData[0].bio || '热爱编程的开发者',
+                        avatar: userData[0].avatar || currentUser.email[0].toUpperCase(),
+                        role: userData[0].role || 'user'
+                    };
+                    userStatus = userData[0].status || 'active';
+                    banReason = userData[0].ban_reason || '原因：违反社区规定';
+                } else {
+                    userProfile = {
+                        name: currentUser.email.split('@')[0],
+                        bio: '热爱编程的开发者',
+                        avatar: currentUser.email[0].toUpperCase(),
+                        role: 'user'
+                    };
+                    userStatus = 'active';
+                }
+                
+                localStorage.setItem('userProfile', JSON.stringify(userProfile));
+                
                 updateUIForUser(true);
                 hideLogin();
+                
+                if (checkBanned()) return;
+                
                 await loadPosts();
                 updateOnlineStatus();
+                loadConversations();
                 showToast('登录成功');
-                
             } catch (err) {
                 console.error('登录错误:', err);
                 showToast('网络错误: ' + err.message, true);
             }
         }
 
-        // ===== 修复的注册函数（存储到 public.users）=====
         async function doRegister() {
             const email = document.getElementById('registerEmail').value;
             const password = document.getElementById('registerPassword').value;
@@ -2137,50 +2427,46 @@
             }
             
             try {
-                // 检查邮箱是否已存在
-                const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/users?email=eq.${encodeURIComponent(email)}`, {
-                    headers: { 'apikey': SUPABASE_KEY }
-                });
-                const existingUsers = await checkRes.json();
-                
-                if (existingUsers && existingUsers.length > 0) {
-                    showToast('该邮箱已注册', true);
-                    return;
-                }
-                
-                // 创建新用户
-                const username = email.split('@')[0];
-                const newUser = {
-                    email: email,
-                    password: password,
-                    username: username,
-                    avatar: username[0].toUpperCase(),
-                    bio: '热爱编程的开发者',
-                    role: 'user',
-                    status: 'active',
-                    created_at: new Date().toISOString(),
-                    last_login: null
-                };
-                
-                const createRes = await fetch(`${SUPABASE_URL}/rest/v1/users`, {
+                const res = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
                     method: 'POST',
                     headers: {
                         'apikey': SUPABASE_KEY,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=representation'
+                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(newUser)
+                    body: JSON.stringify({ 
+                        email, 
+                        password,
+                        options: { emailRedirectTo: window.location.origin }
+                    })
                 });
                 
-                if (!createRes.ok) {
-                    const err = await createRes.text();
-                    throw new Error('注册失败: ' + err);
+                const data = await res.json();
+                
+                if (data.error) {
+                    if (data.msg === 'User already registered') {
+                        showToast('该邮箱已注册，请直接登录', true);
+                    } else {
+                        showToast(data.error_description || data.msg, true);
+                    }
+                } else {
+                    await fetch(`${SUPABASE_URL}/rest/v1/users`, {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email: email,
+                            username: email.split('@')[0],
+                            status: 'active',
+                            role: 'user'
+                        })
+                    });
+                    
+                    showToast('注册成功！请查收验证邮件');
+                    hideRegister();
+                    showLogin();
                 }
-                
-                showToast('注册成功！请登录');
-                hideRegister();
-                showLogin();
-                
             } catch (err) {
                 console.error('注册错误:', err);
                 showToast('网络错误: ' + err.message, true);
@@ -2196,12 +2482,84 @@
             
             currentUser = null;
             userProfile = null;
+            userStatus = 'active';
             localStorage.removeItem('currentUser');
             localStorage.removeItem('userProfile');
             
             updateUIForUser(false);
             updateOnlineStatus();
             showToast('已退出登录');
+        }
+
+        // 私信功能占位
+        function toggleMessages() {
+            document.getElementById('messageDropdown').classList.toggle('show');
+        }
+        
+        function markAllMessagesRead() {}
+        function loadConversations() {}
+        function openChat() {}
+
+        function toggleNotifications() {
+            document.getElementById('notificationDropdown').classList.toggle('show');
+            renderNotifications();
+        }
+
+        function renderNotifications() {
+            const list = document.getElementById('notificationList');
+            if (notifications.length === 0) {
+                list.innerHTML = '<div class="empty-state">暂无通知</div>';
+                return;
+            }
+            list.innerHTML = notifications.slice(0, 10).map(n => `
+                <div class="notification-item ${n.read ? '' : 'unread'}" onclick="markAsRead('${n.id}')">
+                    <div>${n.type === 'like' ? '❤️' : '💬'} ${n.data.content}</div>
+                    <div class="notification-time">${new Date(n.time).toLocaleString()}</div>
+                </div>
+            `).join('');
+        }
+
+        function markAsRead(id) {
+            const notification = notifications.find(n => n.id == id);
+            if (notification) {
+                notification.read = true;
+                localStorage.setItem('notifications', JSON.stringify(notifications));
+                updateNotificationBadge();
+                renderNotifications();
+            }
+        }
+
+        function markAllAsRead() {
+            notifications.forEach(n => n.read = true);
+            localStorage.setItem('notifications', JSON.stringify(notifications));
+            updateNotificationBadge();
+            renderNotifications();
+            showToast('全部已读');
+        }
+
+        function updateNotificationBadge() {
+            const unread = notifications.filter(n => !n.read).length;
+            const badge = document.getElementById('notificationBadge');
+            if (unread > 0) {
+                badge.textContent = unread;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function addNotification(type, data) {
+            if (!currentUser) return;
+            const notification = {
+                id: Date.now(),
+                type: type,
+                data: data,
+                read: false,
+                time: new Date().toISOString()
+            };
+            notifications.unshift(notification);
+            localStorage.setItem('notifications', JSON.stringify(notifications));
+            updateNotificationBadge();
         }
 
         function showLogin() { document.getElementById('loginModal').classList.remove('hidden'); }
@@ -2218,6 +2576,9 @@
             if (!e.target.closest('.notification-icon')) {
                 document.getElementById('notificationDropdown').classList.remove('show');
             }
+            if (!e.target.closest('.message-icon')) {
+                document.getElementById('messageDropdown').classList.remove('show');
+            }
         });
 
         async function init() {
@@ -2225,12 +2586,14 @@
             
             if (isValid) {
                 updateUIForUser(true);
+                if (!checkBanned()) {
+                    await loadPosts();
+                }
             } else {
                 currentUser = null;
                 updateUIForUser(false);
             }
             
-            await loadPosts();
             updateOnlineStatus();
             updateNotificationBadge();
             startOnlineStatusPing();
