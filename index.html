@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>开发者社区</title>
+    <title>开发者社区 · KAVA</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0,200" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -206,6 +206,11 @@
         
         .btn.success {
             background: var(--success);
+        }
+        
+        .btn.warning {
+            background: var(--warning);
+            color: white;
         }
         
         .profile-grid {
@@ -800,6 +805,7 @@
             display: inline-flex;
             align-items: center;
             gap: 4px;
+            margin-left: 8px;
         }
         
         .status-badge.active {
@@ -815,6 +821,23 @@
         .status-badge.muted {
             background: #fff3e0;
             color: #ff6f00;
+        }
+        
+        .status-badge.warning {
+            background: #fff3e0;
+            color: #ff6f00;
+        }
+        
+        .muted-overlay {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        
+        .muted-message {
+            color: var(--warning);
+            font-size: 0.85rem;
+            margin-top: 8px;
+            text-align: center;
         }
     </style>
 </head>
@@ -860,6 +883,7 @@
                         <span class="material-symbols-outlined" style="font-size: 16px;">verified</span> 已验证
                     </span>
                     <span class="admin-badge" id="adminBadge">管理员</span>
+                    <span id="userStatusBadge" class="status-badge hidden"></span>
                     <button class="btn small" onclick="logout()">
                         <span class="material-symbols-outlined">logout</span> 退出
                     </button>
@@ -877,7 +901,6 @@
                     </div>
                     <div class="profile-name" id="homeDisplayName">
                         未登录
-                        <span id="homeStatusBadge" class="status-badge hidden"></span>
                     </div>
                     <div class="profile-bio" id="homeBio">
                         请先登录
@@ -917,6 +940,7 @@
                         <button class="btn" onclick="publishPost()" style="width:100%;">
                             <span class="material-symbols-outlined">send</span> 发布帖子
                         </button>
+                        <div id="mutedMessage" class="muted-message hidden"></div>
                     </div>
                     
                     <div class="tabs">
@@ -967,7 +991,7 @@
             </div>
         </div>
 
-        <!-- 他人个人主页视图（修复版） -->
+        <!-- 他人个人主页视图 -->
         <div id="profileView" class="hidden">
             <div class="back-btn" onclick="showHome()">
                 <span class="material-symbols-outlined">arrow_back</span> 返回首页
@@ -1187,41 +1211,48 @@
             document.getElementById('registerCaptchaImage').textContent = registerCaptcha;
         }
 
-        // ===== 检查用户状态 =====
-        function checkUserStatus(user) {
-            if (!user) return 'active';
+        // ===== 更新状态徽章 =====
+        function updateStatusBadge(status) {
+            const userStatusBadge = document.getElementById('userStatusBadge');
+            if (!userStatusBadge) return;
             
-            if (user.status === 'banned') {
-                showToast('你的账号已被封禁', true);
-                logout();
+            userStatusBadge.classList.remove('active', 'banned', 'muted', 'hidden');
+            
+            if (status === 'banned') {
+                userStatusBadge.textContent = '封禁';
+                userStatusBadge.classList.add('banned');
+                userStatusBadge.classList.remove('hidden');
+            } else if (status === 'muted') {
+                userStatusBadge.textContent = '禁言';
+                userStatusBadge.classList.add('muted');
+                userStatusBadge.classList.remove('hidden');
+            } else if (status === 'active') {
+                userStatusBadge.textContent = '正常';
+                userStatusBadge.classList.add('active');
+                userStatusBadge.classList.remove('hidden');
+            } else {
+                userStatusBadge.classList.add('hidden');
+            }
+        }
+
+        // ===== 检查用户状态并限制操作 =====
+        function checkUserStatus(action) {
+            if (!currentUser) {
+                showToast('请先登录', true);
                 return false;
             }
             
-            if (user.status === 'muted') {
-                return 'muted';
+            if (currentUser.status === 'banned') {
+                showToast('你的账号已被封禁', true);
+                return false;
+            }
+            
+            if (currentUser.status === 'muted' && action !== 'view') {
+                showToast('你已被禁言，无法执行此操作', true);
+                return false;
             }
             
             return true;
-        }
-
-        // ===== 更新状态徽章 =====
-        function updateStatusBadge(status) {
-            const badge = document.getElementById('homeStatusBadge');
-            if (!badge) return;
-            
-            badge.classList.remove('hidden', 'active', 'banned', 'muted');
-            
-            if (status === 'banned') {
-                badge.textContent = '封禁';
-                badge.classList.add('banned');
-                badge.classList.remove('hidden');
-            } else if (status === 'muted') {
-                badge.textContent = '禁言';
-                badge.classList.add('muted');
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-            }
         }
 
         // ===== 登录函数（带人机验证）=====
@@ -1262,13 +1293,14 @@
                     return;
                 }
                 
-                // 检查用户状态
+                // ✅ 检查用户状态 - 封禁用户不能登录
                 if (user.status === 'banned') {
                     showToast('你的账号已被封禁，无法登录', true);
                     refreshLoginCaptcha();
                     return;
                 }
                 
+                // ✅ 保存用户信息，包括状态
                 currentUser = {
                     id: user.id,
                     email: user.email,
@@ -1282,8 +1314,7 @@
                     name: user.username || user.email.split('@')[0],
                     bio: user.bio || '热爱编程的开发者',
                     avatar: user.avatar || user.email[0].toUpperCase(),
-                    role: user.role || 'user',
-                    status: user.status || 'active'
+                    role: user.role || 'user'
                 };
                 
                 localStorage.setItem('userProfile', JSON.stringify(userProfile));
@@ -1389,8 +1420,10 @@
             }
         }
 
-        // ===== 个人主页（修复版）=====
+        // ===== 个人主页 =====
         async function viewProfile(username) {
+            if (!checkUserStatus('view')) return;
+            
             currentViewUser = username;
             document.getElementById('homeView').classList.add('hidden');
             document.getElementById('profileView').classList.remove('hidden');
@@ -1468,7 +1501,8 @@
         }
 
         function toggleFollow() {
-            if (!currentUser) return;
+            if (!checkUserStatus('interact')) return;
+            
             const myUsername = currentUser.email.split('@')[0];
             if (!following[myUsername]) following[myUsername] = [];
             const index = following[myUsername].indexOf(currentViewUser);
@@ -1485,16 +1519,7 @@
 
         // ===== 发布帖子（检查禁言）=====
         async function publishPost() {
-            if (!currentUser) {
-                showToast('请先登录', true);
-                return;
-            }
-            
-            // 检查是否被禁言
-            if (currentUser.status === 'muted') {
-                showToast('你已被禁言，无法发布帖子', true);
-                return;
-            }
+            if (!checkUserStatus('post')) return;
             
             const content = document.getElementById('postContent').value.trim();
             if (!content) return;
@@ -1522,16 +1547,7 @@
 
         // ===== 发表评论（检查禁言）=====
         async function addComment(postId) {
-            if (!currentUser) {
-                showToast('请先登录', true);
-                return;
-            }
-            
-            // 检查是否被禁言
-            if (currentUser.status === 'muted') {
-                showToast('你已被禁言，无法发表评论', true);
-                return;
-            }
+            if (!checkUserStatus('comment')) return;
             
             const input = document.getElementById(`comment-${postId}`);
             const content = input.value.trim();
@@ -1575,16 +1591,7 @@
 
         // ===== 点赞（检查禁言）=====
         async function toggleLike(postId) {
-            if (!currentUser) {
-                showToast('请先登录', true);
-                return;
-            }
-            
-            // 检查是否被禁言（禁言用户不能点赞）
-            if (currentUser.status === 'muted') {
-                showToast('你已被禁言，无法点赞', true);
-                return;
-            }
+            if (!checkUserStatus('like')) return;
             
             const post = allPosts.find(p => p.id === postId);
             if (!post) return;
@@ -1629,6 +1636,7 @@
             const homeAvatar = document.getElementById('homeAvatar');
             const homeDisplayName = document.getElementById('homeDisplayName');
             const homeBio = document.getElementById('homeBio');
+            const mutedMessage = document.getElementById('mutedMessage');
             
             if (isLoggedIn && currentUser) {
                 if (authSection) authSection.classList.add('hidden');
@@ -1651,19 +1659,30 @@
                     if (homeAvatar) homeAvatar.textContent = userProfile.avatar || currentUser.email[0].toUpperCase();
                     if (homeDisplayName) homeDisplayName.textContent = userProfile.name || currentUser.email.split('@')[0];
                     if (homeBio) homeBio.textContent = userProfile.bio || '热爱编程的开发者';
-                    
-                    // 更新状态徽章
-                    updateStatusBadge(currentUser.status);
-                    
-                    // 如果是禁言状态，隐藏发帖框
-                    if (currentUser.status === 'muted' && composeSection) {
+                }
+                
+                // ✅ 更新状态徽章
+                updateStatusBadge(currentUser.status);
+                
+                // ✅ 根据状态控制发帖框
+                if (currentUser.status === 'muted') {
+                    if (composeSection) {
                         composeSection.style.opacity = '0.5';
                         composeSection.style.pointerEvents = 'none';
-                        composeSection.querySelector('textarea').placeholder = '你已被禁言，无法发布内容';
-                    } else if (composeSection) {
+                        const textarea = composeSection.querySelector('textarea');
+                        if (textarea) textarea.placeholder = '你已被禁言，无法发布内容';
+                        if (mutedMessage) {
+                            mutedMessage.textContent = '你当前处于禁言状态，无法发布、评论或点赞';
+                            mutedMessage.classList.remove('hidden');
+                        }
+                    }
+                } else {
+                    if (composeSection) {
                         composeSection.style.opacity = '1';
                         composeSection.style.pointerEvents = 'auto';
-                        composeSection.querySelector('textarea').placeholder = '分享你的开发心得...';
+                        const textarea = composeSection.querySelector('textarea');
+                        if (textarea) textarea.placeholder = '分享你的开发心得...';
+                        if (mutedMessage) mutedMessage.classList.add('hidden');
                     }
                 }
             } else {
@@ -1678,6 +1697,7 @@
                 if (homeDisplayName) homeDisplayName.textContent = '未登录';
                 if (homeBio) homeBio.textContent = '请先登录';
                 updateStatusBadge(null);
+                if (mutedMessage) mutedMessage.classList.add('hidden');
                 currentUser = null;
             }
         }
@@ -1816,10 +1836,8 @@
         }
 
         function showEditProfile() {
-            if (!currentUser) {
-                showToast('请先登录', true);
-                return;
-            }
+            if (!checkUserStatus('edit')) return;
+            
             document.getElementById('editName').value = userProfile?.name || '';
             document.getElementById('editBio').value = userProfile?.bio || '';
             document.getElementById('editProfileModal').classList.remove('hidden');
@@ -1940,6 +1958,12 @@
                     currentUser.status = status;
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
                     updateUIForUser(true);
+                    
+                    // 如果是封禁自己，直接退出
+                    if (status === 'banned') {
+                        showToast('你的账号已被封禁', true);
+                        logout();
+                    }
                 }
             } catch (err) {
                 showToast('更新失败: ' + err.message, true);
