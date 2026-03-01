@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>开发者社区 · KAVAX</title>
+    <title>开发者社区 · KAVA</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0,200" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -676,8 +676,11 @@
         
         let currentUser = null;
         let allPosts = [];
+        let followers = JSON.parse(localStorage.getItem('followers') || '{}');
+        let following = JSON.parse(localStorage.getItem('following') || '{}');
         let onlineUsers = JSON.parse(localStorage.getItem('onlineUsers') || '[]');
         let userProfile = null;
+        let currentViewUser = null;
         
         let timer = null;
         
@@ -692,6 +695,7 @@
             setTimeout(() => toast.remove(), 2000);
         }
         
+        // ===== 邮箱验证码登录 =====
         async function sendEmailCode() {
             const email = document.getElementById('loginEmail').value.trim();
             
@@ -755,7 +759,6 @@
                 return;
             }
             
-            // 获取登录按钮并禁用
             const loginBtn = document.querySelector('.btn[onclick="doLoginWithCode()"]');
             if (loginBtn) {
                 loginBtn.disabled = true;
@@ -770,7 +773,7 @@
                 });
                 
                 const data = await res.json();
-                console.log('登录返回数据:', data);
+                console.log('登录返回:', data);
                 
                 if (data.error) {
                     showToast(data.error, true);
@@ -783,7 +786,6 @@
                 console.error('登录错误:', err);
                 showToast('网络错误: ' + err.message, true);
             } finally {
-                // 恢复登录按钮
                 if (loginBtn) {
                     loginBtn.disabled = false;
                     loginBtn.textContent = '登录 / 注册';
@@ -855,6 +857,7 @@
                 
                 updateUIForUser(true);
                 hideLogin();
+                await loadPosts();
                 showToast('登录成功');
                 
             } catch (err) {
@@ -863,9 +866,228 @@
             }
         }
         
+        // ===== 帖子功能 =====
+        async function loadPosts() {
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/posts?select=*&order=created_at.desc`, {
+                    headers: { 'apikey': SUPABASE_KEY }
+                });
+                allPosts = await res.json();
+                renderPosts();
+                renderHotPosts();
+                renderFollowingPosts();
+            } catch (err) {
+                console.error('加载帖子失败:', err);
+                document.getElementById('postsList').innerHTML = '<div class="empty-state">暂无帖子</div>';
+            }
+        }
+        
+        function renderPosts() {
+            let html = '';
+            allPosts.forEach(post => {
+                html += `
+                    <div class="post" id="post-${post.id}">
+                        <div class="post-header" onclick="viewProfile('${post.author}')">
+                            <div class="post-avatar">
+                                ${post.author[0].toUpperCase()}
+                                ${onlineUsers.includes(post.author) ? '<span class="online-badge-small online"></span>' : ''}
+                            </div>
+                            <div>
+                                <div class="post-author">${post.author}</div>
+                                <div class="post-time">${new Date(post.created_at).toLocaleString()}</div>
+                            </div>
+                        </div>
+                        <div class="post-content">${post.content}</div>
+                        <div class="post-actions">
+                            <button class="action-btn" onclick="toggleLike(${post.id})">
+                                <span class="material-symbols-outlined">favorite</span> ${post.likes || 0}
+                            </button>
+                            <button class="action-btn" onclick="toggleComments(${post.id})">
+                                <span class="material-symbols-outlined">comment</span> ${post.comments?.length || 0}
+                            </button>
+                        </div>
+                        <div id="comments-${post.id}" class="comments-section hidden">
+                            ${renderComments(post.comments || [])}
+                            <div class="add-comment">
+                                <input type="text" id="comment-${post.id}" placeholder="写评论...">
+                                <button class="btn secondary small" onclick="addComment(${post.id})">发送</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('postsList').innerHTML = html || '<div class="empty-state">暂无帖子</div>';
+        }
+        
+        function renderComments(comments) {
+            if (!comments || comments.length === 0) return '';
+            return comments.map(c => `
+                <div class="comment">
+                    <div class="comment-header">
+                        <span class="comment-author" onclick="viewProfile('${c.author}')">${c.author}</span>
+                        <span class="comment-time">${new Date(c.created_at).toLocaleString()}</span>
+                    </div>
+                    <div class="comment-content">${c.content}</div>
+                </div>
+            `).join('');
+        }
+        
+        function renderHotPosts() {
+            const hotPosts = [...allPosts].sort((a, b) => (b.likes || 0) - (a.likes || 0)).slice(0, 10);
+            let html = '';
+            hotPosts.forEach(post => {
+                html += `
+                    <div class="post">
+                        <div class="post-header" onclick="viewProfile('${post.author}')">
+                            <div class="post-avatar">${post.author[0].toUpperCase()}</div>
+                            <div>
+                                <div class="post-author">${post.author}</div>
+                                <div class="post-time">🔥 ${post.likes || 0} 点赞</div>
+                            </div>
+                        </div>
+                        <div class="post-content">${post.content}</div>
+                    </div>
+                `;
+            });
+            document.getElementById('hotPostsList').innerHTML = html;
+        }
+        
+        function renderFollowingPosts() {
+            if (!currentUser) {
+                document.getElementById('followingPostsList').innerHTML = '<div class="empty-state">请先登录查看关注的人</div>';
+                return;
+            }
+            
+            const username = currentUser.email.split('@')[0];
+            const followingList = following[username] || [];
+            const followingPosts = allPosts.filter(p => followingList.includes(p.author));
+            
+            let html = '';
+            followingPosts.forEach(post => {
+                html += `
+                    <div class="post">
+                        <div class="post-header" onclick="viewProfile('${post.author}')">
+                            <div class="post-avatar">${post.author[0].toUpperCase()}</div>
+                            <div>
+                                <div class="post-author">${post.author}</div>
+                                <div class="post-time">${new Date(post.created_at).toLocaleString()}</div>
+                            </div>
+                        </div>
+                        <div class="post-content">${post.content}</div>
+                    </div>
+                `;
+            });
+            document.getElementById('followingPostsList').innerHTML = html || '<div class="empty-state">暂无关注的人的帖子</div>';
+        }
+        
+        async function publishPost() {
+            if (!currentUser) {
+                showToast('请先登录', true);
+                return;
+            }
+            
+            const content = document.getElementById('postContent').value.trim();
+            if (!content) return;
+            
+            try {
+                const username = currentUser.email.split('@')[0];
+                
+                await fetch(`${SUPABASE_URL}/rest/v1/posts`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ author: username, content, likes: 0, comments: [] })
+                });
+                
+                document.getElementById('postContent').value = '';
+                await loadPosts();
+                showToast('发布成功');
+            } catch (err) {
+                showToast('发布失败', true);
+            }
+        }
+        
+        async function addComment(postId) {
+            if (!currentUser) {
+                showToast('请先登录', true);
+                return;
+            }
+            
+            const input = document.getElementById(`comment-${postId}`);
+            const content = input.value.trim();
+            if (!content) return;
+            
+            const post = allPosts.find(p => p.id === postId);
+            if (!post) return;
+            
+            const comments = post.comments || [];
+            comments.push({
+                author: currentUser.email.split('@')[0],
+                content: content,
+                created_at: new Date().toISOString()
+            });
+            
+            try {
+                await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ comments })
+                });
+                
+                post.comments = comments;
+                input.value = '';
+                renderPosts();
+                showToast('评论成功');
+            } catch (err) {
+                showToast('评论失败', true);
+            }
+        }
+        
+        async function toggleLike(postId) {
+            if (!currentUser) {
+                showToast('请先登录', true);
+                return;
+            }
+            
+            const post = allPosts.find(p => p.id === postId);
+            if (!post) return;
+            
+            const newLikes = (post.likes || 0) + 1;
+            
+            try {
+                await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ likes: newLikes })
+                });
+                
+                post.likes = newLikes;
+                renderPosts();
+                renderHotPosts();
+                showToast('点赞成功');
+            } catch (err) {
+                showToast('点赞失败', true);
+            }
+        }
+        
+        function toggleComments(postId) {
+            const el = document.getElementById(`comments-${postId}`);
+            if (el) el.classList.toggle('hidden');
+        }
+        
+        // ===== 用户界面更新 =====
         function updateUIForUser(isLoggedIn) {
             const authSection = document.getElementById('auth-section');
             const userSection = document.getElementById('user-section');
+            const composeSection = document.getElementById('compose-section');
             const homeAvatar = document.getElementById('homeAvatar');
             const homeDisplayName = document.getElementById('homeDisplayName');
             const homeBio = document.getElementById('homeBio');
@@ -873,6 +1095,7 @@
             if (isLoggedIn && currentUser) {
                 authSection.classList.add('hidden');
                 userSection.classList.remove('hidden');
+                composeSection.classList.remove('hidden');
                 
                 if (userProfile) {
                     homeAvatar.textContent = userProfile.avatar || currentUser.email[0].toUpperCase();
@@ -884,6 +1107,7 @@
             } else {
                 authSection.classList.remove('hidden');
                 userSection.classList.add('hidden');
+                composeSection.classList.add('hidden');
                 homeAvatar.textContent = 'U';
                 homeDisplayName.textContent = '未登录';
                 homeBio.textContent = '请先登录';
@@ -952,14 +1176,19 @@
         function switchTab(tab) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             event.target.closest('.tab').classList.add('active');
-            document.getElementById('postsList').innerHTML = '<div class="empty-state">暂无帖子</div>';
+            document.getElementById('postsList').classList.add('hidden');
+            document.getElementById('hotPostsList').classList.add('hidden');
+            document.getElementById('followingPostsList').classList.add('hidden');
+            if (tab === 'posts') document.getElementById('postsList').classList.remove('hidden');
+            else if (tab === 'hot') document.getElementById('hotPostsList').classList.remove('hidden');
+            else document.getElementById('followingPostsList').classList.remove('hidden');
         }
         
         // 初始化
         onlineUsers = JSON.parse(localStorage.getItem('onlineUsers') || '[]');
         document.getElementById('onlineCount').textContent = onlineUsers.length;
+        loadPosts();
         
-        // 检查登录状态
         const savedUser = localStorage.getItem('currentUser');
         if (savedUser) {
             try {
